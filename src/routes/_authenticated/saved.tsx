@@ -6,9 +6,11 @@ export const Route = createFileRoute("/_authenticated/saved")({
   head: () => ({
     meta: [
       { title: "Saved — Promptfolio" },
-      { name: "description", content: "Your saved AI recreations and prompts." },
+      { name: "description", content: "Your saved interface templates and prompts." },
       { property: "og:title", content: "Saved — Promptfolio" },
-      { property: "og:description", content: "Your favourite recreations." },
+      { property: "og:description", content: "Your favourite interface templates." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Saved,

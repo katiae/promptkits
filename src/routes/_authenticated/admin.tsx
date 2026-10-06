@@ -9,9 +9,11 @@ export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
       { title: "Admin — Promptfolio" },
-      { name: "description", content: "Manage recreations, demos and prompts." },
+      { name: "description", content: "Manage interface templates, demos and prompts." },
       { property: "og:title", content: "Admin — Promptfolio" },
       { property: "og:description", content: "Manage the directory." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -25,7 +27,6 @@ type Form = {
   description: string;
   category: string;
   tags: string;
-  original_url: string;
   demo_url: string;
   thumbnail_url: string;
   prompt: string;
@@ -34,13 +35,13 @@ type Form = {
 };
 
 const blank: Form = {
-  name: "", slug: "", description: "", category: "Landing page", tags: "", original_url: "",
+  name: "", slug: "", description: "", category: "Landing page", tags: "",
   demo_url: "", thumbnail_url: "", prompt: "", status: "published", hue: 150,
 };
 
 const toForm = (e: Entry): Form => ({
   id: e.id, name: e.name, slug: e.slug, description: e.description, category: e.category,
-  tags: e.tags.join(", "), original_url: e.original_url ?? "", demo_url: e.demo_url ?? "",
+  tags: e.tags.join(", "), demo_url: e.demo_url ?? "",
   thumbnail_url: e.thumbnail_url ?? "", prompt: e.prompt, status: e.status, hue: e.hue,
 });
 
@@ -83,7 +84,7 @@ function Admin() {
       description: form.description,
       category: form.category,
       tags: form.tags.split(",").map((t) => slugify(t)).filter(Boolean),
-      original_url: form.original_url || null,
+      original_url: null,
       demo_url: form.demo_url || null,
       thumbnail_url: form.thumbnail_url || null,
       prompt: form.prompt,
@@ -147,9 +148,8 @@ function Admin() {
           {field("description", "One-line description")}
           {field("category", "Category")}
           {field("tags", "Tags (comma separated)")}
-          {field("original_url", "Original site URL")}
           {field("demo_url", "Live demo URL")}
-          {field("thumbnail_url", "Thumbnail image URL (optional)")}
+          {field("thumbnail_url", "Template thumbnail URL")}
           {field("hue", "Orb colour hue (0–360)")}
           <label className="block">
             <span className="label-mono text-muted-foreground">Status</span>

@@ -5,10 +5,12 @@ import { slugify } from "@/lib/entries";
 export const Route = createFileRoute("/category/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug} recreations — Promptfolio` },
-      { name: "description", content: `AI-recreated ${params.slug} interfaces with live demos and build prompts.` },
-      { property: "og:title", content: `${params.slug} recreations — Promptfolio` },
-      { property: "og:description", content: `Browse ${params.slug} sites rebuilt by AI.` },
+      { title: `${params.slug} templates — Promptfolio` },
+      { name: "description", content: `${params.slug} interface templates with live demos and complete AI build prompts.` },
+      { property: "og:title", content: `${params.slug} templates — Promptfolio` },
+      { property: "og:description", content: `Browse ${params.slug} templates to build with AI.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => {

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ArrowUpRight, Copy, Check, Heart, Maximize2 } from "lucide-react";
+import { ArrowUpRight, Copy, Check, Heart, Download } from "lucide-react";
 import { toast } from "sonner";
 import { entryQuery, slugify } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
@@ -10,10 +10,12 @@ import { OrbThumb } from "@/components/Orb";
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `How to build ${params.slug} with AI — Promptfolio` },
-      { name: "description", content: `Live AI recreation of ${params.slug} plus the full prompt used to build it.` },
-      { property: "og:title", content: `How to build ${params.slug} with AI — Promptfolio` },
-      { property: "og:description", content: `Try the live demo and copy the build prompt for ${params.slug}.` },
+      { title: `${params.slug} interface template — Promptfolio` },
+      { name: "description", content: `Try the ${params.slug} interface template and copy its complete AI build prompt.` },
+      { property: "og:title", content: `${params.slug} interface template — Promptfolio` },
+      { property: "og:description", content: `Open the live template and copy its complete AI build prompt.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Detail,
@@ -45,7 +47,7 @@ function Detail() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 pt-12">
-      <Link to="/" className="label-mono text-muted-foreground hover:text-foreground">← All recreations</Link>
+      <Link to="/" className="label-mono text-muted-foreground hover:text-foreground">← All templates</Link>
       <div className="mt-6 flex flex-wrap items-end gap-4">
         <div>
           <Link to="/category/$slug" params={{ slug: slugify(entry.category) }} className="label-mono text-muted-foreground hover:text-foreground">
@@ -55,11 +57,18 @@ function Detail() {
           <p className="mt-2 text-muted-foreground">{entry.description}</p>
         </div>
         <div className="ml-auto flex items-center gap-2 text-sm">
-          {entry.original_url && (
-            <a href={entry.original_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary">
-              Original <ArrowUpRight className="size-3.5" />
+          {entry.demo_url ? (
+            <a href={entry.demo_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-primary-foreground hover:opacity-90">
+              Open demo <ArrowUpRight className="size-3.5" />
             </a>
+          ) : (
+            <span className="flex cursor-not-allowed items-center gap-1.5 rounded-full bg-muted px-3.5 py-1.5 text-muted-foreground" aria-disabled="true">
+              Demo coming soon
+            </span>
           )}
+          <span className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-muted-foreground" aria-disabled="true" title="HTML downloads are coming soon">
+            <Download className="size-3.5" /> Download HTML · soon
+          </span>
           <button
             onClick={() => toggle(entry.id)}
             className={`flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary ${fav ? "text-heart" : ""}`}
@@ -93,8 +102,8 @@ function Detail() {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{entry.demo_url ?? "demo coming soon"}</span>
             {entry.demo_url && (
-              <a href={entry.demo_url} target="_blank" rel="noreferrer" className="ml-auto text-muted-foreground hover:text-foreground" aria-label="Open full screen">
-                <Maximize2 className="size-3.5" />
+              <a href={entry.demo_url} target="_blank" rel="noreferrer" className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
+                Open demo <ArrowUpRight className="size-3.5" />
               </a>
             )}
           </div>
@@ -108,7 +117,7 @@ function Detail() {
             />
           ) : (
             <div className="p-3">
-              <OrbThumb hue={entry.hue} name={entry.name} />
+              <OrbThumb hue={entry.hue} name={entry.name} thumbnailUrl={entry.thumbnail_url} />
               <p className="label-mono py-4 text-center text-muted-foreground">Live demo not published yet</p>
             </div>
           )}
