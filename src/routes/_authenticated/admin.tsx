@@ -200,7 +200,7 @@ function Admin() {
   );
 
   return (
-    <main className="mx-auto max-w-6xl px-6 pt-12">
+    <main className="mx-auto max-w-[1600px] px-6 pt-12">
       <div className="flex items-end">
         <div>
           <p className="label-mono text-muted-foreground">Admin</p>

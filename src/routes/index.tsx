@@ -43,7 +43,7 @@ function Index() {
 
   return (
     <main>
-      <section className="mx-auto max-w-6xl px-6 pb-10 pt-20 text-center animate-fade-up">
+      <section className="mx-auto max-w-[1600px] px-6 pb-10 pt-20 text-center animate-fade-up">
         <h1 className="mx-auto mt-5 max-w-3xl text-balance font-serif text-5xl font-normal leading-[1.05] tracking-tight text-primary sm:text-6xl">
           Build better interfaces with AI.
         </h1>
@@ -52,7 +52,7 @@ function Index() {
         </p>
       </section>
 
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-[1600px] px-6">
         <div className="flex flex-wrap items-center gap-2 border-y border-border/80 py-3.5">
           <div className="mr-2 flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 sm:w-64">
             <Search className="size-3.5 text-muted-foreground" />
@@ -85,7 +85,7 @@ function Index() {
         </div>
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 py-8">
+      <section className="mx-auto max-w-[1600px] px-6 py-8">
         {isLoading ? <p className="py-16 text-center text-muted-foreground">Loading…</p> : <EntryGrid entries={filtered} empty="No matches. Try another search." />}
       </section>
     </main>

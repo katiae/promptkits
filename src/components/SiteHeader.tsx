@@ -18,7 +18,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-8 px-6 py-3.5">
+      <div className="mx-auto flex max-w-[1600px] items-center gap-8 px-6 py-3.5">
         <Link to="/" className="flex items-center gap-2.5">
           <Orb hue={150} size={22} />
           <span className="font-serif text-xl tracking-tight">Promptfolio</span>
