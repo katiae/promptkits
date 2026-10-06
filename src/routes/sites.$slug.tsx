@@ -166,7 +166,7 @@ function Detail() {
       </div>
 
       <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2 lg:grid lg:grid-cols-[1.45fr_1fr] lg:gap-2">
-        <section className={`${tab === "demo" ? "block" : "hidden"} rounded-2xl bg-card lg:block`}>
+        <section className={`${tab === "demo" ? "flex" : "hidden"} flex-col rounded-2xl bg-card lg:flex`}>
           <div className="flex items-center gap-1.5 border-b border-border/70 px-4 py-2.5">
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
@@ -189,7 +189,7 @@ function Detail() {
             <iframe
               srcDoc={html}
               title={`${entry.name} demo`}
-              className="h-[620px] w-full rounded-b-2xl bg-card"
+              className="min-h-[620px] w-full flex-1 rounded-b-2xl bg-card"
               sandbox="allow-scripts"
               referrerPolicy="no-referrer"
             />
@@ -197,7 +197,7 @@ function Detail() {
             <iframe
               src={entry.demo_url}
               title={`${entry.name} demo`}
-              className="h-[620px] w-full rounded-b-2xl bg-card"
+              className="min-h-[620px] w-full flex-1 rounded-b-2xl bg-card"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
               loading="lazy"
             />
