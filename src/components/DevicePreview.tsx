@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Monitor, Tablet, Smartphone, BookOpen } from "lucide-react";
+import { Monitor, Tablet, Smartphone, BookOpen, Square } from "lucide-react";
 
-export type Device = "desktop" | "tablet" | "phone" | "fold";
+export type Device = "desktop" | "tablet" | "phone" | "fold" | "flip";
 
 export const DEVICES: { id: Device; label: string; icon: typeof Monitor; w?: number; h?: number }[] = [
   { id: "desktop", label: "Desktop", icon: Monitor },
   { id: "tablet", label: "Tablet", icon: Tablet, w: 820, h: 1180 },
   { id: "fold", label: "Foldable", icon: BookOpen, w: 673, h: 841 },
   { id: "phone", label: "Phone", icon: Smartphone, w: 390, h: 844 },
+  { id: "flip", label: "Flip phone", icon: Square, w: 360, h: 374 },
 ];
 
 export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (d: Device) => void }) {
