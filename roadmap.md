@@ -6,3 +6,6 @@
 - [x] Remove original website links and add demo-only plus coming-soon HTML download actions.
 - [x] Display template thumbnails within the blurred-gradient card artwork.
 - [x] Update the admin labels and verify the main directory and detail view.
+
+- [x] Halyard design system page, visitor sign-in prompt, extra form controls and ZIP download.
+- [ ] In-app generator to create design systems for new templates.
