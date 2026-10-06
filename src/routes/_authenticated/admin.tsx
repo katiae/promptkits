@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { entriesQuery, slugify, type Entry } from "@/lib/entries";
+import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries";
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
 import type { Json } from "@/integrations/supabase/types";
@@ -75,7 +75,7 @@ function Admin() {
     }
     setAutofilling(true);
     try {
-      const meta = await autofillEntry({ data: { prompt: form.prompt } });
+      const meta = await autofillEntry({ data: { prompt: form.prompt, existingTags } });
       setForm((f) =>
         f && {
           ...f,
@@ -95,6 +95,9 @@ function Admin() {
     }
   };
   const report: ScanReport | null = form ? buildReport(form.html_content || null, form.prompt) : null;
+
+  // All tags already in use, sorted — reused for suggestions so tags stay consistent.
+  const existingTags = [...new Set(entries.flatMap((e) => e.tags))].sort();
 
   const onFile = async (file?: File) => {
     if (!file) return;
@@ -120,7 +123,7 @@ function Admin() {
       slug: form.slug || slugify(form.name),
       description: form.description,
       category: form.category,
-      tags: form.tags.split(",").map((t) => slugify(t)).filter(Boolean),
+      tags: normalizeTags(form.tags.split(",")),
       original_url: null,
       demo_url: form.demo_url || null,
       thumbnail_url: form.thumbnail_url || null,
@@ -187,7 +190,35 @@ function Admin() {
           {field("slug", "Slug (auto if empty)")}
           {field("description", "One-line description")}
           {field("category", "Category")}
-          {field("tags", "Tags (comma separated)")}
+          <div>
+            {field("tags", "Tags (comma separated)")}
+            {existingTags.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {existingTags.map((t) => {
+                  const active = normalizeTags(form.tags.split(",")).includes(t);
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() =>
+                        setForm((f) => {
+                          if (!f) return f;
+                          const current = normalizeTags(f.tags.split(","));
+                          const next = active ? current.filter((x) => x !== t) : [...current, t];
+                          return { ...f, tags: next.join(", ") };
+                        })
+                      }
+                      className={`rounded-full px-2.5 py-0.5 text-xs ${
+                        active ? "bg-primary text-primary-foreground" : "border border-border text-muted-foreground hover:bg-secondary"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
           {field("demo_url", "Live demo URL (optional if you upload HTML)")}
           {field("thumbnail_url", "Template thumbnail URL")}
           {field("hue", "Orb colour hue (0–360)")}

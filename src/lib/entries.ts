@@ -34,3 +34,8 @@ export function slugify(s: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
+
+/** Normalize a tag list: slugified, trimmed, de-duplicated, empties removed. */
+export function normalizeTags(tags: string[]): string[] {
+  return [...new Set(tags.map((t) => slugify(t)).filter(Boolean))];
+}
