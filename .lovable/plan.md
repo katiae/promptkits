@@ -18,9 +18,12 @@ A curated directory (like Mobbin) where every entry is a well-known site or app 
 
 ## Design
 Composition from the "Neon tech grid" direction (sticky slim header, mono meta line, filter bar between hairlines, 3-col cards with tags and status footer, split demo + prompt detail), re-skinned:
-- Light mode, soft palette: warm off-white paper background, white cards, soft hairline borders, muted ink text, soft sage and dusty-rose accents (replacing cyan/magenta).
-- Serif headings (Instrument Serif) with a clean sans body (Work Sans) and a mono for meta/prompts (IBM Plex Mono).
-- Faint grid background kept but very low contrast.
+Soft, calming feel based on your reference screenshots:
+- Warm off-white background (about #FAF9F7), white cards on a slightly greyer tray, very soft borders, near-black ink headings and warm grey body text.
+- Gentle accents only: a small soft-green status dot, plus blurred pastel gradient orbs (mint, lavender, sky, blush) used sparingly as decoration and card fallbacks.
+- Type: soft, rounded book serif for headings (Newsreader, regular weight, tight spacing), clean neutral sans for body (Geist), and an uppercase mono for small labels like "PLATFORM" (Geist Mono).
+- Rounded corners, generous whitespace, thin dividers with small arrows on list rows, dark pill primary button plus outlined secondary.
+- No grid background; motion limited to slow fades and soft hover lifts.
 
 ## Starter content
 6 seed entries (e.g. Cohere, Linear, Stripe, Arc, Notion, Raycast-style) with placeholder demo URLs and draft prompts, so the grid isn't empty. You'll replace demo URLs and prompts with your real ones via Admin.
