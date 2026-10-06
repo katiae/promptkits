@@ -178,7 +178,14 @@ function Detail() {
               </button>
             )}
           </div>
-          {html ? (
+          {contentLoading ? (
+            <div className="p-2">
+              <div className="skeleton-art skeleton-palette-1 relative h-[604px] w-full overflow-hidden rounded-xl bg-tray">
+                <div className="skeleton-cloud skeleton-cloud-first" />
+                <div className="skeleton-cloud skeleton-cloud-second" />
+              </div>
+            </div>
+          ) : html ? (
             <iframe
               srcDoc={html}
               title={`${entry.name} demo`}
@@ -202,7 +209,7 @@ function Detail() {
           )}
         </section>
 
-        <aside className={`${tab === "prompt" ? "flex" : "hidden"} flex-col rounded-2xl bg-card lg:flex`}>
+        <aside className={`${tab === "prompt" ? "flex" : "hidden"} flex-col overflow-hidden rounded-2xl bg-card lg:flex`}>
           <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
             <span className="label-mono text-muted-foreground">Build prompt</span>
             <button onClick={copy} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-sm text-primary-foreground hover:opacity-90">
