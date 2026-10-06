@@ -16,3 +16,4 @@
 - First admin is claimed via the `claim_admin()` RPC from /admin — auth-schema triggers are not allowed.
 - `status` (published/draft/pending) and `submitted_by` exist so community submissions can be enabled later without schema changes.
 - Design tokens live only in src/styles.css; components use semantic classes so the look can be restyled centrally.
+- Template thumbnails are captured in the admin browser (html-to-image) and stored as compressed JPEG data URLs in `entries.thumbnail_url` — public storage buckets are blocked in this workspace.
