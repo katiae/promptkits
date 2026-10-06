@@ -65,7 +65,7 @@ function Admin() {
       return !!rows?.length;
     },
   });
-  const { data: entries = [] } = useQuery({ ...entriesQuery(), enabled: !!isAdmin });
+  const { data: entries = [] } = useQuery({ ...entriesQuery(true), enabled: !!isAdmin });
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);

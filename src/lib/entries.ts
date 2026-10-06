@@ -4,16 +4,20 @@ import type { Tables } from "@/integrations/supabase/types";
 
 export type Entry = Tables<"entries">;
 
-export const entriesQuery = () =>
+// Public lists skip heavy columns (full HTML files, scan reports, prompts).
+const LIST_COLUMNS =
+  "id,slug,name,description,category,tags,demo_url,thumbnail_url,status,hue,created_at";
+
+export const entriesQuery = (full = false) =>
   queryOptions({
-    queryKey: ["entries"],
+    queryKey: ["entries", full ? "full" : "list"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("entries")
-        .select("*")
+        .select(full ? "*" : LIST_COLUMNS)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as Entry[];
+      return data as unknown as Entry[];
     },
   });
 
