@@ -216,7 +216,19 @@ function Detail() {
               {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />} {copied ? "Copied" : "Copy"}
             </button>
           </div>
-          <pre className="max-h-[620px] flex-1 overflow-auto whitespace-pre-wrap p-5 font-mono text-[13px] leading-relaxed text-foreground/80">{entry.prompt}</pre>
+          {contentLoading ? (
+            <div className="flex-1 space-y-3 p-5" aria-hidden="true">
+              <div className="h-3.5 w-11/12 rounded bg-secondary" />
+              <div className="h-3.5 w-full rounded bg-secondary" />
+              <div className="h-3.5 w-4/5 rounded bg-secondary" />
+              <div className="h-3.5 w-11/12 rounded bg-secondary" />
+              <div className="h-3.5 w-2/3 rounded bg-secondary" />
+              <div className="h-3.5 w-5/6 rounded bg-secondary" />
+              <div className="h-3.5 w-3/4 rounded bg-secondary" />
+            </div>
+          ) : (
+            <pre className="max-h-[620px] flex-1 overflow-auto whitespace-pre-wrap p-5 font-mono text-[13px] leading-relaxed text-foreground/80">{content?.prompt ?? ""}</pre>
+          )}
         </aside>
       </div>
     </main>
