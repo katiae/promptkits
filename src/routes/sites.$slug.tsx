@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ArrowUpRight, Copy, Check, Heart, Download } from "lucide-react";
 import { toast } from "sonner";
-import { entryMetaQuery, entryContentQuery, slugify } from "@/lib/entries";
+import { entryMetaQuery, entryContentQuery } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
 import { OrbThumb } from "@/components/Orb";
 import { buildReport } from "@/lib/security-scanner";
