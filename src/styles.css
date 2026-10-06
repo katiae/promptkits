@@ -167,3 +167,40 @@
 }
 @keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @utility animate-fade-up { animation: fade-up 700ms cubic-bezier(0.32,0.72,0,1) both; }
+
+/* Loading artwork shares the directory's pastel palette. */
+.skeleton-palette-0 { --cloud-first: var(--chart-1); --cloud-second: var(--chart-2); }
+.skeleton-palette-1 { --cloud-first: var(--chart-3); --cloud-second: var(--chart-4); }
+.skeleton-palette-2 { --cloud-first: var(--chart-2); --cloud-second: var(--chart-5); }
+.skeleton-cloud {
+  position: absolute;
+  width: 65%;
+  height: 80%;
+  border-radius: 50%;
+  filter: blur(38px);
+  opacity: 0.5;
+  animation: skeleton-drift 5s ease-in-out infinite alternate;
+}
+.skeleton-cloud-first { left: -12%; top: -24%; background: var(--cloud-first); }
+.skeleton-cloud-second { right: -10%; bottom: -28%; background: var(--cloud-second); animation-delay: -2.5s; }
+.template-skeleton:nth-child(2n) .skeleton-cloud { animation-delay: -1.5s; }
+.template-grid-placeholders-exit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: skeleton-exit 480ms ease-out both;
+}
+.template-grid-reveal { animation: template-reveal 480ms cubic-bezier(0.32,0.72,0,1) both; }
+@keyframes skeleton-drift {
+  from { transform: translate(0, 0) scale(1); opacity: 0.45; }
+  to { transform: translate(8%, 6%) scale(1.08); opacity: 0.65; }
+}
+@keyframes skeleton-exit { to { opacity: 0; } }
+@keyframes template-reveal {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-cloud, .template-grid-placeholders-exit, .template-grid-reveal, .animate-fade-up { animation: none; }
+  .template-grid-placeholders-exit { opacity: 0; }
+}

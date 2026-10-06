@@ -86,7 +86,7 @@ function Index() {
       </div>
 
       <section className="mx-auto max-w-[1600px] px-6 py-8">
-        {isLoading ? <p className="py-16 text-center text-muted-foreground">Loading…</p> : <EntryGrid entries={filtered} empty="No matches. Try another search." />}
+        <EntryGrid entries={filtered} loading={isLoading} empty="No matches. Try another search." />
       </section>
     </main>
   );
