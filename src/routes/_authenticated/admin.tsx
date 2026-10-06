@@ -163,7 +163,12 @@ function Admin() {
               <option value="pending">Pending review</option>
             </select>
           </label>
-          <div className="md:col-span-2">{field("prompt", "Build prompt", true)}</div>
+          <div className="md:col-span-2">
+            {field("prompt", "Build prompt", true)}
+            <p className="mt-1 text-xs text-muted-foreground">
+              Cover four sections: Overview, Layout &amp; structure, Styling, and Animations &amp; transitions.
+            </p>
+          </div>
           <div className="flex gap-2 md:col-span-2">
             <button onClick={save} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">Save</button>
             <button onClick={() => setForm(null)} className="rounded-full border border-border px-5 py-2 text-sm">Cancel</button>
