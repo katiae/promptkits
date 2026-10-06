@@ -8,6 +8,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { OrbThumb } from "@/components/Orb";
 import { DeviceSwitcher, DeviceFrame, type Device } from "@/components/DevicePreview";
 import { buildReport } from "@/lib/security-scanner";
+import { DesignSystemButton } from "@/components/DesignSystemButton";
 
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
@@ -139,6 +140,7 @@ function Detail() {
               <Download className="size-3.5" /> Download HTML · soon
             </span>
           )}
+          <DesignSystemButton slug={entry.slug} name={entry.name} />
           <button
             onClick={() => toggle(entry.id)}
             className={`flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary ${fav ? "text-heart" : ""}`}
