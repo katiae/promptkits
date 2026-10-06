@@ -64,7 +64,7 @@ function Detail() {
   };
 
   return (
-    <main className="mx-auto max-w-6xl px-6 pt-12">
+    <main className="mx-auto max-w-[1600px] px-6 pt-12">
       <Link to="/" className="label-mono text-muted-foreground hover:text-foreground">← All templates</Link>
       <div className="mt-6 flex flex-wrap items-end gap-4">
         <div>
