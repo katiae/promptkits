@@ -375,7 +375,7 @@ function Admin() {
   );
 }
 
-function DesignSystemCell({ entry, status, busy, onGenerate }: { entry: Entry; status?: DsStatus; busy: boolean; onGenerate: () => void }) {
+function DesignSystemCell({ entry, status, busy, onGenerate }: { entry: Entry; status?: DsStatus | undefined; busy: boolean; onGenerate: () => void }) {
   const bundled = entry.slug === "midnight-cadence";
   if (bundled) return <span className="label-mono text-muted-foreground">Design system · hand-built</span>;
   const btn = "rounded-full border border-border px-3 py-1 hover:bg-secondary disabled:opacity-60";

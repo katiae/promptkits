@@ -145,7 +145,7 @@ function specimen(name: string): string {
     case "Radio": return `<div class="col" role="radiogroup"><label class="ds-radio"><input type="radio" name="r" checked /> Everyone</label><label class="ds-radio"><input type="radio" name="r" /> Only my team</label><label class="ds-radio"><input type="radio" name="r" /> Only me</label></div>`;
     case "Switch": return `<div class="col"><label class="row"><button class="ds-switch" role="switch" aria-checked="true" data-switch></button> Auto-assign</label><label class="row"><button class="ds-switch" role="switch" aria-checked="false" data-switch></button> Compact mode</label></div>`;
     case "DatePicker": return `<div class="ds-cal" data-cal></div>`;
-    case "StatusIcon": return `<div class="row">${["todo", "progress", "done", "cancelled"].map((k) => `<span class="row" style="gap:6px;font-size:13px">${statusSvg(k)} ${k[0].toUpperCase() + k.slice(1)}</span>`).join("")}</div>`;
+    case "StatusIcon": return `<div class="row">${["todo", "progress", "done", "cancelled"].map((k) => `<span class="row" style="gap:6px;font-size:13px">${statusSvg(k)} ${k.charAt(0).toUpperCase() + k.slice(1)}</span>`).join("")}</div>`;
     case "PriorityIcon": return `<div class="row">${[1, 2, 3].map((n) => `<span class="row" style="gap:6px;font-size:13px">${prioritySvg(n)} ${["Low", "Medium", "High"][n - 1]}</span>`).join("")}</div>`;
     case "ProgressBar": return `<div class="col" style="width:100%">${[24, 62, 100].map((v) => `<div class="ds-progress"><i style="width:${v}%"></i></div>`).join("")}</div>`;
     case "Card": return `<div class="row" style="width:100%;align-items:stretch">${["Roadmap", "Insights"].map((t) => `<div class="ds-card" style="flex:1"><div class="ds-tag ds-tag--accent">New</div><h4 style="margin:10px 0 4px;font:600 15px var(--ds-font-display)">${t}</h4><p style="margin:0;font-size:13px;color:var(--ds-fg-2)">A grouped surface for related content.</p></div>`).join("")}</div>`;
@@ -167,7 +167,7 @@ export function guidelinesHtml(s: Spec) {
     { group: "Foundations", items: [["overview", "Overview"], ["colour", "Colour"], ["type", "Type"], ["space", "Space & radius"], ["motion", "Motion"]] },
     ...COMPONENT_GROUPS.map((g) => ({ group: g.group, items: g.items.map((n) => [n.toLowerCase(), n]) })),
   ];
-  const swatch = (k: ThemeKey) => `<div class="sw"><i style="background:var(--ds-${kebab(k)})"></i><b>${k}</b><code>--${p}-${kebab(k)}</code><code class="hex">${esc(s.dark[k])} / ${esc(s.light[k])}</code></div>`;
+  const swatch = (k: ThemeKey) => `<div class="sw"><i style="background:var(--${p}-${kebab(k)})"></i><b>${k}</b><code>--${p}-${kebab(k)}</code><code class="hex">${esc(s.dark[k])} / ${esc(s.light[k])}</code></div>`;
   const comp = (name: string, group: string) => {
     const n = notes.get(name)!;
     const list = (items: string[], cls: string) => items.length ? `<ul class="${cls}">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
