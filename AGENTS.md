@@ -19,3 +19,4 @@
 - Template thumbnails are captured in the admin browser (html-to-image) and stored as compressed JPEG data URLs in `entries.thumbnail_url` — public storage buckets are blocked in this workspace.
 - Template list loading is handled by EntryGrid with a shared EntrySkeleton and CSS crossfade — keeps card geometry and accessible loading states consistent across browsing views.
 - Design system packages live as files in src/design-systems/<template-slug>/ and are served only through signed-in server functions (guidelines HTML in a sandboxed iframe, ZIP built in the browser) — keeps paid-ready content out of public reads.
+- AI design systems: the model returns a strict JSON brief (spec.ts); code renders every file (render.ts) and stores them in `design_systems.files`; repo bundles in src/design-systems/ take precedence — keeps every generated package complete and consistent.
