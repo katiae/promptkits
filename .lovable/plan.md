@@ -1,7 +1,7 @@
-# Reframe the directory around original templates
+# Reframe the directory around interface templates
 
 ## Changes
-- Replace recreation/source-site wording with original template language across public pages and metadata.
+- Replace recreation/source-site wording with template language focused on building better, more distinctive interfaces with AI across public pages and metadata.
 - Remove the original website action and its admin field; keep the existing database column unused for compatibility.
 - Add a clear **Open demo** action that opens only the template demo in a new tab.
 - Add a disabled **Download HTML — coming soon** action beside the demo controls.
