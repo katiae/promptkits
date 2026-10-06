@@ -52,6 +52,8 @@ function Admin() {
     queryFn: async () => {
       const { data } = await supabase.auth.getUser();
       if (!data.user) return false;
+      // Only the owner's account can become admin (enforced in the database too).
+      await supabase.rpc("claim_admin");
       const { data: rows } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id).eq("role", "admin");
       return !!rows?.length;
     },
@@ -59,20 +61,12 @@ function Admin() {
   const { data: entries = [] } = useQuery({ ...entriesQuery(), enabled: !!isAdmin });
   const [form, setForm] = useState<Form | null>(null);
 
-  const claim = async () => {
-    const { data, error } = await supabase.rpc("claim_admin");
-    if (error || !data) { toast.error("An admin already exists."); return; }
-    toast.success("You're now the admin");
-    qc.invalidateQueries({ queryKey: ["is-admin"] });
-  };
-
   if (isLoading) return <p className="py-32 text-center text-muted-foreground">Loading…</p>;
   if (!isAdmin)
     return (
       <main className="mx-auto max-w-md px-6 py-28 text-center">
-        <h1 className="font-serif text-4xl">Admin</h1>
-        <p className="mt-3 text-muted-foreground">If no admin exists yet, the first person to claim it becomes the owner.</p>
-        <button onClick={claim} className="mt-6 rounded-full bg-primary px-5 py-2.5 text-primary-foreground">Claim admin</button>
+        <h1 className="font-serif text-4xl">Page not found</h1>
+        <Link to="/" className="mt-6 inline-block text-primary">← Back home</Link>
       </main>
     );
 
