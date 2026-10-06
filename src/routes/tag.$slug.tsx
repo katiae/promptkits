@@ -8,6 +8,8 @@ export const Route = createFileRoute("/tag/$slug")({
       { name: "description", content: `Interface templates tagged ${params.slug}, with live demos and build prompts.` },
       { property: "og:title", content: `#${params.slug} — Promptfolio` },
       { property: "og:description", content: `AI interface templates tagged ${params.slug}.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => {

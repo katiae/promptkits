@@ -12,6 +12,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Explore distinctive interface templates, try each live demo, and copy the prompt to build it with AI." },
       { property: "og:title", content: "Promptfolio — Better interface templates for AI" },
       { property: "og:description", content: "Live interface templates and the prompts to build them with AI." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,

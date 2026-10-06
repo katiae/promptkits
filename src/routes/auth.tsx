@@ -12,6 +12,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in with Google to save your favourite interface templates." },
       { property: "og:title", content: "Sign in — Promptfolio" },
       { property: "og:description", content: "Save favourite interface templates and prompts." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,

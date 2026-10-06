@@ -12,6 +12,8 @@ export const Route = createFileRoute("/_authenticated/admin")({
       { name: "description", content: "Manage interface templates, demos and prompts." },
       { property: "og:title", content: "Admin — Promptfolio" },
       { property: "og:description", content: "Manage the directory." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
   }),

@@ -12,8 +12,10 @@ export const Route = createFileRoute("/sites/$slug")({
     meta: [
       { title: `${params.slug} interface template — Promptfolio` },
       { name: "description", content: `Try the ${params.slug} interface template and copy its complete AI build prompt.` },
-      { property: "og:title", content: `How to build ${params.slug} with AI — Promptfolio` },
+      { property: "og:title", content: `${params.slug} interface template — Promptfolio` },
       { property: "og:description", content: `Open the live template and copy its complete AI build prompt.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Detail,
