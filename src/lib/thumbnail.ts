@@ -53,7 +53,7 @@ async function settleTemplate(iframe: HTMLIFrameElement, doc: Document) {
   // CSS entrance animations restart inside that fresh clone and the JPEG is
   // taken from their opacity:0 first frame.
   const freezeStyle = doc.createElement("style");
-  freezeStyle.dataset.thumbnailCapture = "true";
+  freezeStyle.dataset["thumbnailCapture"] = "true";
   freezeStyle.textContent = `
     *, *::before, *::after {
       animation-delay: 0s !important;
