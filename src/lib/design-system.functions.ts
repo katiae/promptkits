@@ -6,14 +6,14 @@ import { getBundle, availableSlugs } from "./design-system.server";
 const slugInput = (d: unknown) => z.object({ slug: z.string().min(1).max(120) }).parse(d);
 
 /** Public: which templates have a design system (no content). */
-export const listDesignSystems = createServerFn({ method: "GET" }).handler(async () => availableSlugs());
+export const listDesignSystems = createServerFn({ method: "GET" }).handler(async () => await availableSlugs());
 
 /** Signed-in only: the guidelines page HTML. */
 export const getDesignSystemGuidelines = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator(slugInput)
   .handler(async ({ data }) => {
-    const b = getBundle(data.slug);
+    const b = await getBundle(data.slug);
     return { html: b?.["index.html"] ?? null };
   });
 
@@ -21,4 +21,4 @@ export const getDesignSystemGuidelines = createServerFn({ method: "GET" })
 export const getDesignSystemFiles = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator(slugInput)
-  .handler(async ({ data }) => ({ files: getBundle(data.slug) }));
+  .handler(async ({ data }) => ({ files: await getBundle(data.slug) }));
