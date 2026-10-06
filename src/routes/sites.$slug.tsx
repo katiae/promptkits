@@ -22,6 +22,53 @@ export const Route = createFileRoute("/sites/$slug")({
   component: Detail,
 });
 
+function DetailSkeleton() {
+  return (
+    <main className="mx-auto max-w-[1600px] px-6 pt-12" aria-busy="true" aria-label="Loading template">
+      <div className="template-skeleton" aria-hidden="true">
+        <div className="h-3 w-24 rounded bg-secondary" />
+        <div className="mt-6 flex flex-wrap items-end gap-4">
+          <div className="flex-1">
+            <div className="h-3 w-20 rounded bg-secondary" />
+            <div className="mt-3 h-10 w-2/5 rounded-lg bg-muted" />
+            <div className="mt-3 h-4 w-3/5 rounded bg-secondary" />
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            <div className="h-8 w-28 rounded-full bg-muted" />
+            <div className="h-8 w-36 rounded-full bg-secondary" />
+            <div className="h-8 w-20 rounded-full bg-secondary" />
+          </div>
+        </div>
+        <div className="mt-5 flex gap-1.5">
+          <div className="h-5 w-16 rounded-full bg-secondary" />
+          <div className="h-5 w-20 rounded-full bg-secondary" />
+          <div className="h-5 w-14 rounded-full bg-secondary" />
+        </div>
+        <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2 lg:grid lg:grid-cols-[1.45fr_1fr] lg:gap-2">
+          <div className="rounded-2xl bg-card p-2">
+            <div className="skeleton-art skeleton-palette-1 relative h-[620px] w-full overflow-hidden rounded-xl bg-tray">
+              <div className="skeleton-cloud skeleton-cloud-first" />
+              <div className="skeleton-cloud skeleton-cloud-second" />
+            </div>
+          </div>
+          <div className="hidden flex-col rounded-2xl bg-card p-5 lg:flex">
+            <div className="h-3 w-24 rounded bg-secondary" />
+            <div className="mt-6 space-y-3">
+              <div className="h-3.5 w-11/12 rounded bg-secondary" />
+              <div className="h-3.5 w-full rounded bg-secondary" />
+              <div className="h-3.5 w-4/5 rounded bg-secondary" />
+              <div className="h-3.5 w-11/12 rounded bg-secondary" />
+              <div className="h-3.5 w-2/3 rounded bg-secondary" />
+              <div className="h-3.5 w-5/6 rounded bg-secondary" />
+              <div className="h-3.5 w-3/4 rounded bg-secondary" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 function Detail() {
   const { slug } = Route.useParams();
   const { data: entry, isLoading } = useQuery(entryQuery(slug));
@@ -29,7 +76,7 @@ function Detail() {
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
 
-  if (isLoading) return <p className="py-32 text-center text-muted-foreground">Loading…</p>;
+  if (isLoading) return <DetailSkeleton />;
   if (!entry)
     return (
       <main className="py-32 text-center">
