@@ -48,11 +48,10 @@ function Detail() {
   const html = entry.html_content && buildReport(entry.html_content, "").ok ? entry.html_content : null;
   const hasDemo = !!(html || entry.demo_url);
   const openDemo = () => {
-    if (html) {
-      const url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
-      window.open(url, "_blank", "noopener");
-      setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    } else if (entry.demo_url) window.open(entry.demo_url, "_blank", "noopener,noreferrer");
+    const url = html
+      ? `${window.location.origin}/sites/${entry.slug}/live-demo`
+      : entry.demo_url;
+    if (url) window.open(url, "_blank", "noopener");
   };
   const download = () => {
     if (!html) return;
