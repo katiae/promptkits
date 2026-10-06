@@ -71,7 +71,8 @@ function DetailSkeleton() {
 
 function Detail() {
   const { slug } = Route.useParams();
-  const { data: entry, isLoading } = useQuery(entryQuery(slug));
+  const { data: entry, isLoading } = useQuery(entryMetaQuery(slug));
+  const { data: content, isLoading: contentLoading } = useQuery(entryContentQuery(slug));
   const { isFav, toggle } = useFavorites();
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
@@ -92,7 +93,7 @@ function Detail() {
     setTimeout(() => setCopied(false), 1800);
   };
   const fav = isFav(entry.id);
-  const html = entry.html_content && buildReport(entry.html_content, "").ok ? entry.html_content : null;
+  const html = content?.html_content && buildReport(content.html_content, "").ok ? content.html_content : null;
   const hasDemo = !!(html || entry.demo_url);
   const openDemo = () => {
     const url = html
