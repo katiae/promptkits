@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries";
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
+import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -67,6 +68,7 @@ function Admin() {
   const { data: entries = [] } = useQuery({ ...entriesQuery(), enabled: !!isAdmin });
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
+  const [capturing, setCapturing] = useState(false);
 
   const autofill = async () => {
     if (!form || form.prompt.trim().length < 20) {
