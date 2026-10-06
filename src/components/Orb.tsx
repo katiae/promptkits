@@ -13,6 +13,17 @@ export function Orb({ hue, size = 40, className = "" }: { hue: number; size?: nu
 }
 
 export function OrbThumb({ hue, name, thumbnailUrl }: { hue: number; name: string; thumbnailUrl?: string | null }) {
+  if (thumbnailUrl)
+    return (
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-tray">
+        <img
+          src={thumbnailUrl}
+          alt={`${name} template preview`}
+          loading="lazy"
+          className="size-full object-cover object-top transition duration-500 group-hover:scale-[1.02]"
+        />
+      </div>
+    );
   return (
     <div className="relative grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-xl bg-tray">
       <div

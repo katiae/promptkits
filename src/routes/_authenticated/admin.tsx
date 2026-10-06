@@ -247,7 +247,21 @@ function Admin() {
             )}
           </div>
           {field("demo_url", "Live demo URL (optional if you upload HTML)")}
-          {field("thumbnail_url", "Template thumbnail URL")}
+          <div className="block">
+            <span className="label-mono text-muted-foreground">Thumbnail</span>
+            <div className="mt-1 flex items-center gap-3">
+              {form.thumbnail_url ? (
+                <img src={form.thumbnail_url} alt="Thumbnail preview" className="h-16 w-26 rounded-md border border-border object-cover object-top" />
+              ) : (
+                <span className="text-xs text-muted-foreground">Captured automatically from the HTML when you save.</span>
+              )}
+              {form.html_content && (
+                <button type="button" onClick={regenerate} disabled={capturing} className="rounded-full border border-border px-3 py-1 text-xs hover:bg-secondary">
+                  {capturing ? "Capturing…" : "📸 Regenerate thumbnail"}
+                </button>
+              )}
+            </div>
+          </div>
           {field("hue", "Orb colour hue (0–360)")}
           <label className="block">
             <span className="label-mono text-muted-foreground">Status</span>
@@ -310,7 +324,7 @@ function Admin() {
             </div>
           )}
           <div className="flex gap-2 md:col-span-2">
-            <button onClick={save} disabled={!!report && !report.ok} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">Save</button>
+            <button onClick={save} disabled={(!!report && !report.ok) || capturing} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground disabled:opacity-60">{capturing ? "Capturing thumbnail…" : "Save"}</button>
             <button onClick={() => setForm(null)} className="rounded-full border border-border px-5 py-2 text-sm">Cancel</button>
           </div>
         </div>
