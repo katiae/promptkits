@@ -25,6 +25,48 @@ async function waitForImages(doc: Document) {
   );
 }
 
+async function settleTemplate(iframe: HTMLIFrameElement, doc: Document) {
+  const view = iframe.contentWindow;
+  if (!view) return;
+
+  // Wake up common scroll- and intersection-driven reveal effects.
+  view.dispatchEvent(new Event("resize"));
+  view.dispatchEvent(new Event("scroll"));
+  doc.dispatchEvent(new Event("scroll"));
+  view.scrollTo(0, Math.min(240, Math.max(0, doc.documentElement.scrollHeight - CAPTURE_HEIGHT)));
+  await wait(100);
+  view.scrollTo(0, 0);
+
+  await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+  await wait(2_500);
+
+  // Finish Web Animations API effects at their intended end state.
+  for (const animation of doc.getAnimations()) {
+    try {
+      animation.finish();
+    } catch {
+      // Infinite animations cannot be finished and are safe to leave running.
+    }
+  }
+
+  // Some templates keep hero content at opacity:0 until an observer adds a
+  // class. If that observer cannot see the hidden capture frame, reveal only
+  // zero-opacity elements that occupy the captured viewport.
+  for (const element of Array.from(doc.body.querySelectorAll<HTMLElement>("*"))) {
+    const rect = element.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0 || rect.bottom <= 0 || rect.top >= CAPTURE_HEIGHT) continue;
+    const style = view.getComputedStyle(element);
+    if (style.display === "none") continue;
+    if (Number.parseFloat(style.opacity) === 0) {
+      element.style.setProperty("opacity", "1", "important");
+      element.style.setProperty("transform", "none", "important");
+      element.style.setProperty("visibility", "visible", "important");
+    }
+  }
+
+  await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+}
+
 // Renders template HTML in an invisible in-viewport frame and captures its top viewport.
 // Keeping the frame in the viewport is important: templates commonly reveal their hero
 // with IntersectionObserver, which never fires when the frame is positioned off-screen.
@@ -54,11 +96,7 @@ export async function captureThumbnail(html: string): Promise<string> {
     await doc.fonts?.ready;
     await waitForImages(doc);
 
-    // Give observers two painted frames to activate, then let entrance transitions finish.
-    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-    await wait(2_500);
-
-    iframe.contentWindow?.scrollTo(0, 0);
+    await settleTemplate(iframe, doc);
     const root = doc.documentElement;
     return await toJpeg(root, {
       width: CAPTURE_WIDTH,
@@ -68,6 +106,7 @@ export async function captureThumbnail(html: string): Promise<string> {
       quality: 0.82,
       backgroundColor: getComputedStyle(doc.body).backgroundColor || "#ffffff",
       style: { overflow: "hidden" },
+      skipFonts: true,
     });
   } finally {
     iframe.remove();
