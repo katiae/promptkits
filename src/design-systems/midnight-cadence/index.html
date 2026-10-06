@@ -1060,15 +1060,23 @@ var MARK_DARK = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vc
   var cv = document.querySelector('.cover'), ci = cv.querySelector('.cover-in');
   function fit(){ ci.style.transform = 'scale(' + (cv.clientWidth / 960) + ')'; }
   fit(); window.addEventListener('resize', fit);
+  window.addEventListener('message', function(e){ var d = e.data; if (d && d.type === 'hy-theme' && (d.theme === 'dark' || d.theme === 'light')) setTheme(d.theme); });
   var links = [].slice.call(document.querySelectorAll('.side a'));
   var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
-  links.forEach(function(a, i){ a.addEventListener('click', function(e){ e.preventDefault(); secs[i].scrollIntoView({behavior:'smooth', block:'start'}); }); });
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if (e.isIntersecting) { var i = secs.indexOf(e.target); links.forEach(function(l, n){ l.classList.toggle('on', n === i); }); } });
-    }, { rootMargin: '-30% 0px -65% 0px' });
-    secs.forEach(function(s){ if (s) io.observe(s); });
+  var lockUntil = 0;
+  function mark(i){ links.forEach(function(l, n){ l.classList.toggle('on', n === i); }); }
+  links.forEach(function(a, i){ a.addEventListener('click', function(e){ e.preventDefault(); mark(i); lockUntil = Date.now() + 1200; secs[i].scrollIntoView({behavior:'smooth', block:'start'}); }); });
+  function spy(){
+    if (Date.now() < lockUntil) return;
+    var line = 120, cur = 0;
+    secs.forEach(function(s, i){ if (s && s.getBoundingClientRect().top <= line) cur = i; });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) cur = secs.length - 1;
+    mark(cur);
   }
+  var ticking = false;
+  window.addEventListener('scroll', function(){ if (ticking) return; ticking = true; requestAnimationFrame(function(){ ticking = false; spy(); }); }, { passive: true });
+  window.addEventListener('scrollend', function(){ lockUntil = 0; spy(); });
+  spy();
 })();
 
 </script>
