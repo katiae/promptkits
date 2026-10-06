@@ -208,6 +208,14 @@ function Admin() {
             <p className="mt-1 text-xs text-muted-foreground">
               Cover four sections: Overview, Layout &amp; structure, Styling, and Animations &amp; transitions.
             </p>
+            <button
+              type="button"
+              onClick={autofill}
+              disabled={autofilling}
+              className="mt-2 rounded-full border border-border px-4 py-1.5 text-sm hover:bg-secondary disabled:opacity-50"
+            >
+              {autofilling ? "Filling fields…" : "✨ Auto-fill fields from prompt"}
+            </button>
           </div>
           <div className="md:col-span-2">
             <span className="label-mono text-muted-foreground">Template HTML file (demo + download)</span>
