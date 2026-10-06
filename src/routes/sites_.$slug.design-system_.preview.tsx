@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines } from "@/lib/design-system.functions";
 import { DesignSystemTeaser } from "@/components/DesignSystemButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { withTheme, type DsTheme } from "@/lib/ds-theme";
+import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
 
 export const Route = createFileRoute("/sites_/$slug/design-system_/preview")({
   head: ({ params }) => ({
@@ -28,7 +28,13 @@ function FullScreen() {
   const { user, loading } = useAuth();
   const fetchGuide = useServerFn(getDesignSystemGuidelines);
   const [theme, setTheme] = useState<DsTheme>("dark");
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
+  useEffect(() => { postTheme(frameRef.current, theme); }, [theme]);
   const { data } = useQuery({ queryKey: ["design-system", slug, user?.id], queryFn: () => fetchGuide({ data: { slug } }), enabled: !!user });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, themeRef.current) : ""), [data?.html]);
   const name = slug === "midnight-cadence" ? "Halyard" : slug;
 
   if (!loading && !user) return <div className="mx-auto mt-24 max-w-md rounded-3xl bg-card p-8"><DesignSystemTeaser slug={slug} name={name} /></div>;
@@ -39,7 +45,7 @@ function FullScreen() {
         <div className="ml-auto"><ThemeToggle value={theme} onChange={setTheme} /></div>
       </div>
       {data?.html ? (
-        <iframe key={theme} srcDoc={withTheme(data.html, theme)} title={`${name} design system`} sandbox="allow-scripts" className="w-full flex-1 bg-card" />
+        <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system`} sandbox="allow-scripts" className="w-full flex-1 bg-card" />
       ) : (
         <div className="skeleton-art skeleton-palette-1 relative flex-1 overflow-hidden" aria-busy="true"><div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" /></div>
       )}

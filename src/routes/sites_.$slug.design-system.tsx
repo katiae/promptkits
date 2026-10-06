@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Download, ArrowUpRight } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { withTheme, type DsTheme } from "@/lib/ds-theme";
+import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
@@ -31,11 +31,17 @@ function DesignSystemPage() {
   const fetchFiles = useServerFn(getDesignSystemFiles);
   const [busy, setBusy] = useState(false);
   const [theme, setTheme] = useState<DsTheme>("dark");
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
+  useEffect(() => { postTheme(frameRef.current, theme); }, [theme]);
   const { data, isLoading } = useQuery({
     queryKey: ["design-system", slug, user?.id],
     queryFn: () => fetchGuide({ data: { slug } }),
     enabled: !!user,
   });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, themeRef.current) : ""), [data?.html]);
   const name = slug === "midnight-cadence" ? "Halyard" : slug;
 
   const download = async () => {
@@ -87,7 +93,7 @@ function DesignSystemPage() {
                 <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
               </div>
             ) : data?.html ? (
-              <iframe key={theme} srcDoc={withTheme(data.html, theme)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
+              <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
             ) : (
               <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
             )}
