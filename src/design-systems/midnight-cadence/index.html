@@ -529,6 +529,7 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
 .logos figure.l{background:#f7f7f8;color:#50555f}
 .logos figure.d{background:#0b0c0e;color:#a3a7b0}
 .comp{padding:40px 0;border-top:1px solid var(--hy-line);scroll-margin-top:16px}
+.comp .cname{font-size:1.75rem;letter-spacing:-.03em;font-weight:600;color:var(--hy-fg);margin:6px 0 4px}
 .comp .grp{font:11px var(--hy-font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--hy-fg-3)}
 .frame{border:1px solid var(--hy-line);border-radius:14px;overflow:hidden;background:var(--hy-bg);margin:12px 0 16px}
 .frame iframe{display:block;width:100%;border:0}
@@ -596,7 +597,7 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
   <div class="brand"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iI2VjZWVmMiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNmMmI2NmQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=" width="22" height="22" alt="" id="mark">Halyard</div>
   <span class="t">Foundations</span>
   <a href="#overview">Overview</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#space">Space &amp; radius</a><a href="#logo">Logo</a>
-  <span class="t">Components</span><a href="#c-Accordion">Accordion</a><a href="#c-AppShell">AppShell</a><a href="#c-Avatar">Avatar</a><a href="#c-Button">Button</a><a href="#c-Card">Card</a><a href="#c-Checkbox">Checkbox</a><a href="#c-CommandMenu">CommandMenu</a><a href="#c-DatePicker">DatePicker</a><a href="#c-IssueRow">IssueRow</a><a href="#c-Kbd">Kbd</a><a href="#c-Marquee">Marquee</a><a href="#c-Pill">Pill</a><a href="#c-PriorityIcon">PriorityIcon</a><a href="#c-ProgressBar">ProgressBar</a><a href="#c-Radio">Radio</a><a href="#c-Reveal">Reveal</a><a href="#c-SegmentedControl">SegmentedControl</a><a href="#c-Select">Select</a><a href="#c-StatusIcon">StatusIcon</a><a href="#c-Switch">Switch</a><a href="#c-Table">Table</a><a href="#c-Tabs">Tabs</a><a href="#c-Tag">Tag</a><a href="#c-TextField">TextField</a><a href="#c-Typography">Typography</a>
+  <span class="t">Navigation &amp; controls</span><a href="#c-SegmentedControl">SegmentedControl</a><a href="#c-Tabs">Tabs</a><a href="#c-CommandMenu">CommandMenu</a><a href="#c-AppShell">AppShell</a><a href="#c-Pill">Pill</a><span class="t">Forms &amp; inputs</span><a href="#c-Button">Button</a><a href="#c-TextField">TextField</a><a href="#c-Select">Select</a><a href="#c-Checkbox">Checkbox</a><a href="#c-Radio">Radio</a><a href="#c-Switch">Switch</a><a href="#c-DatePicker">DatePicker</a><span class="t">Feedback &amp; status</span><a href="#c-StatusIcon">StatusIcon</a><a href="#c-PriorityIcon">PriorityIcon</a><a href="#c-ProgressBar">ProgressBar</a><span class="t">Data &amp; content</span><a href="#c-Card">Card</a><a href="#c-Table">Table</a><a href="#c-Tag">Tag</a><a href="#c-Avatar">Avatar</a><a href="#c-Kbd">Kbd</a><a href="#c-Accordion">Accordion</a><a href="#c-Typography">Typography</a><span class="t">Motion &amp; patterns</span><a href="#c-Reveal">Reveal</a><a href="#c-Marquee">Marquee</a><a href="#c-IssueRow">IssueRow</a>
   <div class="theme" role="group" aria-label="Theme"><button aria-pressed="true" data-t="dark">Dark</button><button aria-pressed="false" data-t="light">Light</button></div>
 </nav>
 <main>
@@ -751,25 +752,43 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
 </ul></div></section>
 <h2 class="sec-title" style="margin-top:56px">Components</h2>
 <p class="lead">Live previews running the real components. Each one lists when and how to use it.</p>
-<section class="comp" id="c-Accordion"><span class="grp">Containers</span><div class="frame"><div class="hy-body pv" id="pv-Accordion" style="padding:16px;max-width:620px"></div></div><div class="prose"><h1>Accordion</h1>
-<p>Questions and answers, or any list of sections where people only need one or two open.</p>
+<section class="comp" id="c-SegmentedControl"><span class="grp">Navigation &amp; controls</span><h2 class="cname">SegmentedControl</h2><div class="frame"><div class="hy-body pv" id="pv-SegmentedControl" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>SegmentedControl</h1>
+<p>Switches between two to four views of the same thing (Monthly/Annual, Sign up/Log in, List/Board).</p>
 <ul>
-<li>Panels expand by animating their height from zero; the plus turns into a minus.</li>
-<li>One panel open at a time by default; pass <code>multiple</code> to allow several.</li>
-<li>Closed panels are removed from the tab order.</li>
-</ul></div></section><section class="comp" id="c-AppShell"><span class="grp">Layout</span><div class="frame"><div class="hy-body pv" id="pv-AppShell" style="height:300px;overflow:hidden;border:1px solid var(--hy-line);border-radius:12px"></div></div><div class="prose"><h1>AppShell</h1>
+<li>The thumb slides to the chosen option with the spring curve, 450ms.</li>
+<li>Options share equal width. Keep labels to one or two words.</li>
+<li>Use <code>Tabs</code> instead when choosing between sections or pages.</li>
+</ul></div></section>
+<section class="comp" id="c-Tabs"><span class="grp">Navigation &amp; controls</span><h2 class="cname">Tabs</h2><div class="frame"><div class="hy-body pv" id="pv-Tabs" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Tabs</h1>
+<p>Navigation and filters with a sliding indicator behind the active item.</p>
+<ul>
+<li><code>plain</code> for the site nav, sticky sub-navs and scroll-spy day lists; <code>track</code> for filters inside a bordered track.</li>
+<li><code>orientation="vertical"</code> for side navigation within a page.</li>
+<li>Items with <code>href</code> render as links with <code>aria-current="page"</code>; others as toggle buttons.</li>
+<li>The indicator moves to the new item rather than appearing there. Pass <code>value={null}</code> to hide it (no page active).</li>
+</ul></div></section>
+<section class="comp" id="c-CommandMenu"><span class="grp">Navigation &amp; controls</span><h2 class="cname">CommandMenu</h2><div class="frame"><div class="hy-body pv" id="pv-CommandMenu" style="padding:16px"></div></div><div class="prose"><h1>CommandMenu</h1>
+<p>The global action launcher, opened with ⌘K or Ctrl+K.</p>
+<ul>
+<li>Every frequent action belongs here with its single-key shortcut.</li>
+<li>Type to filter, arrows to move, Enter to run, Escape to close.</li>
+<li>Opens with a spring scale from 96% and a fade; the scrim dims the page.</li>
+<li><code>inline</code> renders it without the overlay for docs and empty states.</li>
+</ul></div></section>
+<section class="comp" id="c-AppShell"><span class="grp">Navigation &amp; controls</span><h2 class="cname">AppShell</h2><div class="frame"><div class="hy-body pv" id="pv-AppShell" style="height:300px;overflow:hidden;border:1px solid var(--hy-line);border-radius:12px"></div></div><div class="prose"><h1>AppShell</h1>
 <p>The full-height app layout: sidebar, sticky top bar and scrolling content.</p>
 <ul>
 <li>Compose with <code>Sidebar</code>, <code>SidebarSection</code>, <code>SidebarItem</code> and <code>Topbar</code>.</li>
 <li>Sidebar items show an icon or a coloured <code>dot</code> (teams, projects) and an optional count in mono.</li>
 <li>Under 860px the sidebar becomes a drawer: pass <code>sidebarOpen</code> and <code>onSidebarClose</code>, and give <code>Topbar</code> an <code>onMenu</code> handler to show the menu button.</li>
-</ul></div></section><section class="comp" id="c-Avatar"><span class="grp">Content</span><div class="frame"><div class="hy-body pv" id="pv-Avatar" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Avatar</h1>
-<p>A person's initials in a coloured disc.</p>
+</ul></div></section>
+<section class="comp" id="c-Pill"><span class="grp">Navigation &amp; controls</span><h2 class="cname">Pill</h2><div class="frame"><div class="hy-body pv" id="pv-Pill" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Pill</h1>
+<p>An announcement link at the top of a hero.</p>
 <ul>
-<li>Pass <code>name</code>; the colour is picked from the name so the same person always gets the same colour.</li>
-<li><code>xs</code> 18px in activity feeds, <code>sm</code> 20px in rows, <code>md</code> 28px in quotes and headers.</li>
-<li>The full name is the accessible label and tooltip.</li>
-</ul></div></section><section class="comp" id="c-Button"><span class="grp">Actions</span><div class="frame"><div class="hy-body pv" id="pv-Button" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Button</h1>
+<li>One short sentence plus an optional solid badge ("New", "Beta"). The arrow nudges right on hover.</li>
+<li>Link it to the changelog entry or page that explains the news.</li>
+</ul></div></section>
+<section class="comp" id="c-Button"><span class="grp">Forms &amp; inputs</span><h2 class="cname">Button</h2><div class="frame"><div class="hy-body pv" id="pv-Button" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Button</h1>
 <p>Triggers an action; one primary button per view, for the main next step.</p>
 <ul>
 <li><strong>primary</strong>: the single most important action (Start free, Create issue). Fill <code>hy-btn-primary-bg</code>, text <code>hy-fg-inverse</code>.</li>
@@ -779,97 +798,82 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
 <li>Sizes: <code>sm</code> 30px (toolbars), <code>md</code> 36px (default), <code>lg</code> 40px (forms, plan cards).</li>
 <li>For links use <code>LinkButton</code>, or <code>buttonClass()</code> on a router link.</li>
 <li>Labels are verbs in sentence case: "Start building", not "Get Started Now".</li>
-</ul></div></section><section class="comp" id="c-Card"><span class="grp">Containers</span><div class="frame"><div class="hy-body pv" id="pv-Card" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px"></div></div><div class="prose"><h1>Card</h1>
+</ul></div></section>
+<section class="comp" id="c-TextField"><span class="grp">Forms &amp; inputs</span><h2 class="cname">TextField</h2><div class="frame"><div class="hy-body pv" id="pv-TextField" style="display:grid;gap:12px;padding:16px;max-width:380px"></div></div><div class="prose"><h1>TextField</h1>
+<p>A labelled single-line input with an optional hint or error.</p>
+<ul>
+<li>The label is always visible; placeholders show an example, never the label.</li>
+<li>Focus shows an amber border and a soft <code>hy-signal-soft</code> halo.</li>
+<li>Errors say what went wrong and how to fix it, in <code>hy-danger</code>, and are linked to the input for screen readers.</li>
+</ul></div></section>
+<section class="comp" id="c-Select"><span class="grp">Forms &amp; inputs</span><h2 class="cname">Select</h2><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><div class="hy-field" style="width:260px"><label class="hy-field__label">Cycle length</label><select class="hy-select"><option>1 week</option><option selected>2 weeks</option><option>3 weeks</option></select></div><div class="hy-field" style="width:260px"><label class="hy-field__label">Priority</label><select class="hy-select"><option>Urgent</option><option>High</option><option selected>Medium</option><option>Low</option></select></div></div></div><div class="prose"><h1>Select</h1><p>Pick one option from a longer list.</p><ul><li>Shares height, radius and focus halo with TextField.</li><li>Uses the native control for accessibility and mobile pickers.</li></ul></div></section>
+<section class="comp" id="c-Checkbox"><span class="grp">Forms &amp; inputs</span><h2 class="cname">Checkbox</h2><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-check"><input type="checkbox" checked><span class="hy-check__box"></span>Email me updates</label><label class="hy-check"><input type="checkbox"><span class="hy-check__box"></span>Include archived</label><label class="hy-check"><input type="checkbox" disabled><span class="hy-check__box"></span>Disabled</label></div></div><div class="prose"><h1>Checkbox</h1><p>For independent on/off choices in a list or form.</p><ul><li>Checked state fills with <code>hy-signal</code>.</li><li>The whole label is clickable.</li><li>Use a Switch instead when the change applies immediately.</li></ul></div></section>
+<section class="comp" id="c-Radio"><span class="grp">Forms &amp; inputs</span><h2 class="cname">Radio</h2><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-radio"><input type="radio" name="r1" checked><span class="hy-radio__dot"></span>Weekly</label><label class="hy-radio"><input type="radio" name="r1"><span class="hy-radio__dot"></span>Every two weeks</label><label class="hy-radio"><input type="radio" name="r1"><span class="hy-radio__dot"></span>Monthly</label></div></div><div class="prose"><h1>Radio</h1><p>One choice from a small set of options that are all visible.</p><ul><li>Use for 2 to 5 options; use Select for more.</li><li>Always preselect a sensible default.</li></ul></div></section>
+<section class="comp" id="c-Switch"><span class="grp">Forms &amp; inputs</span><h2 class="cname">Switch</h2><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-switch"><input type="checkbox" checked><span class="hy-switch__track"></span>Auto-assign issues</label><label class="hy-switch"><input type="checkbox"><span class="hy-switch__track"></span>Weekend mode</label></div></div><div class="prose"><h1>Switch</h1><p>A setting that takes effect immediately.</p><ul><li>The thumb slides with the same easing as SegmentedControl.</li><li>Label states what is on, never “Enable/Disable”.</li></ul></div></section>
+<section class="comp" id="c-DatePicker"><span class="grp">Forms &amp; inputs</span><h2 class="cname">DatePicker</h2><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><div class="hy-date" id="hy-date-demo"></div></div></div><div class="prose"><h1>DatePicker</h1><p>Choose a single day, such as a due date or cycle start.</p><ul><li>Today is outlined; the selection fills with <code>hy-signal</code>.</li><li>Weeks start on Monday.</li><li>Pair with a TextField showing the formatted date when space is tight.</li></ul></div></section>
+<section class="comp" id="c-StatusIcon"><span class="grp">Feedback &amp; status</span><h2 class="cname">StatusIcon</h2><div class="frame"><div class="hy-body pv" id="pv-StatusIcon" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>StatusIcon</h1>
+<p>A 14px circle that shows where an issue is in the workflow.</p>
+<ul>
+<li>todo: outline. in-progress: half filled in <code>hy-signal</code>. in-review: three-quarters in <code>hy-ok</code>. done: solid <code>hy-info</code>. canceled: grey with a strike.</li>
+<li>Always pair with the text label somewhere on screen, or rely on its built-in accessible label.</li>
+</ul></div></section>
+<section class="comp" id="c-PriorityIcon"><span class="grp">Feedback &amp; status</span><h2 class="cname">PriorityIcon</h2><div class="frame"><div class="hy-body pv" id="pv-PriorityIcon" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>PriorityIcon</h1>
+<p>Three rising bars; the number of lit bars is the priority (0 to 3).</p>
+<ul>
+<li>Sits at the start of an issue row. Lit bars use <code>hy-fg-2</code>, unlit <code>hy-line-strong</code>.</li>
+</ul></div></section>
+<section class="comp" id="c-ProgressBar"><span class="grp">Feedback &amp; status</span><h2 class="cname">ProgressBar</h2><div class="frame"><div class="hy-body pv" id="pv-ProgressBar" style="display:grid;gap:12px;padding:16px;max-width:360px"></div></div><div class="prose"><h1>ProgressBar</h1>
+<p>A 6px bar for how much of a cycle, project or upload is complete.</p>
+<ul>
+<li><code>signal</code> for the live or current item, <code>info</code> for others, <code>ok</code> for review stages.</li>
+<li><code>animateOnScroll</code> grows the bar from zero as it enters the viewport.</li>
+<li>Always give it a <code>label</code>.</li>
+</ul></div></section>
+<section class="comp" id="c-Card"><span class="grp">Data &amp; content</span><h2 class="cname">Card</h2><div class="frame"><div class="hy-body pv" id="pv-Card" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px"></div></div><div class="prose"><h1>Card</h1>
 <p>A bordered surface that groups one idea: a feature, a plan, an integration, a cycle.</p>
 <ul>
 <li><code>spotlight</code> (on by default) adds a soft glow under the cursor and lights the border nearby in <code>hy-signal</code>.</li>
 <li><code>highlighted</code> marks the one recommended item in a set (an amber border and faint top tint).</li>
 <li><code>interactive</code> lifts 2px on hover for clickable cards.</li>
 <li>Cards in a row share padding and baselines; let content set the height.</li>
-</ul></div></section><section class="comp" id="c-CommandMenu"><span class="grp">Navigation</span><div class="frame"><div class="hy-body pv" id="pv-CommandMenu" style="padding:16px"></div></div><div class="prose"><h1>CommandMenu</h1>
-<p>The global action launcher, opened with ⌘K or Ctrl+K.</p>
-<ul>
-<li>Every frequent action belongs here with its single-key shortcut.</li>
-<li>Type to filter, arrows to move, Enter to run, Escape to close.</li>
-<li>Opens with a spring scale from 96% and a fade; the scrim dims the page.</li>
-<li><code>inline</code> renders it without the overlay for docs and empty states.</li>
-</ul></div></section><section class="comp" id="c-IssueRow"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-IssueRow" style="padding:8px 0;background:var(--hy-bg-raise);border:1px solid var(--hy-line);border-radius:12px;container-type:inline-size"></div></div><div class="prose"><h1>IssueRow</h1>
-<p>One work item in a list: priority, ID, status, title, label and assignee.</p>
-<ul>
-<li>Wrap rows in <code>IssueList</code>. Titles truncate with an ellipsis; nothing else wraps.</li>
-<li>In narrow containers (under 520px) the priority and label hide automatically.</li>
-<li><code>flash</code> highlights a row once in <code>hy-signal-soft</code> right after it is created.</li>
-</ul></div></section><section class="comp" id="c-Kbd"><span class="grp">Content</span><div class="frame"><div class="hy-body pv" id="pv-Kbd" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Kbd</h1>
-<p>Shows a keyboard key or shortcut.</p>
-<ul>
-<li><code>sm</code> inline in text and menus ("press ⌘ K"), <code>lg</code> as an illustration.</li>
-<li><code>pressed</code> animates a key press (2px drop, amber label). Use it to demonstrate shortcuts, never as a state.</li>
-<li>Every command-menu item with a shortcut shows it with <code>Kbd</code>.</li>
-</ul></div></section><section class="comp" id="c-Marquee"><span class="grp">Marketing</span><div class="frame"><div class="hy-body pv" id="pv-Marquee" style="padding:20px 0"></div></div><div class="prose"><h1>Marquee</h1>
-<p>An endless horizontal strip, used for customer names under a hero.</p>
-<ul>
-<li>Edges fade out; it pauses on hover. With reduced motion it stops and wraps into centred rows.</li>
-<li>Items are in <code>hy-fg-3</code> and brighten on hover. Keep them all the same height.</li>
-</ul></div></section><section class="comp" id="c-Pill"><span class="grp">Marketing</span><div class="frame"><div class="hy-body pv" id="pv-Pill" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Pill</h1>
-<p>An announcement link at the top of a hero.</p>
-<ul>
-<li>One short sentence plus an optional solid badge ("New", "Beta"). The arrow nudges right on hover.</li>
-<li>Link it to the changelog entry or page that explains the news.</li>
-</ul></div></section><section class="comp" id="c-PriorityIcon"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-PriorityIcon" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>PriorityIcon</h1>
-<p>Three rising bars; the number of lit bars is the priority (0 to 3).</p>
-<ul>
-<li>Sits at the start of an issue row. Lit bars use <code>hy-fg-2</code>, unlit <code>hy-line-strong</code>.</li>
-</ul></div></section><section class="comp" id="c-ProgressBar"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-ProgressBar" style="display:grid;gap:12px;padding:16px;max-width:360px"></div></div><div class="prose"><h1>ProgressBar</h1>
-<p>A 6px bar for how much of a cycle, project or upload is complete.</p>
-<ul>
-<li><code>signal</code> for the live or current item, <code>info</code> for others, <code>ok</code> for review stages.</li>
-<li><code>animateOnScroll</code> grows the bar from zero as it enters the viewport.</li>
-<li>Always give it a <code>label</code>.</li>
-</ul></div></section><section class="comp" id="c-Reveal"><span class="grp">Motion</span><div class="frame"><div class="hy-body pv" id="pv-Reveal" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Reveal</h1>
-<p>Applies the system's motion presets to any element.</p>
-<ul>
-<li><code>mode="load"</code> with <code>index</code>: the hero entrance, blur plus 14px rise, staggered 90ms. Use once per page.</li>
-<li><code>mode="scroll"</code> (default): fades from 25% and rises 24px as the element enters the viewport.</li>
-<li><code>mode="tilt"</code>: a product window that flattens from an 18° tilt as it scrolls in; give the parent <code>perspective: 1600px</code>.</li>
-<li>Everything ends at the resting state, so content is complete with reduced motion or no JavaScript.</li>
-</ul></div></section><section class="comp" id="c-SegmentedControl"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" id="pv-SegmentedControl" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>SegmentedControl</h1>
-<p>Switches between two to four views of the same thing (Monthly/Annual, Sign up/Log in, List/Board).</p>
-<ul>
-<li>The thumb slides to the chosen option with the spring curve, 450ms.</li>
-<li>Options share equal width. Keep labels to one or two words.</li>
-<li>Use <code>Tabs</code> instead when choosing between sections or pages.</li>
-</ul></div></section><section class="comp" id="c-StatusIcon"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-StatusIcon" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>StatusIcon</h1>
-<p>A 14px circle that shows where an issue is in the workflow.</p>
-<ul>
-<li>todo: outline. in-progress: half filled in <code>hy-signal</code>. in-review: three-quarters in <code>hy-ok</code>. done: solid <code>hy-info</code>. canceled: grey with a strike.</li>
-<li>Always pair with the text label somewhere on screen, or rely on its built-in accessible label.</li>
-</ul></div></section><section class="comp" id="c-Table"><span class="grp">Containers</span><div class="frame"><div class="hy-body pv" id="pv-Table" style="padding:16px"></div></div><div class="prose"><h1>Table</h1>
+</ul></div></section>
+<section class="comp" id="c-Table"><span class="grp">Data &amp; content</span><h2 class="cname">Table</h2><div class="frame"><div class="hy-body pv" id="pv-Table" style="padding:16px"></div></div><div class="prose"><h1>Table</h1>
 <p>A native table styled to the system, inside a bordered panel that scrolls sideways on small screens.</p>
 <ul>
 <li>Header row sits on <code>hy-bg-raise</code> and stays visible while scrolling.</li>
 <li>Group rows (<code>TableGroupRow</code>) use the mono eyebrow style.</li>
 <li><code>TableCheck</code> renders ✓ in <code>hy-fg</code> and — in <code>hy-fg-3</code>, each with an accessible label.</li>
 <li>Numbers use tabular figures.</li>
-</ul></div></section><section class="comp" id="c-Tabs"><span class="grp">Navigation</span><div class="frame"><div class="hy-body pv" id="pv-Tabs" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Tabs</h1>
-<p>Navigation and filters with a sliding indicator behind the active item.</p>
-<ul>
-<li><code>plain</code> for the site nav, sticky sub-navs and scroll-spy day lists; <code>track</code> for filters inside a bordered track.</li>
-<li><code>orientation="vertical"</code> for side navigation within a page.</li>
-<li>Items with <code>href</code> render as links with <code>aria-current="page"</code>; others as toggle buttons.</li>
-<li>The indicator moves to the new item rather than appearing there. Pass <code>value={null}</code> to hide it (no page active).</li>
-</ul></div></section><section class="comp" id="c-Tag"><span class="grp">Content</span><div class="frame"><div class="hy-body pv" id="pv-Tag" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Tag</h1>
+</ul></div></section>
+<section class="comp" id="c-Tag"><span class="grp">Data &amp; content</span><h2 class="cname">Tag</h2><div class="frame"><div class="hy-body pv" id="pv-Tag" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Tag</h1>
 <p>A short label for a category or state, one or two words.</p>
 <ul>
 <li><code>neutral</code> for categories (Bug, Feature). Tones only mean status: <code>signal</code> live/new, <code>ok</code> in review, <code>info</code> done, <code>danger</code> blocked.</li>
 <li><code>solid</code> for one high-emphasis label per view, like "New" in an announcement pill.</li>
 <li><code>dot</code> adds a leading dot in the tone colour; use it in lists where the colour carries meaning.</li>
-</ul></div></section><section class="comp" id="c-TextField"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" id="pv-TextField" style="display:grid;gap:12px;padding:16px;max-width:380px"></div></div><div class="prose"><h1>TextField</h1>
-<p>A labelled single-line input with an optional hint or error.</p>
+</ul></div></section>
+<section class="comp" id="c-Avatar"><span class="grp">Data &amp; content</span><h2 class="cname">Avatar</h2><div class="frame"><div class="hy-body pv" id="pv-Avatar" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Avatar</h1>
+<p>A person's initials in a coloured disc.</p>
 <ul>
-<li>The label is always visible; placeholders show an example, never the label.</li>
-<li>Focus shows an amber border and a soft <code>hy-signal-soft</code> halo.</li>
-<li>Errors say what went wrong and how to fix it, in <code>hy-danger</code>, and are linked to the input for screen readers.</li>
-</ul></div></section><section class="comp" id="c-Typography"><span class="grp">Foundations</span><div class="frame"><div class="hy-body pv" id="pv-Typography" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Typography</h1>
+<li>Pass <code>name</code>; the colour is picked from the name so the same person always gets the same colour.</li>
+<li><code>xs</code> 18px in activity feeds, <code>sm</code> 20px in rows, <code>md</code> 28px in quotes and headers.</li>
+<li>The full name is the accessible label and tooltip.</li>
+</ul></div></section>
+<section class="comp" id="c-Kbd"><span class="grp">Data &amp; content</span><h2 class="cname">Kbd</h2><div class="frame"><div class="hy-body pv" id="pv-Kbd" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Kbd</h1>
+<p>Shows a keyboard key or shortcut.</p>
+<ul>
+<li><code>sm</code> inline in text and menus ("press ⌘ K"), <code>lg</code> as an illustration.</li>
+<li><code>pressed</code> animates a key press (2px drop, amber label). Use it to demonstrate shortcuts, never as a state.</li>
+<li>Every command-menu item with a shortcut shows it with <code>Kbd</code>.</li>
+</ul></div></section>
+<section class="comp" id="c-Accordion"><span class="grp">Data &amp; content</span><h2 class="cname">Accordion</h2><div class="frame"><div class="hy-body pv" id="pv-Accordion" style="padding:16px;max-width:620px"></div></div><div class="prose"><h1>Accordion</h1>
+<p>Questions and answers, or any list of sections where people only need one or two open.</p>
+<ul>
+<li>Panels expand by animating their height from zero; the plus turns into a minus.</li>
+<li>One panel open at a time by default; pass <code>multiple</code> to allow several.</li>
+<li>Closed panels are removed from the tab order.</li>
+</ul></div></section>
+<section class="comp" id="c-Typography"><span class="grp">Data &amp; content</span><h2 class="cname">Typography</h2><div class="frame"><div class="hy-body pv" id="pv-Typography" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Typography</h1>
 <p><code>Heading</code>, <code>Text</code> and <code>Eyebrow</code> apply the type scale so screens never set sizes by hand.</p>
 <ul>
 <li><code>Heading</code> level 1 to 4 maps to display-lg, display-md, display-sm and card-title. Override the look with <code>size</code> when the outline needs a different level.</li>
@@ -877,7 +881,27 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
 <li><code>Text</code> defaults to body in <code>hy-fg-2</code>; <code>size="lede"</code> for intros; <code>mono</code> for IDs and numbers.</li>
 <li><code>Eyebrow</code> labels a section: mono, uppercase, <code>hy-signal</code>, after an 18px rule.</li>
 </ul></div></section>
-<section class="comp" id="c-Checkbox"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-check"><input type="checkbox" checked><span class="hy-check__box"></span>Email me updates</label><label class="hy-check"><input type="checkbox"><span class="hy-check__box"></span>Include archived</label><label class="hy-check"><input type="checkbox" disabled><span class="hy-check__box"></span>Disabled</label></div></div><div class="prose"><h1>Checkbox</h1><p>For independent on/off choices in a list or form.</p><ul><li>Checked state fills with <code>hy-signal</code>.</li><li>The whole label is clickable.</li><li>Use a Switch instead when the change applies immediately.</li></ul></div></section><section class="comp" id="c-Radio"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-radio"><input type="radio" name="r1" checked><span class="hy-radio__dot"></span>Weekly</label><label class="hy-radio"><input type="radio" name="r1"><span class="hy-radio__dot"></span>Every two weeks</label><label class="hy-radio"><input type="radio" name="r1"><span class="hy-radio__dot"></span>Monthly</label></div></div><div class="prose"><h1>Radio</h1><p>One choice from a small set of options that are all visible.</p><ul><li>Use for 2 to 5 options; use Select for more.</li><li>Always preselect a sensible default.</li></ul></div></section><section class="comp" id="c-Switch"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-switch"><input type="checkbox" checked><span class="hy-switch__track"></span>Auto-assign issues</label><label class="hy-switch"><input type="checkbox"><span class="hy-switch__track"></span>Weekend mode</label></div></div><div class="prose"><h1>Switch</h1><p>A setting that takes effect immediately.</p><ul><li>The thumb slides with the same easing as SegmentedControl.</li><li>Label states what is on, never “Enable/Disable”.</li></ul></div></section><section class="comp" id="c-Select"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><div class="hy-field" style="width:260px"><label class="hy-field__label">Cycle length</label><select class="hy-select"><option>1 week</option><option selected>2 weeks</option><option>3 weeks</option></select></div><div class="hy-field" style="width:260px"><label class="hy-field__label">Priority</label><select class="hy-select"><option>Urgent</option><option>High</option><option selected>Medium</option><option>Low</option></select></div></div></div><div class="prose"><h1>Select</h1><p>Pick one option from a longer list.</p><ul><li>Shares height, radius and focus halo with TextField.</li><li>Uses the native control for accessibility and mobile pickers.</li></ul></div></section><section class="comp" id="c-DatePicker"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><div class="hy-date" id="hy-date-demo"></div></div></div><div class="prose"><h1>DatePicker</h1><p>Choose a single day, such as a due date or cycle start.</p><ul><li>Today is outlined; the selection fills with <code>hy-signal</code>.</li><li>Weeks start on Monday.</li><li>Pair with a TextField showing the formatted date when space is tight.</li></ul></div></section>
+<section class="comp" id="c-Reveal"><span class="grp">Motion &amp; patterns</span><h2 class="cname">Reveal</h2><div class="frame"><div class="hy-body pv" id="pv-Reveal" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Reveal</h1>
+<p>Applies the system's motion presets to any element.</p>
+<ul>
+<li><code>mode="load"</code> with <code>index</code>: the hero entrance, blur plus 14px rise, staggered 90ms. Use once per page.</li>
+<li><code>mode="scroll"</code> (default): fades from 25% and rises 24px as the element enters the viewport.</li>
+<li><code>mode="tilt"</code>: a product window that flattens from an 18° tilt as it scrolls in; give the parent <code>perspective: 1600px</code>.</li>
+<li>Everything ends at the resting state, so content is complete with reduced motion or no JavaScript.</li>
+</ul></div></section>
+<section class="comp" id="c-Marquee"><span class="grp">Motion &amp; patterns</span><h2 class="cname">Marquee</h2><div class="frame"><div class="hy-body pv" id="pv-Marquee" style="padding:20px 0"></div></div><div class="prose"><h1>Marquee</h1>
+<p>An endless horizontal strip, used for customer names under a hero.</p>
+<ul>
+<li>Edges fade out; it pauses on hover. With reduced motion it stops and wraps into centred rows.</li>
+<li>Items are in <code>hy-fg-3</code> and brighten on hover. Keep them all the same height.</li>
+</ul></div></section>
+<section class="comp" id="c-IssueRow"><span class="grp">Motion &amp; patterns</span><h2 class="cname">IssueRow</h2><div class="frame"><div class="hy-body pv" id="pv-IssueRow" style="padding:8px 0;background:var(--hy-bg-raise);border:1px solid var(--hy-line);border-radius:12px;container-type:inline-size"></div></div><div class="prose"><h1>IssueRow</h1>
+<p>One work item in a list: priority, ID, status, title, label and assignee.</p>
+<ul>
+<li>Wrap rows in <code>IssueList</code>. Titles truncate with an ellipsis; nothing else wraps.</li>
+<li>In narrow containers (under 520px) the priority and label hide automatically.</li>
+<li><code>flash</code> highlights a row once in <code>hy-signal-soft</code> right after it is created.</li>
+</ul></div></section>
 </main>
 </div>
 <script>
