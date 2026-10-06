@@ -42,9 +42,6 @@ function Index() {
   return (
     <main>
       <section className="mx-auto max-w-6xl px-6 pb-10 pt-20 text-center animate-fade-up">
-        <p className="label-mono inline-flex items-center gap-2 text-muted-foreground">
-          <span className="size-1.5 rounded-full bg-live" /> Directory · {data.length} recreations
-        </p>
         <h1 className="mx-auto mt-5 max-w-3xl text-balance font-serif text-5xl font-normal leading-[1.05] tracking-tight text-primary sm:text-6xl">
           Famous interfaces, rebuilt from the prompt.
         </h1>
