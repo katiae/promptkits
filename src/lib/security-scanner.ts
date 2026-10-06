@@ -57,10 +57,10 @@ export function scanHtml(html: string): Finding[] {
   for (const r of HTML_RULES) if (r.re.test(html)) findings.push({ severity: r.severity, rule: r.rule, detail: r.detail });
 
   for (const m of html.matchAll(/<script[^>]*\ssrc=["']?([^"'\s>]+)/gi)) {
-    if (!isTrusted(m[1])) findings.push({ severity: "block", rule: "untrusted-script", detail: `Loads a script from an unapproved source: ${m[1]}` });
+    if (!isTrusted(m[1] ?? "")) findings.push({ severity: "block", rule: "untrusted-script", detail: `Loads a script from an unapproved source: ${m[1]}` });
   }
   for (const m of html.matchAll(/<link[^>]*\shref=["']?(https?:[^"'\s>]+)/gi)) {
-    if (!isTrusted(m[1])) findings.push({ severity: "warn", rule: "external-asset", detail: `Loads an asset from ${m[1]}` });
+    if (!isTrusted(m[1] ?? "")) findings.push({ severity: "warn", rule: "external-asset", detail: `Loads an asset from ${m[1]}` });
   }
   if (html.length > 2_000_000) findings.push({ severity: "block", rule: "size", detail: "File is larger than 2 MB." });
   if (!/<html|<body|<div/i.test(html)) findings.push({ severity: "block", rule: "not-html", detail: "This doesn't look like an HTML page." });
