@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ArrowUpRight, Copy, Check, Heart, Download } from "lucide-react";
+import { ArrowUpRight, Copy, Check, Download } from "lucide-react";
+import { FavHeart } from "@/components/FavHeart";
 import { toast } from "sonner";
 import { entryMetaQuery, entryContentQuery } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
@@ -145,7 +146,7 @@ function Detail() {
             onClick={() => toggle(entry.id)}
             className={`flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary ${fav ? "text-heart" : ""}`}
           >
-            <Heart className="size-3.5" fill={fav ? "currentColor" : "none"} /> {fav ? "Saved" : "Save"}
+            <FavHeart fav={fav} className="size-3.5" /> {fav ? "Saved" : "Save"}
           </button>
         </div>
       </div>

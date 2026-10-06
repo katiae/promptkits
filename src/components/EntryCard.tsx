@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Heart } from "lucide-react";
+import { FavHeart } from "./FavHeart";
 import type { Entry } from "@/lib/entries";
 import { OrbThumb } from "./Orb";
 
@@ -23,7 +23,7 @@ export function EntryCard({ entry, fav, onFav }: { entry: Entry; fav: boolean; o
           aria-label={fav ? "Remove from saved" : "Save"}
           className={`relative z-10 rounded-full p-1.5 transition hover:bg-secondary ${fav ? "text-heart" : "text-muted-foreground"}`}
         >
-          <Heart className="size-4" fill={fav ? "currentColor" : "none"} />
+          <FavHeart fav={fav} className="size-4" />
         </button>
       </div>
       <div className="flex flex-wrap gap-1.5 px-2.5 pb-2 pt-3">
