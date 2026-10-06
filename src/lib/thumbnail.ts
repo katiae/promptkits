@@ -1,9 +1,48 @@
-// Renders template HTML offscreen and captures the top viewport as a small JPEG data URL.
+const CAPTURE_WIDTH = 1280;
+const CAPTURE_HEIGHT = 800;
+
+function wait(ms: number) {
+  return new Promise<void>((resolve) => window.setTimeout(resolve, ms));
+}
+
+async function waitForImages(doc: Document) {
+  const images = Array.from(doc.images);
+  await Promise.all(
+    images.map(async (image) => {
+      if (!image.complete) {
+        await Promise.race([
+          new Promise<void>((resolve) => {
+            image.addEventListener("load", () => resolve(), { once: true });
+            image.addEventListener("error", () => resolve(), { once: true });
+          }),
+          wait(4_000),
+        ]);
+      }
+      if (image.complete && image.naturalWidth > 0) {
+        await image.decode().catch(() => undefined);
+      }
+    }),
+  );
+}
+
+// Renders template HTML in an invisible in-viewport frame and captures its top viewport.
+// Keeping the frame in the viewport is important: templates commonly reveal their hero
+// with IntersectionObserver, which never fires when the frame is positioned off-screen.
 export async function captureThumbnail(html: string): Promise<string> {
   const { toJpeg } = await import("html-to-image");
   const iframe = document.createElement("iframe");
   iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
-  iframe.style.cssText = "position:fixed;left:-10000px;top:0;width:1280px;height:800px;border:0;";
+  iframe.setAttribute("aria-hidden", "true");
+  iframe.style.cssText = [
+    "position:fixed",
+    "inset:0 auto auto 0",
+    `width:${CAPTURE_WIDTH}px`,
+    `height:${CAPTURE_HEIGHT}px`,
+    "border:0",
+    "opacity:0",
+    "pointer-events:none",
+    "z-index:-2147483647",
+  ].join(";");
   document.body.appendChild(iframe);
   try {
     await new Promise<void>((resolve) => {
@@ -13,11 +52,17 @@ export async function captureThumbnail(html: string): Promise<string> {
     const doc = iframe.contentDocument;
     if (!doc) throw new Error("Could not render the template");
     await doc.fonts?.ready;
-    await new Promise((r) => setTimeout(r, 1500)); // let entrance animations settle
+    await waitForImages(doc);
+
+    // Give observers two painted frames to activate, then let entrance transitions finish.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    await wait(2_500);
+
+    iframe.contentWindow?.scrollTo(0, 0);
     const root = doc.documentElement;
     return await toJpeg(root, {
-      width: 1280,
-      height: 800,
+      width: CAPTURE_WIDTH,
+      height: CAPTURE_HEIGHT,
       canvasWidth: 800,
       canvasHeight: 500,
       quality: 0.82,
