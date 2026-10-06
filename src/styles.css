@@ -200,7 +200,29 @@
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
 }
+/* Heart pop (YouTube-Shorts style): springy scale-up + soft expanding ring */
+.heart-pop { animation: heart-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes heart-pop {
+  0% { transform: scale(0.3); }
+  45% { transform: scale(1.28); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.heart-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 2px solid var(--heart, currentColor);
+  pointer-events: none;
+  animation: heart-ring 480ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes heart-ring {
+  from { transform: scale(0.6); opacity: 0.7; }
+  to { transform: scale(1.9); opacity: 0; }
+}
 @media (prefers-reduced-motion: reduce) {
+  .heart-pop, .heart-ring { animation: none; }
+  .heart-ring { display: none; }
   .skeleton-cloud, .template-grid-placeholders-exit, .template-grid-reveal, .animate-fade-up { animation: none; }
   .template-grid-placeholders-exit { opacity: 0; }
 }
