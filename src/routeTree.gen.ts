@@ -19,6 +19,7 @@ import { Route as SitesSlugRouteImport } from './routes/sites.$slug'
 import { Route as TagSlugRouteImport } from './routes/tag.$slug'
 import { Route as SitesSlugLiveDemoRouteImport } from './routes/sites.$slug.live-demo'
 import { Route as SitesSlugDesignSystemRouteImport } from './routes/sites_.$slug.design-system'
+import { Route as SitesSlugDesignSystemPreviewRouteImport } from './routes/sites_.$slug.design-system_.preview'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -69,6 +70,12 @@ const SitesSlugDesignSystemRoute = SitesSlugDesignSystemRouteImport.update({
   path: '/sites/$slug/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitesSlugDesignSystemPreviewRoute =
+  SitesSlugDesignSystemPreviewRouteImport.update({
+    id: '/sites_/$slug/design-system_/preview',
+    path: '/sites/$slug/design-system/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/tag/$slug': typeof TagSlugRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
+  '/sites/$slug/design-system/preview': typeof SitesSlugDesignSystemPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/tag/$slug': typeof TagSlugRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
+  '/sites/$slug/design-system/preview': typeof SitesSlugDesignSystemPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,6 +113,7 @@ export interface FileRoutesById {
   '/tag/$slug': typeof TagSlugRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites_/$slug/design-system': typeof SitesSlugDesignSystemRoute
+  '/sites_/$slug/design-system_/preview': typeof SitesSlugDesignSystemPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/tag/$slug'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
+    | '/sites/$slug/design-system/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/tag/$slug'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
+    | '/sites/$slug/design-system/preview'
   id:
     | '__root__'
     | '/'
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/tag/$slug'
     | '/sites/$slug/live-demo'
     | '/sites_/$slug/design-system'
+    | '/sites_/$slug/design-system_/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +163,7 @@ export interface RootRouteChildren {
   SitesSlugRoute: typeof SitesSlugRouteWithChildren
   TagSlugRoute: typeof TagSlugRoute
   SitesSlugDesignSystemRoute: typeof SitesSlugDesignSystemRoute
+  SitesSlugDesignSystemPreviewRoute: typeof SitesSlugDesignSystemPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -224,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitesSlugDesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sites_/$slug/design-system_/preview': {
+      id: '/sites_/$slug/design-system_/preview'
+      path: '/sites/$slug/design-system/preview'
+      fullPath: '/sites/$slug/design-system/preview'
+      preLoaderRoute: typeof SitesSlugDesignSystemPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -260,6 +281,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitesSlugRoute: SitesSlugRouteWithChildren,
   TagSlugRoute: TagSlugRoute,
   SitesSlugDesignSystemRoute: SitesSlugDesignSystemRoute,
+  SitesSlugDesignSystemPreviewRoute: SitesSlugDesignSystemPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
