@@ -34,9 +34,11 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-3 text-sm">
           {user ? (
             <>
-              <Link to="/admin" className="text-muted-foreground hover:text-foreground">
-                Admin
-              </Link>
+              {user.email?.toLowerCase() === "hello@katiadejuan.com" && (
+                <Link to="/admin" className="text-muted-foreground hover:text-foreground">
+                  Admin
+                </Link>
+              )}
               <button onClick={signOut} className="rounded-full border border-border bg-card px-4 py-1.5 hover:bg-secondary">
                 Sign out
               </button>
