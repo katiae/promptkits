@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries";
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
+import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -67,6 +68,7 @@ function Admin() {
   const { data: entries = [] } = useQuery({ ...entriesQuery(), enabled: !!isAdmin });
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
+  const [capturing, setCapturing] = useState(false);
 
   const autofill = async () => {
     if (!form || form.prompt.trim().length < 20) {
@@ -116,8 +118,33 @@ function Admin() {
       </main>
     );
 
+  const snap = async (html: string) => {
+    setCapturing(true);
+    try {
+      return await captureThumbnail(html);
+    } catch (e) {
+      toast.error("Couldn't capture the thumbnail — saving without it");
+      console.error(e);
+      return null;
+    } finally {
+      setCapturing(false);
+    }
+  };
+
+  const regenerate = async () => {
+    if (!form?.html_content) return;
+    const url = await snap(form.html_content);
+    if (url) { setForm((f) => f && { ...f, thumbnail_url: url }); toast.success("Thumbnail updated — save to keep it"); }
+  };
+
   const save = async () => {
     if (!form) return;
+    let thumb = form.thumbnail_url;
+    const original = form.id ? entries.find((e) => e.id === form.id) : undefined;
+    const htmlChanged = !!form.html_content && form.html_content !== (original?.html_content ?? "");
+    if (form.html_content && (htmlChanged || !thumb) && !(report && !report.ok)) {
+      thumb = (await snap(form.html_content)) ?? thumb;
+    }
     const payload = {
       name: form.name,
       slug: form.slug || slugify(form.name),
@@ -126,7 +153,7 @@ function Admin() {
       tags: normalizeTags(form.tags.split(",")),
       original_url: null,
       demo_url: form.demo_url || null,
-      thumbnail_url: form.thumbnail_url || null,
+      thumbnail_url: thumb || null,
       prompt: form.prompt,
       status: form.status,
       hue: Number(form.hue) || 150,
@@ -220,7 +247,21 @@ function Admin() {
             )}
           </div>
           {field("demo_url", "Live demo URL (optional if you upload HTML)")}
-          {field("thumbnail_url", "Template thumbnail URL")}
+          <div className="block">
+            <span className="label-mono text-muted-foreground">Thumbnail</span>
+            <div className="mt-1 flex items-center gap-3">
+              {form.thumbnail_url ? (
+                <img src={form.thumbnail_url} alt="Thumbnail preview" className="h-16 w-26 rounded-md border border-border object-cover object-top" />
+              ) : (
+                <span className="text-xs text-muted-foreground">Captured automatically from the HTML when you save.</span>
+              )}
+              {form.html_content && (
+                <button type="button" onClick={regenerate} disabled={capturing} className="rounded-full border border-border px-3 py-1 text-xs hover:bg-secondary">
+                  {capturing ? "Capturing…" : "📸 Regenerate thumbnail"}
+                </button>
+              )}
+            </div>
+          </div>
           {field("hue", "Orb colour hue (0–360)")}
           <label className="block">
             <span className="label-mono text-muted-foreground">Status</span>
@@ -283,7 +324,7 @@ function Admin() {
             </div>
           )}
           <div className="flex gap-2 md:col-span-2">
-            <button onClick={save} disabled={!!report && !report.ok} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">Save</button>
+            <button onClick={save} disabled={(!!report && !report.ok) || capturing} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground disabled:opacity-60">{capturing ? "Capturing thumbnail…" : "Save"}</button>
             <button onClick={() => setForm(null)} className="rounded-full border border-border px-5 py-2 text-sm">Cancel</button>
           </div>
         </div>
