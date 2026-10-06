@@ -19,7 +19,7 @@
  */
 
 @theme inline {
-  --font-serif: "Newsreader", Georgia, serif;
+  --font-serif: "Fraunces", Georgia, serif;
   --font-sans: "Geist", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
   --color-tray: var(--tray);
@@ -75,7 +75,7 @@
   --card-foreground: oklch(0.2 0.008 70);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.008 70);
-  --primary: oklch(0.38 0.06 152);
+  --primary: oklch(0.35 0.06 152);
   --primary-foreground: oklch(0.985 0.003 80);
   --secondary: oklch(0.955 0.004 80);
   --secondary-foreground: oklch(0.25 0.008 70);
@@ -148,6 +148,7 @@
 
   body {
     font-family: var(--font-sans);
+    font-variation-settings: "SOFT" 100, "WONK" 0;
     -webkit-font-smoothing: antialiased;
     background-color: var(--color-background);
     color: var(--color-foreground);
