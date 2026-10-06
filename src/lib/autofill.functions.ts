@@ -12,7 +12,9 @@ type EntryMeta = {
 
 export const autofillEntry = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ prompt: z.string().min(20) }).parse(data))
+  .inputValidator((data) =>
+    z.object({ prompt: z.string().min(20), existingTags: z.array(z.string()).default([]) }).parse(data),
+  )
   .handler(async ({ data, context }) => {
     // Only admins may use this
     const { data: roles } = await context.supabase
@@ -38,7 +40,7 @@ export const autofillEntry = createServerFn({ method: "POST" })
           {
             role: "system",
             content:
-              "You fill in directory metadata for an interface-template gallery. Given a build prompt for a website/app template, return: name (2-3 word evocative template name, no brand names), description (one short sentence, max 90 chars), category (one of: Landing page, Dashboard, App, Marketing, Portfolio, E-commerce, Blog, Other), tags (3-5 lowercase hyphenated tags), hue (integer 0-360 matching the template's dominant colour mood).",
+              "You fill in directory metadata for an interface-template gallery. Given a build prompt for a website/app template, return: name (2-3 word evocative template name, no brand names), description (one short sentence, max 90 chars), category (one of: Landing page, Dashboard, App, Marketing, Portfolio, E-commerce, Blog, Other), tags (3-5 lowercase hyphenated tags), hue (integer 0-360 matching the template's dominant colour mood). For tags: strongly prefer reusing tags from the existing tag list provided by the user when they fit; only invent a new tag when no existing one covers the concept, and never return duplicates or near-synonyms of each other.",
           },
           { role: "user", content: data.prompt.slice(0, 8000) },
         ],
