@@ -1,30 +1,37 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Monitor, Tablet, Smartphone, BookOpen } from "lucide-react";
+import { Monitor, Tablet, Smartphone, BookOpen, Square } from "lucide-react";
 
-export type Device = "desktop" | "tablet" | "phone" | "fold";
+export type Device = "desktop" | "tablet" | "phone" | "fold" | "flip";
 
 export const DEVICES: { id: Device; label: string; icon: typeof Monitor; w?: number; h?: number }[] = [
   { id: "desktop", label: "Desktop", icon: Monitor },
   { id: "tablet", label: "Tablet", icon: Tablet, w: 820, h: 1180 },
   { id: "fold", label: "Foldable", icon: BookOpen, w: 673, h: 841 },
   { id: "phone", label: "Phone", icon: Smartphone, w: 390, h: 844 },
+  { id: "flip", label: "Flip phone", icon: Square, w: 360, h: 374 },
 ];
 
 export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (d: Device) => void }) {
   return (
     <div role="radiogroup" aria-label="Preview size" className="flex shrink-0 items-center gap-0.5 rounded-full bg-tray p-0.5">
       {DEVICES.map(({ id, label, icon: Icon }) => (
-        <button
-          key={id}
-          role="radio"
-          aria-checked={value === id}
-          aria-label={label}
-          title={label}
-          onClick={() => onChange(id)}
-          className={`grid size-7 place-items-center rounded-full transition-colors ${value === id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          <Icon className="size-3.5" />
-        </button>
+        <div key={id} className="group relative">
+          <button
+            role="radio"
+            aria-checked={value === id}
+            aria-label={label}
+            onClick={() => onChange(id)}
+            className={`grid size-7 place-items-center rounded-full transition-colors ${value === id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            <Icon className="size-3.5" />
+          </button>
+          <span
+            role="tooltip"
+            className="label-mono pointer-events-none absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-md bg-primary px-2 py-1 text-[10px] text-primary-foreground opacity-0 shadow-sm transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100"
+          >
+            {label}
+          </span>
+        </div>
       ))}
     </div>
   );
