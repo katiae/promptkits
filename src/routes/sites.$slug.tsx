@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { entryMetaQuery, entryContentQuery } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
 import { OrbThumb } from "@/components/Orb";
+import { DeviceSwitcher, DeviceFrame, type Device } from "@/components/DevicePreview";
 import { buildReport } from "@/lib/security-scanner";
 
 export const Route = createFileRoute("/sites/$slug")({
@@ -76,6 +77,7 @@ function Detail() {
   const { isFav, toggle } = useFavorites();
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
+  const [device, setDevice] = useState<Device>("desktop");
 
   if (isLoading) return <DetailSkeleton />;
   if (!entry)
@@ -170,7 +172,10 @@ function Detail() {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `/sites/${entry.slug}/live-demo · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
             {hasDemo && (
-              <button onClick={openDemo} className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
+              <div className="ml-auto hidden shrink-0 pl-3 sm:block"><DeviceSwitcher value={device} onChange={setDevice} /></div>
+            )}
+            {hasDemo && (
+              <button onClick={openDemo} className="ml-3 shrink-0 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
                 Open demo <ArrowUpRight className="size-3.5" />
               </button>
             )}
@@ -183,21 +188,21 @@ function Detail() {
               </div>
             </div>
           ) : html ? (
-            <iframe
+            <DeviceFrame device={device}><iframe
               srcDoc={html}
               title={`${entry.name} demo`}
-              className="min-h-[620px] w-full flex-1 rounded-b-2xl bg-card"
+              className={`w-full flex-1 bg-card ${device === "desktop" ? "min-h-[620px] rounded-b-2xl" : "h-full"}`}
               sandbox="allow-scripts"
               referrerPolicy="no-referrer"
-            />
+            /></DeviceFrame>
           ) : entry.demo_url ? (
-            <iframe
+            <DeviceFrame device={device}><iframe
               src={entry.demo_url}
               title={`${entry.name} demo`}
-              className="min-h-[620px] w-full flex-1 rounded-b-2xl bg-card"
+              className={`w-full flex-1 bg-card ${device === "desktop" ? "min-h-[620px] rounded-b-2xl" : "h-full"}`}
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
               loading="lazy"
-            />
+            /></DeviceFrame>
           ) : (
             <div className="p-3">
               <OrbThumb hue={entry.hue} name={entry.name} thumbnailUrl={entry.thumbnail_url} />
