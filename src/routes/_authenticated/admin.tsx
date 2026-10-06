@@ -8,6 +8,10 @@ import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
 import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
+import { useServerFn } from "@tanstack/react-start";
+import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
+
+type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -69,6 +73,25 @@ function Admin() {
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);
+  const fetchDsStatus = useServerFn(listDesignSystemStatus);
+  const generateDs = useServerFn(generateDesignSystem);
+  const { data: dsStatus = [] } = useQuery({ queryKey: ["ds-status"], queryFn: () => fetchDsStatus(), enabled: !!isAdmin });
+  const [generating, setGenerating] = useState<Set<string>>(new Set());
+  const runGenerate = async (entryId: string, name: string) => {
+    setGenerating((s) => new Set(s).add(entryId));
+    const t = toast.loading(`Building the ${name} design system — this takes a minute or two…`);
+    try {
+      const r = await generateDs({ data: { entryId } });
+      if (r.ok) toast.success(`${name} design system is ready`, { id: t });
+      else toast.error(r.error, { id: t });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Generation failed", { id: t });
+    } finally {
+      setGenerating((s) => { const n = new Set(s); n.delete(entryId); return n; });
+      qc.invalidateQueries({ queryKey: ["ds-status"] });
+      qc.invalidateQueries({ queryKey: ["design-systems"] });
+    }
+  };
 
   const autofill = async () => {
     if (!form || form.prompt.trim().length < 20) {
@@ -163,13 +186,16 @@ function Admin() {
     };
     if (!payload.name) { toast.error("Name is required"); return; }
     if (report && !report.ok) { toast.error("Security scan blocked this template — fix the flagged issues first"); return; }
-    const { error } = form.id
-      ? await supabase.from("entries").update(payload).eq("id", form.id)
-      : await supabase.from("entries").insert(payload);
+    const isNew = !form.id;
+    const { data: saved, error } = form.id
+      ? await supabase.from("entries").update(payload).eq("id", form.id).select("id").single()
+      : await supabase.from("entries").insert(payload).select("id").single();
     if (error) { toast.error(error.message); return; }
     toast.success("Saved");
     setForm(null);
     qc.invalidateQueries();
+    // New templates with a demo get their own design system automatically.
+    if (isNew && saved && payload.html_content) runGenerate(saved.id, payload.name);
   };
 
   const remove = async (id: string) => {
@@ -337,7 +363,8 @@ function Admin() {
               <Link to="/sites/$slug" params={{ slug: e.slug }} className="font-serif text-lg">{e.name}</Link>
               <p className="truncate text-sm text-muted-foreground">{e.category} · {e.status}</p>
             </div>
-            <div className="ml-auto flex gap-2 text-sm">
+            <div className="ml-auto flex items-center gap-2 text-sm">
+              <DesignSystemCell entry={e} status={dsStatus.find((d) => d.entry_id === e.id)} busy={generating.has(e.id)} onGenerate={() => runGenerate(e.id, e.name)} />
               <button onClick={() => setForm(toForm(e))} className="rounded-full border border-border px-3 py-1 hover:bg-secondary">Edit</button>
               <button onClick={() => remove(e.id)} className="rounded-full border border-border px-3 py-1 text-destructive hover:bg-secondary">Delete</button>
             </div>
@@ -345,5 +372,27 @@ function Admin() {
         ))}
       </div>
     </main>
+  );
+}
+
+function DesignSystemCell({ entry, status, busy, onGenerate }: { entry: Entry; status?: DsStatus | undefined; busy: boolean; onGenerate: () => void }) {
+  const bundled = entry.slug === "midnight-cadence";
+  if (bundled) return <span className="label-mono text-muted-foreground">Design system · hand-built</span>;
+  const btn = "rounded-full border border-border px-3 py-1 hover:bg-secondary disabled:opacity-60";
+  if (busy || status?.status === "generating")
+    return <span className="label-mono animate-pulse text-muted-foreground">Generating design system…</span>;
+  return (
+    <>
+      {status?.status === "ready" && (
+        <>
+          <span className="label-mono text-primary">Design system ready</span>
+          <Link to="/sites/$slug/design-system" params={{ slug: entry.slug }} className={btn}>Preview</Link>
+        </>
+      )}
+      {status?.status === "failed" && <span className="label-mono max-w-56 truncate text-destructive" title={status.error ?? ""}>Failed: {status.error}</span>}
+      <button onClick={onGenerate} disabled={!entry.prompt && !entry.html_content} className={btn}>
+        {status ? "Regenerate" : "✨ Generate design system"}
+      </button>
+    </>
   );
 }

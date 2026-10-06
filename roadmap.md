@@ -9,3 +9,4 @@
 
 - [x] Halyard design system page, visitor sign-in prompt, extra form controls and ZIP download.
 - [ ] In-app generator to create design systems for new templates.
+- [x] AI design system generator for new templates

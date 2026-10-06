@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      design_systems: {
+        Row: {
+          entry_id: string
+          error: string | null
+          files: Json | null
+          id: string
+          slug: string
+          spec: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          entry_id: string
+          error?: string | null
+          files?: Json | null
+          id?: string
+          slug: string
+          spec?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          entry_id?: string
+          error?: string | null
+          files?: Json | null
+          id?: string
+          slug?: string
+          spec?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_systems_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: true
+            referencedRelation: "entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       entries: {
         Row: {
           category: string
