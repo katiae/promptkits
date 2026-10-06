@@ -60,7 +60,7 @@ function Admin() {
 
   const claim = async () => {
     const { data, error } = await supabase.rpc("claim_admin");
-    if (error || !data) return toast.error("An admin already exists.");
+    if (error || !data) { toast.error("An admin already exists."); return; }
     toast.success("You're now the admin");
     qc.invalidateQueries({ queryKey: ["is-admin"] });
   };
@@ -91,11 +91,11 @@ function Admin() {
       hue: Number(form.hue) || 150,
       updated_at: new Date().toISOString(),
     };
-    if (!payload.name) return toast.error("Name is required");
+    if (!payload.name) { toast.error("Name is required"); return; }
     const { error } = form.id
       ? await supabase.from("entries").update(payload).eq("id", form.id)
       : await supabase.from("entries").insert(payload);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Saved");
     setForm(null);
     qc.invalidateQueries();
@@ -104,7 +104,7 @@ function Admin() {
   const remove = async (id: string) => {
     if (!confirm("Delete this entry?")) return;
     const { error } = await supabase.from("entries").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries();
   };
 
