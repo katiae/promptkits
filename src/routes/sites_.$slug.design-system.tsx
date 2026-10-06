@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Download } from "lucide-react";
+import { Download, ArrowUpRight } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { withTheme, type DsTheme } from "@/lib/ds-theme";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
@@ -28,6 +30,7 @@ function DesignSystemPage() {
   const fetchGuide = useServerFn(getDesignSystemGuidelines);
   const fetchFiles = useServerFn(getDesignSystemFiles);
   const [busy, setBusy] = useState(false);
+  const [theme, setTheme] = useState<DsTheme>("dark");
   const { data, isLoading } = useQuery({
     queryKey: ["design-system", slug, user?.id],
     queryFn: () => fetchGuide({ data: { slug } }),
@@ -68,9 +71,15 @@ function DesignSystemPage() {
               <h1 className="font-serif text-5xl tracking-tight">{name} design system</h1>
               <p className="mt-2 text-muted-foreground">Foundations and a complete component kit to grow your product beyond the template.</p>
             </div>
-            <button onClick={download} disabled={busy || !data?.html} className="ml-auto flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90 disabled:opacity-60">
+            <div className="ml-auto flex flex-wrap items-center gap-2">
+            <ThemeToggle value={theme} onChange={setTheme} />
+            <a href={`/sites/${slug}/design-system/preview`} target="_blank" rel="noopener" className="flex items-center gap-1.5 rounded-full bg-card px-4 py-2 text-sm hover:bg-tray">
+              Open in new tab <ArrowUpRight className="size-3.5" />
+            </a>
+            <button onClick={download} disabled={busy || !data?.html} className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90 disabled:opacity-60">
               <Download className="size-3.5" /> {busy ? "Preparing…" : "Download for GitHub & Storybook"}
             </button>
+            </div>
           </div>
           <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2">
             {isLoading || loading ? (
@@ -78,7 +87,7 @@ function DesignSystemPage() {
                 <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
               </div>
             ) : data?.html ? (
-              <iframe srcDoc={data.html} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
+              <iframe key={theme} srcDoc={withTheme(data.html, theme)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
             ) : (
               <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
             )}
