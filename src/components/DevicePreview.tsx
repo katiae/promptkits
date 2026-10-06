@@ -15,17 +15,23 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
   return (
     <div role="radiogroup" aria-label="Preview size" className="flex shrink-0 items-center gap-0.5 rounded-full bg-tray p-0.5">
       {DEVICES.map(({ id, label, icon: Icon }) => (
-        <button
-          key={id}
-          role="radio"
-          aria-checked={value === id}
-          aria-label={label}
-          title={label}
-          onClick={() => onChange(id)}
-          className={`grid size-7 place-items-center rounded-full transition-colors ${value === id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          <Icon className="size-3.5" />
-        </button>
+        <div key={id} className="group relative">
+          <button
+            role="radio"
+            aria-checked={value === id}
+            aria-label={label}
+            onClick={() => onChange(id)}
+            className={`grid size-7 place-items-center rounded-full transition-colors ${value === id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            <Icon className="size-3.5" />
+          </button>
+          <span
+            role="tooltip"
+            className="label-mono pointer-events-none absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-md bg-primary px-2 py-1 text-[10px] text-primary-foreground opacity-0 shadow-sm transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100"
+          >
+            {label}
+          </span>
+        </div>
       ))}
     </div>
   );
