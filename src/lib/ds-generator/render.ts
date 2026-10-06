@@ -265,7 +265,7 @@ ${shell}
 function reactFile(s: Spec) {
   return px(`import * as React from "react";
 import "../tokens/tokens.css";
-import "../dist/ds.css";
+import "../dist/__P__.css";
 
 type Div = React.HTMLAttributes<HTMLDivElement>;
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(" ");
@@ -357,7 +357,7 @@ export function Reveal({ children }: { children: React.ReactNode }) {
   return <div ref={ref} className={cx("ds-reveal", on && "is-in")}>{children}</div>;
 }
 export const Marquee = ({ items }: { items: string[] }) => <div className="ds-marquee"><div>{[...items, ...items].map((x, i) => <span key={i}>{x}</span>)}</div></div>;
-`, s.brand.prefix).replace(`../dist/${s.brand.prefix}.css`, `../dist/${s.brand.prefix}.css`);
+`, s.brand.prefix).replace("__P__", s.brand.prefix);
 }
 
 function storiesFile(s: Spec) {
