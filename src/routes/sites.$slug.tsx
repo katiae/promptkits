@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ArrowUpRight, Copy, Check, Heart, Download } from "lucide-react";
 import { toast } from "sonner";
-import { entryMetaQuery, entryContentQuery, slugify } from "@/lib/entries";
+import { entryMetaQuery, entryContentQuery } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
 import { OrbThumb } from "@/components/Orb";
 import { buildReport } from "@/lib/security-scanner";
@@ -115,10 +115,7 @@ function Detail() {
       <Link to="/" className="label-mono text-muted-foreground hover:text-foreground">← All templates</Link>
       <div className="mt-6 flex flex-wrap items-end gap-4">
         <div>
-          <Link to="/category/$slug" params={{ slug: slugify(entry.category) }} className="label-mono text-muted-foreground hover:text-foreground">
-            {entry.category}
-          </Link>
-          <h1 className="mt-2 font-serif text-5xl tracking-tight">{entry.name}</h1>
+          <h1 className="font-serif text-5xl tracking-tight">{entry.name}</h1>
           <p className="mt-2 text-muted-foreground">{entry.description}</p>
         </div>
         <div className="ml-auto flex items-center gap-2 text-sm">
