@@ -20,11 +20,13 @@ export type Database = {
           created_at: string
           demo_url: string | null
           description: string
+          html_content: string | null
           hue: number
           id: string
           name: string
           original_url: string | null
           prompt: string
+          scan_report: Json | null
           slug: string
           status: string
           submitted_by: string | null
@@ -37,11 +39,13 @@ export type Database = {
           created_at?: string
           demo_url?: string | null
           description?: string
+          html_content?: string | null
           hue?: number
           id?: string
           name: string
           original_url?: string | null
           prompt?: string
+          scan_report?: Json | null
           slug: string
           status?: string
           submitted_by?: string | null
@@ -54,11 +58,13 @@ export type Database = {
           created_at?: string
           demo_url?: string | null
           description?: string
+          html_content?: string | null
           hue?: number
           id?: string
           name?: string
           original_url?: string | null
           prompt?: string
+          scan_report?: Json | null
           slug?: string
           status?: string
           submitted_by?: string | null

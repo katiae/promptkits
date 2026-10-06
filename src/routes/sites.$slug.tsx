@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { entryQuery, slugify } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
 import { OrbThumb } from "@/components/Orb";
+import { buildReport } from "@/lib/security-scanner";
 
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
@@ -44,6 +45,23 @@ function Detail() {
     setTimeout(() => setCopied(false), 1800);
   };
   const fav = isFav(entry.id);
+  const html = entry.html_content && buildReport(entry.html_content, "").ok ? entry.html_content : null;
+  const hasDemo = !!(html || entry.demo_url);
+  const openDemo = () => {
+    if (html) {
+      const url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+      window.open(url, "_blank", "noopener");
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } else if (entry.demo_url) window.open(entry.demo_url, "_blank", "noopener,noreferrer");
+  };
+  const download = () => {
+    if (!html) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
+    a.download = `${entry.slug}.html`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
 
   return (
     <main className="mx-auto max-w-6xl px-6 pt-12">
@@ -57,18 +75,24 @@ function Detail() {
           <p className="mt-2 text-muted-foreground">{entry.description}</p>
         </div>
         <div className="ml-auto flex items-center gap-2 text-sm">
-          {entry.demo_url ? (
-            <a href={entry.demo_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-primary-foreground hover:opacity-90">
+          {hasDemo ? (
+            <button onClick={openDemo} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-primary-foreground hover:opacity-90">
               Open demo <ArrowUpRight className="size-3.5" />
-            </a>
+            </button>
           ) : (
             <span className="flex cursor-not-allowed items-center gap-1.5 rounded-full bg-muted px-3.5 py-1.5 text-muted-foreground" aria-disabled="true">
               Demo coming soon
             </span>
           )}
-          <span className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-muted-foreground" aria-disabled="true" title="HTML downloads are coming soon">
-            <Download className="size-3.5" /> Download HTML · soon
-          </span>
+          {html ? (
+            <button onClick={download} title="Security-scanned HTML file" className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary">
+              <Download className="size-3.5" /> Download HTML
+            </button>
+          ) : (
+            <span className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-muted-foreground" aria-disabled="true" title="HTML downloads are coming soon">
+              <Download className="size-3.5" /> Download HTML · soon
+            </span>
+          )}
           <button
             onClick={() => toggle(entry.id)}
             className={`flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary ${fav ? "text-heart" : ""}`}
@@ -100,14 +124,22 @@ function Detail() {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
-            <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{entry.demo_url ?? "demo coming soon"}</span>
-            {entry.demo_url && (
-              <a href={entry.demo_url} target="_blank" rel="noreferrer" className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
+            <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `${entry.slug}.html · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
+            {hasDemo && (
+              <button onClick={openDemo} className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
                 Open demo <ArrowUpRight className="size-3.5" />
-              </a>
+              </button>
             )}
           </div>
-          {entry.demo_url ? (
+          {html ? (
+            <iframe
+              srcDoc={html}
+              title={`${entry.name} demo`}
+              className="h-[620px] w-full rounded-b-2xl bg-card"
+              sandbox="allow-scripts"
+              referrerPolicy="no-referrer"
+            />
+          ) : entry.demo_url ? (
             <iframe
               src={entry.demo_url}
               title={`${entry.name} demo`}
