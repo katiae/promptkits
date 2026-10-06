@@ -8,10 +8,10 @@ import { EntryGrid } from "@/components/EntryGrid";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Promptfolio — Famous interfaces, rebuilt from the prompt" },
-      { name: "description", content: "A directory of well-known websites and apps recreated by AI. Try each live demo and copy the prompt that built it." },
-      { property: "og:title", content: "Promptfolio — Famous interfaces, rebuilt from the prompt" },
-      { property: "og:description", content: "Try live AI recreations of famous sites and copy the exact build prompt." },
+      { title: "Promptfolio — Better interface templates for AI" },
+      { name: "description", content: "Explore distinctive interface templates, try each live demo, and copy the prompt to build it with AI." },
+      { property: "og:title", content: "Promptfolio — Better interface templates for AI" },
+      { property: "og:description", content: "Live interface templates and the prompts to build them with AI." },
     ],
   }),
   component: Index,
@@ -43,10 +43,10 @@ function Index() {
     <main>
       <section className="mx-auto max-w-6xl px-6 pb-10 pt-20 text-center animate-fade-up">
         <h1 className="mx-auto mt-5 max-w-3xl text-balance font-serif text-5xl font-normal leading-[1.05] tracking-tight text-primary sm:text-6xl">
-          Famous interfaces, rebuilt from the prompt.
+          Build better interfaces with AI.
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-muted-foreground">
-          See how well-known sites were recreated with AI, play with the live demo, then copy the exact prompt to build your own.
+          Explore distinctive templates, try the live demo, then copy the full prompt to make it your own.
         </p>
       </section>
 
@@ -57,7 +57,7 @@ function Index() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search sites, tags, prompts"
+              placeholder="Search templates, tags, prompts"
               className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>

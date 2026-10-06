@@ -5,9 +5,9 @@ export const Route = createFileRoute("/tag/$slug")({
   head: ({ params }) => ({
     meta: [
       { title: `#${params.slug} — Promptfolio` },
-      { name: "description", content: `Recreations tagged ${params.slug}, with live demos and prompts.` },
+      { name: "description", content: `Interface templates tagged ${params.slug}, with live demos and build prompts.` },
       { property: "og:title", content: `#${params.slug} — Promptfolio` },
-      { property: "og:description", content: `AI recreations tagged ${params.slug}.` },
+      { property: "og:description", content: `AI interface templates tagged ${params.slug}.` },
     ],
   }),
   component: () => {

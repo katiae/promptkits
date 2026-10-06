@@ -9,9 +9,9 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — Promptfolio" },
-      { name: "description", content: "Sign in with Google to save your favourite recreations." },
+      { name: "description", content: "Sign in with Google to save your favourite interface templates." },
       { property: "og:title", content: "Sign in — Promptfolio" },
-      { property: "og:description", content: "Save favourite AI recreations and prompts." },
+      { property: "og:description", content: "Save favourite interface templates and prompts." },
     ],
   }),
   component: AuthPage,
@@ -42,7 +42,7 @@ function AuthPage() {
     <main className="mx-auto flex max-w-md flex-col items-center px-6 py-28 text-center">
       <Orb hue={150} size={48} />
       <h1 className="mt-6 font-serif text-4xl tracking-tight">Welcome to Promptfolio</h1>
-      <p className="mt-3 text-muted-foreground">Sign in to save the recreations and prompts you love.</p>
+      <p className="mt-3 text-muted-foreground">Sign in to save the templates and prompts you love.</p>
       <button
         onClick={signIn}
         disabled={busy}

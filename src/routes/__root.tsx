@@ -80,8 +80,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Promptfolio — Famous interfaces, rebuilt from the prompt" },
-      { name: "description", content: "Browse websites and apps recreated by AI, try the live demo, and copy the exact prompt." },
+      { title: "Promptfolio — Better interface templates for AI" },
+      { name: "description", content: "Browse distinctive interface templates, try each live demo, and copy the prompt to build it with AI." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -129,7 +129,7 @@ function RootComponent() {
       <Outlet />
       <footer className="mx-auto mt-24 flex max-w-6xl items-center gap-3 border-t border-border/70 px-6 py-8 text-sm text-muted-foreground">
         <span className="font-serif text-base text-foreground">Promptfolio</span>
-        <span className="label-mono ml-auto">Prompts + live demos · free</span>
+        <span className="label-mono ml-auto">Templates + prompts · free</span>
       </footer>
       <Toaster />
     </QueryClientProvider>
