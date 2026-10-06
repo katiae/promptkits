@@ -1,0 +1,461 @@
+{
+  "name": "Halyard",
+  "version": 1,
+  "color": {
+    "themes": [
+      {
+        "id": "dark",
+        "name": "Dark"
+      },
+      {
+        "id": "light",
+        "name": "Light"
+      }
+    ],
+    "tokens": [
+      {
+        "name": "hy-bg",
+        "value": {
+          "dark": "#0b0c0e",
+          "light": "#f7f7f8"
+        },
+        "usage": "Page and app background."
+      },
+      {
+        "name": "hy-bg-raise",
+        "value": {
+          "dark": "#121316",
+          "light": "#ffffff"
+        },
+        "usage": "Raised surfaces: windows, panels, top bars, inputs on cards."
+      },
+      {
+        "name": "hy-bg-card",
+        "value": {
+          "dark": "#15171b",
+          "light": "#ffffff"
+        },
+        "usage": "Cards and plan tiles."
+      },
+      {
+        "name": "hy-bg-hover",
+        "value": {
+          "dark": "rgba(255,255,255,.04)",
+          "light": "rgba(12,14,18,.04)"
+        },
+        "usage": "Hover tint for rows, menu items and ghost buttons."
+      },
+      {
+        "name": "hy-bg-active",
+        "value": {
+          "dark": "rgba(255,255,255,.07)",
+          "light": "rgba(12,14,18,.07)"
+        },
+        "usage": "Selected row, active tab indicator, progress track."
+      },
+      {
+        "name": "hy-overlay",
+        "value": {
+          "dark": "rgba(24,26,31,.86)",
+          "light": "rgba(255,255,255,.88)"
+        },
+        "usage": "Frosted command menu and popover fill, used with an 18px backdrop blur."
+      },
+      {
+        "name": "hy-scrim",
+        "value": {
+          "dark": "rgba(5,6,8,.6)",
+          "light": "rgba(20,22,26,.25)"
+        },
+        "usage": "Dims the page behind overlays and the mobile sidebar drawer."
+      },
+      {
+        "name": "hy-line",
+        "value": {
+          "dark": "rgba(255,255,255,.08)",
+          "light": "rgba(12,14,18,.08)"
+        },
+        "usage": "Hairlines between sections, rows and cards."
+      },
+      {
+        "name": "hy-line-strong",
+        "value": {
+          "dark": "rgba(255,255,255,.14)",
+          "light": "rgba(12,14,18,.15)"
+        },
+        "usage": "Control borders: buttons, inputs, tags, keycaps."
+      },
+      {
+        "name": "hy-fg",
+        "value": {
+          "dark": "#eceef2",
+          "light": "#16181d"
+        },
+        "usage": "Primary text and headings on any surface."
+      },
+      {
+        "name": "hy-fg-2",
+        "value": {
+          "dark": "#a3a7b0",
+          "light": "#50555f"
+        },
+        "usage": "Secondary text: body copy, ledes, inactive tabs."
+      },
+      {
+        "name": "hy-fg-3",
+        "value": {
+          "dark": "#6b707a",
+          "light": "#80858f"
+        },
+        "usage": "Tertiary text: IDs, captions, placeholders, dates."
+      },
+      {
+        "name": "hy-fg-inverse",
+        "value": {
+          "dark": "#0b0c0e",
+          "light": "#ffffff"
+        },
+        "usage": "Text on filled accent or primary-button backgrounds."
+      },
+      {
+        "name": "hy-signal",
+        "value": {
+          "dark": "#f2b66d",
+          "light": "#b8711a"
+        },
+        "usage": "The one accent. Live state, recommended plan, focus ring, eyebrows. One use per view."
+      },
+      {
+        "name": "hy-signal-soft",
+        "value": {
+          "dark": "rgba(242,182,109,.15)",
+          "light": "rgba(184,113,26,.14)"
+        },
+        "usage": "Focus halo on inputs and the flash behind a newly created row."
+      },
+      {
+        "name": "hy-ok",
+        "value": {
+          "dark": "#6fcf97",
+          "light": "#22875a"
+        },
+        "usage": "Status: in review, success."
+      },
+      {
+        "name": "hy-info",
+        "value": {
+          "dark": "#7aa2f7",
+          "light": "#3d6fd9"
+        },
+        "usage": "Status: done; data series in charts."
+      },
+      {
+        "name": "hy-danger",
+        "value": {
+          "dark": "#f07178",
+          "light": "#d0424e"
+        },
+        "usage": "Status: blocked, errors, destructive actions."
+      },
+      {
+        "name": "hy-lavender",
+        "value": {
+          "dark": "#c9a7f5",
+          "light": "#8a5cd1"
+        },
+        "usage": "Extra categorical colour for projects and charts only."
+      },
+      {
+        "name": "hy-btn-primary-bg",
+        "value": {
+          "dark": "#eceef2",
+          "light": "#16181d"
+        },
+        "usage": "Primary button fill."
+      },
+      {
+        "name": "hy-btn-primary-hover",
+        "value": {
+          "dark": "#ffffff",
+          "light": "#000000"
+        },
+        "usage": "Primary button fill on hover."
+      },
+      {
+        "name": "hy-thumb",
+        "value": {
+          "dark": "#23262d",
+          "light": "#ffffff"
+        },
+        "usage": "Segmented-control thumb."
+      }
+    ]
+  },
+  "type": {
+    "fonts": [],
+    "families": {
+      "sans": "\"Geist\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "mono": "\"Geist Mono\", ui-monospace, SFMono-Regular, Menlo, monospace"
+    },
+    "groups": [
+      {
+        "name": "Display",
+        "family": "sans",
+        "styles": [
+          {
+            "name": "display-lg",
+            "fontSize": "84px",
+            "lineHeight": 1.02,
+            "fontWeight": 600,
+            "letterSpacing": "-0.045em",
+            "sample": "Plan the week. Ship the week.",
+            "usage": "Page title (H1). Fluid: clamp(2.6rem, 7vw, 5.25rem); 84px is the maximum."
+          },
+          {
+            "name": "display-md",
+            "fontSize": "53px",
+            "lineHeight": 1.05,
+            "fontWeight": 600,
+            "letterSpacing": "-0.035em",
+            "sample": "Less status, more shipping.",
+            "usage": "Section title (H2). Fluid: clamp(2rem, 4.4vw, 3.3rem)."
+          },
+          {
+            "name": "display-sm",
+            "fontSize": "36px",
+            "lineHeight": 1.1,
+            "fontWeight": 600,
+            "letterSpacing": "-0.03em",
+            "sample": "Fill the week to the forecast.",
+            "usage": "Sub-section (H3). Fluid: clamp(1.6rem, 3vw, 2.25rem)."
+          }
+        ]
+      },
+      {
+        "name": "Text",
+        "family": "sans",
+        "styles": [
+          {
+            "name": "lede",
+            "fontSize": "19px",
+            "lineHeight": 1.55,
+            "fontWeight": 400,
+            "sample": "Issues, cycles and roadmaps in one fast workspace.",
+            "usage": "Intro paragraph under a page title, in fg-2, max 48 characters wide."
+          },
+          {
+            "name": "card-title",
+            "fontSize": "17px",
+            "lineHeight": 1.4,
+            "fontWeight": 500,
+            "letterSpacing": "-0.01em",
+            "sample": "Cycles that close themselves",
+            "usage": "Card and plan titles (H4)."
+          },
+          {
+            "name": "body",
+            "fontSize": "16px",
+            "lineHeight": 1.55,
+            "fontWeight": 400,
+            "sample": "Unfinished work rolls into the next cycle on Friday.",
+            "usage": "Running text, max 62 characters wide."
+          },
+          {
+            "name": "ui",
+            "fontSize": "14px",
+            "lineHeight": 1.4,
+            "fontWeight": 500,
+            "sample": "Start building",
+            "usage": "Buttons, tabs, nav links."
+          },
+          {
+            "name": "small",
+            "fontSize": "13px",
+            "lineHeight": 1.45,
+            "fontWeight": 400,
+            "sample": "Sidebar items and secondary UI",
+            "usage": "Sidebar, menus, captions."
+          }
+        ]
+      },
+      {
+        "name": "Mono",
+        "family": "mono",
+        "styles": [
+          {
+            "name": "eyebrow",
+            "fontSize": "12px",
+            "lineHeight": 1.4,
+            "fontWeight": 400,
+            "letterSpacing": "0.08em",
+            "sample": "BUILT FOR WEEKLY CYCLES",
+            "usage": "Section labels: uppercase, in signal, after an 18px rule."
+          },
+          {
+            "name": "id",
+            "fontSize": "12px",
+            "lineHeight": 1.4,
+            "fontWeight": 400,
+            "sample": "WEB-318",
+            "usage": "Issue IDs, versions, dates, tabular numbers, in fg-3."
+          },
+          {
+            "name": "key",
+            "fontSize": "11px",
+            "lineHeight": 1,
+            "fontWeight": 400,
+            "sample": "⌘K",
+            "usage": "Keycap labels."
+          }
+        ]
+      }
+    ]
+  },
+  "spacing": {
+    "note": "4px base. Lay out siblings with gap, not margins.",
+    "tokens": [
+      {
+        "name": "hy-space-1",
+        "value": "4px",
+        "usage": "Icon-to-label gap inside small controls."
+      },
+      {
+        "name": "hy-space-2",
+        "value": "8px",
+        "usage": "Gap inside buttons and between chips."
+      },
+      {
+        "name": "hy-space-3",
+        "value": "12px",
+        "usage": "Gap between related controls."
+      },
+      {
+        "name": "hy-space-4",
+        "value": "16px",
+        "usage": "Page gutter, card grid gap is 14px between steps 3 and 4."
+      },
+      {
+        "name": "hy-space-5",
+        "value": "20px",
+        "usage": "Inner padding of dense cards."
+      },
+      {
+        "name": "hy-space-6",
+        "value": "24px",
+        "usage": "Inner padding of standard cards (26px in use)."
+      },
+      {
+        "name": "hy-space-8",
+        "value": "32px",
+        "usage": "Gap between a heading block and its content."
+      },
+      {
+        "name": "hy-space-10",
+        "value": "40px",
+        "usage": "Space above grids under a section heading."
+      },
+      {
+        "name": "hy-space-12",
+        "value": "48px",
+        "usage": "Section padding on mobile."
+      },
+      {
+        "name": "hy-space-16",
+        "value": "64px",
+        "usage": "Space between hero and product window."
+      },
+      {
+        "name": "hy-space-24",
+        "value": "96px",
+        "usage": "Section padding on desktop."
+      }
+    ]
+  },
+  "radius": {
+    "tokens": [
+      {
+        "name": "hy-radius-xs",
+        "value": "5px",
+        "usage": "Keycaps."
+      },
+      {
+        "name": "hy-radius-sm",
+        "value": "7px",
+        "usage": "Tabs, sidebar items, menu items, segmented options."
+      },
+      {
+        "name": "hy-radius-md",
+        "value": "8px",
+        "usage": "Buttons and inputs."
+      },
+      {
+        "name": "hy-radius-lg",
+        "value": "12px",
+        "usage": "Cards."
+      },
+      {
+        "name": "hy-radius-xl",
+        "value": "14px",
+        "usage": "App windows, plan cards, tables."
+      },
+      {
+        "name": "hy-radius-2xl",
+        "value": "20px",
+        "usage": "CTA panels."
+      },
+      {
+        "name": "hy-radius-full",
+        "value": "999px",
+        "usage": "Pills, tags, avatars."
+      }
+    ]
+  },
+  "shadow": {
+    "tokens": [
+      {
+        "name": "hy-shadow-window",
+        "value": "0 0 0 1px rgba(0,0,0,.6), 0 40px 120px -20px rgba(0,0,0,.8)",
+        "usage": "App windows and large product mocks."
+      },
+      {
+        "name": "hy-shadow-overlay",
+        "value": "0 30px 80px -10px rgba(0,0,0,.7)",
+        "usage": "Command menu and popovers."
+      },
+      {
+        "name": "hy-shadow-btn-primary",
+        "value": "inset 0 1px 0 rgba(255,255,255,.6), 0 1px 2px rgba(0,0,0,.4)",
+        "usage": "Primary button: inner top highlight plus a 1px drop."
+      },
+      {
+        "name": "hy-shadow-thumb",
+        "value": "inset 0 1px 0 rgba(255,255,255,.06), 0 1px 3px rgba(0,0,0,.4)",
+        "usage": "Segmented-control thumb."
+      }
+    ]
+  },
+  "zIndex": {
+    "tokens": [
+      {
+        "name": "hy-z-sticky",
+        "value": "40",
+        "usage": "Sticky sub-navs and app top bar."
+      },
+      {
+        "name": "hy-z-nav",
+        "value": "50",
+        "usage": "Site navigation."
+      },
+      {
+        "name": "hy-z-overlay",
+        "value": "100",
+        "usage": "Command menu, drawers."
+      },
+      {
+        "name": "hy-z-toast",
+        "value": "200",
+        "usage": "Toasts above everything."
+      }
+    ]
+  }
+}

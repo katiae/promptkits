@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halyard Design System</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Generated from tokens.json by scripts/build-tokens.mjs. Do not edit by hand. */
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --hy-bg: #0b0c0e;
+  --hy-bg-raise: #121316;
+  --hy-bg-card: #15171b;
+  --hy-bg-hover: rgba(255,255,255,.04);
+  --hy-bg-active: rgba(255,255,255,.07);
+  --hy-overlay: rgba(24,26,31,.86);
+  --hy-scrim: rgba(5,6,8,.6);
+  --hy-line: rgba(255,255,255,.08);
+  --hy-line-strong: rgba(255,255,255,.14);
+  --hy-fg: #eceef2;
+  --hy-fg-2: #a3a7b0;
+  --hy-fg-3: #6b707a;
+  --hy-fg-inverse: #0b0c0e;
+  --hy-signal: #f2b66d;
+  --hy-signal-soft: rgba(242,182,109,.15);
+  --hy-ok: #6fcf97;
+  --hy-info: #7aa2f7;
+  --hy-danger: #f07178;
+  --hy-lavender: #c9a7f5;
+  --hy-btn-primary-bg: #eceef2;
+  --hy-btn-primary-hover: #ffffff;
+  --hy-thumb: #23262d;
+}
+[data-theme="light"] {
+  color-scheme: light;
+  --hy-bg: #f7f7f8;
+  --hy-bg-raise: #ffffff;
+  --hy-bg-card: #ffffff;
+  --hy-bg-hover: rgba(12,14,18,.04);
+  --hy-bg-active: rgba(12,14,18,.07);
+  --hy-overlay: rgba(255,255,255,.88);
+  --hy-scrim: rgba(20,22,26,.25);
+  --hy-line: rgba(12,14,18,.08);
+  --hy-line-strong: rgba(12,14,18,.15);
+  --hy-fg: #16181d;
+  --hy-fg-2: #50555f;
+  --hy-fg-3: #80858f;
+  --hy-fg-inverse: #ffffff;
+  --hy-signal: #b8711a;
+  --hy-signal-soft: rgba(184,113,26,.14);
+  --hy-ok: #22875a;
+  --hy-info: #3d6fd9;
+  --hy-danger: #d0424e;
+  --hy-lavender: #8a5cd1;
+  --hy-btn-primary-bg: #16181d;
+  --hy-btn-primary-hover: #000000;
+  --hy-thumb: #ffffff;
+}
+:root {
+  --hy-font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hy-font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --hy-text-2xs: 11px;
+  --hy-text-xs: 12px;
+  --hy-text-sm: 13px;
+  --hy-text-base: 14px;
+  --hy-text-md: 16px;
+  --hy-text-lg: 17px;
+  --hy-text-xl: 20px;
+  --hy-text-2xl: 28px;
+  --hy-text-display-sm: clamp(1.6rem, 3vw, 2.25rem);
+  --hy-text-display-md: clamp(2rem, 4.4vw, 3.3rem);
+  --hy-text-display-lg: clamp(2.6rem, 7vw, 5.25rem);
+  --hy-leading-tight: 1.05;
+  --hy-leading-snug: 1.2;
+  --hy-leading-normal: 1.55;
+  --hy-tracking-display: -0.04em;
+  --hy-tracking-title: -0.02em;
+  --hy-tracking-label: 0.08em;
+  --hy-space-0: 0;
+  --hy-space-1: 4px;
+  --hy-space-2: 8px;
+  --hy-space-3: 12px;
+  --hy-space-4: 16px;
+  --hy-space-5: 20px;
+  --hy-space-6: 24px;
+  --hy-space-8: 32px;
+  --hy-space-10: 40px;
+  --hy-space-12: 48px;
+  --hy-space-16: 64px;
+  --hy-space-24: 96px;
+  --hy-radius-xs: 5px;
+  --hy-radius-sm: 7px;
+  --hy-radius-md: 8px;
+  --hy-radius-lg: 12px;
+  --hy-radius-xl: 14px;
+  --hy-radius-2xl: 20px;
+  --hy-radius-full: 999px;
+  --hy-shadow-window: 0 0 0 1px rgba(0,0,0,.6), 0 40px 120px -20px rgba(0,0,0,.8);
+  --hy-shadow-overlay: 0 30px 80px -10px rgba(0,0,0,.7);
+  --hy-shadow-btn-primary: inset 0 1px 0 rgba(255,255,255,.6), 0 1px 2px rgba(0,0,0,.4);
+  --hy-shadow-thumb: inset 0 1px 0 rgba(255,255,255,.06), 0 1px 3px rgba(0,0,0,.4);
+  --hy-ease-out: cubic-bezier(.16,1,.3,1);
+  --hy-ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --hy-dur-fast: 150ms;
+  --hy-dur-base: 250ms;
+  --hy-dur-slow: 450ms;
+  --hy-dur-slower: 1000ms;
+  --hy-stagger: 90ms;
+  --hy-max: 1120px;
+  --hy-gutter: 16px;
+  --hy-nav-height: 60px;
+  --hy-sidebar: 220px;
+  --hy-z-sticky: 40;
+  --hy-z-nav: 50;
+  --hy-z-overlay: 100;
+  --hy-z-toast: 200;
+}
+
+/* Halyard component styles. Colours, spacing, radii, shadows and z-index come from the system tokens (tokens.css). */
+:root {
+  --hy-font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hy-font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --hy-text-2xs: 11px;
+  --hy-text-xs: 12px;
+  --hy-text-sm: 13px;
+  --hy-text-base: 14px;
+  --hy-text-md: 16px;
+  --hy-text-lg: 17px;
+  --hy-text-xl: 20px;
+  --hy-text-2xl: 28px;
+  --hy-text-display-sm: clamp(1.6rem, 3vw, 2.25rem);
+  --hy-text-display-md: clamp(2rem, 4.4vw, 3.3rem);
+  --hy-text-display-lg: clamp(2.6rem, 7vw, 5.25rem);
+  --hy-leading-tight: 1.05;
+  --hy-leading-snug: 1.2;
+  --hy-leading-normal: 1.55;
+  --hy-tracking-display: -0.04em;
+  --hy-tracking-title: -0.02em;
+  --hy-tracking-label: 0.08em;
+  --hy-ease-out: cubic-bezier(.16,1,.3,1);
+  --hy-ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --hy-dur-fast: 150ms;
+  --hy-dur-base: 250ms;
+  --hy-dur-slow: 450ms;
+  --hy-dur-slower: 1000ms;
+  --hy-stagger: 90ms;
+  --hy-max: 1120px;
+  --hy-gutter: 16px;
+  --hy-nav-height: 60px;
+  --hy-sidebar: 220px;
+}
+/* Opt-in page defaults: add class="hy-body" to <body> (AppShell does this for its own area). */
+.hy-body {
+  margin: 0;
+  background: var(--hy-bg);
+  color: var(--hy-fg);
+  font-family: var(--hy-font-sans);
+  font-size: var(--hy-text-md);
+  line-height: var(--hy-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+.hy-body *, .hy-body *::before, .hy-body *::after { box-sizing: border-box; }
+.hy-body a { color: inherit; text-decoration: none; }
+.hy-body :focus-visible { outline: 2px solid var(--hy-signal); outline-offset: 3px; border-radius: 6px; }
+
+.hy-container { max-width: var(--hy-max); margin-inline: auto; padding-inline: var(--hy-gutter); }
+.hy-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hy-mono { font-family: var(--hy-font-mono); font-variant-numeric: tabular-nums; }
+
+/* Motion primitives. Every resting state is the finished state, so content is complete with no JS or with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Load: blur + rise, staggered by --hy-i */
+  .hy-rise { animation: hy-rise var(--hy-dur-slower) var(--hy-ease-out) both; animation-delay: calc(var(--hy-i, 0) * var(--hy-stagger)); }
+  /* Scroll: fade + rise as the element enters the viewport (scroll-driven, no observer) */
+  @supports (animation-timeline: view()) {
+    .hy-reveal { animation: hy-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    .hy-tilt-in { transform-origin: 50% 0; animation: hy-tilt-in linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    .hy-grow-x { transform-origin: left; animation: hy-grow-x linear both; animation-timeline: view(); animation-range: entry 30% cover 45%; }
+  }
+  .hy-flash { animation: hy-flash 1.6s var(--hy-ease-out); }
+}
+@keyframes hy-rise { from { opacity: 0; transform: translateY(14px); filter: blur(8px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes hy-reveal { from { opacity: .25; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes hy-tilt-in { from { transform: rotateX(18deg) scale(.94); opacity: .6; } to { transform: none; opacity: 1; } }
+@keyframes hy-grow-x { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes hy-flash { 0% { background: var(--hy-signal-soft); } 100% { background: transparent; } }
+@keyframes hy-blink { 50% { opacity: 0; } }
+@keyframes hy-ping { from { transform: scale(.3); opacity: 1; } to { transform: scale(1); opacity: 0; } }
+@keyframes hy-marquee { to { transform: translateX(-50%); } }
+
+
+/* Accordion.css */
+.hy-acc { border-top: 1px solid var(--hy-line); }
+.hy-acc__item { border-bottom: 1px solid var(--hy-line); }
+.hy-acc__h { margin: 0; font: inherit; }
+.hy-acc__btn { all: unset; box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 20px 0; cursor: pointer; font: 500 var(--hy-text-md) var(--hy-font-sans); color: var(--hy-fg); }
+.hy-acc__btn:focus-visible { outline: 2px solid var(--hy-signal); outline-offset: 3px; border-radius: 6px; }
+.hy-acc__icon { width: 14px; height: 14px; position: relative; flex: none; }
+.hy-acc__icon::before, .hy-acc__icon::after { content: ""; position: absolute; inset: 0; margin: auto; width: 14px; height: 1.5px; background: var(--hy-fg-2); transition: transform 350ms var(--hy-ease-out); }
+.hy-acc__icon::after { transform: rotate(90deg); }
+.is-open .hy-acc__icon::after { transform: rotate(0); }
+.hy-acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 400ms var(--hy-ease-out); }
+.is-open .hy-acc__panel { grid-template-rows: 1fr; }
+.hy-acc__panel > div { overflow: hidden; }
+.hy-acc__content { padding-bottom: 20px; color: var(--hy-fg-2); max-width: 62ch; }
+@media (prefers-reduced-motion: reduce) { .hy-acc__panel, .hy-acc__icon::after { transition: none; } }
+
+/* AppShell.css */
+.hy-shell { display: grid; grid-template-columns: var(--hy-sidebar) minmax(0, 1fr); height: 100%; min-height: 100vh; min-height: 100dvh; }
+.hy-shell__side { border-right: 1px solid var(--hy-line); background: var(--hy-bg); min-width: 0; }
+.hy-shell__main { min-width: 0; display: flex; flex-direction: column; background: var(--hy-bg-raise); container-type: inline-size; }
+.hy-shell__top { border-bottom: 1px solid var(--hy-line); position: sticky; top: 0; z-index: var(--hy-z-sticky); background: color-mix(in srgb, var(--hy-bg-raise) 85%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.hy-shell__content { flex: 1; min-width: 0; }
+.hy-shell__scrim { display: none; }
+
+.hy-sidebar { display: flex; flex-direction: column; height: 100%; padding: 14px 10px; gap: 4px; font-size: var(--hy-text-sm); color: var(--hy-fg-2); }
+.hy-sidebar__ws { display: flex; align-items: center; gap: 8px; padding: 6px 8px; color: var(--hy-fg); font-weight: 500; margin-bottom: 8px; }
+.hy-sidebar__body { display: grid; gap: 2px; align-content: start; flex: 1; overflow-y: auto; }
+.hy-sidebar__sec { display: grid; gap: 2px; }
+.hy-sidebar__sec + .hy-sidebar__sec { margin-top: 10px; }
+.hy-sidebar__title { font-size: var(--hy-text-2xs); letter-spacing: .06em; text-transform: uppercase; color: var(--hy-fg-3); padding: 8px 8px 4px; }
+.hy-sidebar__item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--hy-radius-sm); color: var(--hy-fg-2); text-decoration: none; cursor: pointer; transition: background var(--hy-dur-fast), color var(--hy-dur-fast); }
+.hy-sidebar__item:hover { background: var(--hy-bg-hover); color: var(--hy-fg); }
+.hy-sidebar__item.is-active { background: var(--hy-bg-active); color: var(--hy-fg); }
+.hy-sidebar__icon { width: 16px; display: inline-grid; place-items: center; }
+.hy-sidebar__dot { width: 8px; height: 8px; border-radius: 50%; margin-inline: 4px; flex: none; }
+.hy-sidebar__label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hy-sidebar__count { font-family: var(--hy-font-mono); font-size: var(--hy-text-2xs); color: var(--hy-fg-3); }
+.hy-sidebar__foot { border-top: 1px solid var(--hy-line); padding-top: 10px; }
+
+.hy-topbar { display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 48px; font-size: var(--hy-text-sm); }
+.hy-topbar__main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+.hy-topbar__actions { display: flex; gap: 8px; align-items: center; }
+.hy-topbar__menu { display: none; width: 32px; height: 32px; border-radius: var(--hy-radius-md); border: 1px solid var(--hy-line-strong); background: var(--hy-bg-raise); position: relative; cursor: pointer; }
+.hy-topbar__menu span { position: absolute; left: 9px; right: 9px; height: 1.5px; background: var(--hy-fg); }
+.hy-topbar__menu span:first-child { top: 12px; } .hy-topbar__menu span:last-child { top: 18px; }
+
+@media (max-width: 860px) {
+  .hy-shell { grid-template-columns: minmax(0, 1fr); }
+  .hy-shell__side { position: fixed; inset: 0 auto 0 0; width: min(280px, 84vw); z-index: var(--hy-z-overlay); transform: translateX(-100%); transition: transform var(--hy-dur-slow) var(--hy-ease-out); }
+  .hy-shell__scrim { display: block; position: fixed; inset: 0; z-index: calc(var(--hy-z-overlay) - 1); background: var(--hy-scrim); opacity: 0; pointer-events: none; transition: opacity 300ms; }
+  .is-drawer-open .hy-shell__side { transform: none; }
+  .is-drawer-open .hy-shell__scrim { opacity: 1; pointer-events: auto; }
+  .hy-topbar__menu { display: block; }
+}
+
+/* Avatar.css */
+.hy-avatar { display: inline-grid; place-items: center; border-radius: 50%; color: var(--hy-fg-inverse); font: 600 10px/1 var(--hy-font-sans); flex: none; }
+[data-theme="light"] .hy-avatar { color: #fff; }
+.hy-avatar--xs { width: 18px; height: 18px; font-size: 9px; }
+.hy-avatar--sm { width: 20px; height: 20px; }
+.hy-avatar--md { width: 28px; height: 28px; font-size: 11px; }
+
+/* Button.css */
+.hy-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--hy-space-2);
+  height: 36px; padding: 0 14px; border-radius: var(--hy-radius-md);
+  font: 500 var(--hy-text-base)/1 var(--hy-font-sans); white-space: nowrap; cursor: pointer; text-decoration: none;
+  border: 1px solid var(--hy-line-strong); background: var(--hy-bg-raise); color: var(--hy-fg);
+  transition: background var(--hy-dur-base), border-color var(--hy-dur-base), color var(--hy-dur-base), transform var(--hy-dur-base) var(--hy-ease-out);
+}
+.hy-btn:hover { background: var(--hy-bg-active); border-color: color-mix(in srgb, var(--hy-fg) 22%, transparent); }
+.hy-btn:active { transform: scale(.97); }
+.hy-btn:focus-visible { outline: 2px solid var(--hy-signal); outline-offset: 3px; }
+.hy-btn:disabled, .hy-btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+.hy-btn--primary { background: var(--hy-btn-primary-bg); color: var(--hy-fg-inverse); border-color: transparent; box-shadow: var(--hy-shadow-btn-primary); }
+.hy-btn--primary:hover { background: var(--hy-btn-primary-hover); border-color: transparent; }
+.hy-btn--ghost { background: transparent; border-color: transparent; color: var(--hy-fg-2); }
+.hy-btn--ghost:hover { background: var(--hy-bg-hover); border-color: transparent; color: var(--hy-fg); }
+.hy-btn--sm { height: 30px; padding: 0 10px; font-size: var(--hy-text-sm); border-radius: var(--hy-radius-sm); }
+.hy-btn--lg { height: 40px; padding: 0 18px; }
+.hy-btn--full { width: 100%; }
+.hy-btn__icon { display: inline-grid; place-items: center; font-size: 1.05em; }
+.hy-btn__arrow { transition: transform var(--hy-dur-base) var(--hy-ease-out); }
+.hy-btn:hover .hy-btn__arrow { transform: translateX(3px); }
+
+/* Card.css */
+.hy-card {
+  --hy-mx: 50%; --hy-my: 50%;
+  position: relative; isolation: isolate; overflow: hidden; min-width: 0;
+  border-radius: var(--hy-radius-lg); border: 1px solid var(--hy-line); background: var(--hy-bg-card);
+  transition: border-color 300ms, transform var(--hy-dur-slow) var(--hy-ease-out);
+}
+.hy-card--p-sm { padding: var(--hy-space-4); } .hy-card--p-md { padding: 26px; } .hy-card--p-lg { padding: var(--hy-space-8); }
+.hy-card--interactive { cursor: pointer; }
+.hy-card--interactive:hover { border-color: var(--hy-line-strong); transform: translateY(-2px); }
+.hy-card--highlighted { border-color: color-mix(in srgb, var(--hy-signal) 45%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-signal) 7%, var(--hy-bg-card)), var(--hy-bg-card) 45%); }
+.hy-card--spotlight::before, .hy-card--spotlight::after { content: ""; position: absolute; z-index: -1; opacity: 0; transition: opacity 400ms; pointer-events: none; }
+.hy-card--spotlight::before { inset: 0; background: radial-gradient(380px circle at var(--hy-mx) var(--hy-my), color-mix(in srgb, var(--hy-fg) 7%, transparent), transparent 60%); }
+.hy-card--spotlight::after {
+  inset: -1px; border-radius: inherit; padding: 1px;
+  background: radial-gradient(260px circle at var(--hy-mx) var(--hy-my), color-mix(in srgb, var(--hy-signal) 55%, transparent), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.hy-card--spotlight:hover::before, .hy-card--spotlight:hover::after { opacity: 1; }
+
+/* CommandMenu.css */
+.hy-cmdk-layer { position: fixed; inset: 0; z-index: var(--hy-z-overlay); pointer-events: none; }
+.hy-cmdk-layer.is-open { pointer-events: auto; }
+.hy-cmdk-scrim { position: absolute; inset: 0; background: var(--hy-scrim); opacity: 0; transition: opacity 300ms; }
+.is-open .hy-cmdk-scrim { opacity: 1; }
+.hy-cmdk {
+  position: absolute; left: 50%; top: 14vh; translate: -50% 0; width: min(560px, calc(100% - 32px));
+  border-radius: var(--hy-radius-lg); border: 1px solid var(--hy-line-strong); background: var(--hy-overlay);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: var(--hy-shadow-overlay); overflow: hidden;
+  font-size: 13.5px; transition: opacity 350ms var(--hy-ease-out), transform 450ms var(--hy-ease-spring);
+}
+.hy-cmdk.is-closed { opacity: 0; transform: scale(.96) translateY(-6px); }
+.hy-cmdk--inline { position: relative; left: auto; top: auto; translate: none; width: 100%; max-width: 560px; }
+.hy-cmdk__q { border-bottom: 1px solid var(--hy-line); }
+.hy-cmdk__input { width: 100%; height: 46px; padding: 0 16px; border: 0; background: transparent; color: var(--hy-fg); font: 15px var(--hy-font-sans); caret-color: var(--hy-signal); }
+.hy-cmdk__input:focus { outline: none; }
+.hy-cmdk__input::placeholder { color: var(--hy-fg-3); }
+.hy-cmdk__list { list-style: none; margin: 0; padding: 6px; max-height: 320px; overflow-y: auto; }
+.hy-cmdk__item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--hy-radius-sm); color: var(--hy-fg-2); cursor: pointer; }
+.hy-cmdk__item.is-active { background: var(--hy-bg-active); color: var(--hy-fg); }
+.hy-cmdk__icon { width: 16px; display: inline-grid; place-items: center; }
+.hy-cmdk__kbd { margin-left: auto; }
+.hy-cmdk__empty { padding: 18px 10px; color: var(--hy-fg-3); text-align: center; }
+@media (prefers-reduced-motion: reduce) { .hy-cmdk, .hy-cmdk-scrim { transition: none; } }
+
+/* IssueRow.css */
+.hy-issue-list { list-style: none; margin: 0; padding: 6px 0; }
+.hy-issue { display: grid; grid-template-columns: 22px 64px 18px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 8px 16px;
+  font-size: 13.5px; color: var(--hy-fg-2); transition: background var(--hy-dur-fast); cursor: default; }
+.hy-issue:hover, .hy-issue.is-selected { background: var(--hy-bg-hover); }
+.hy-issue__id { font-family: var(--hy-font-mono); font-size: var(--hy-text-xs); color: var(--hy-fg-3); font-variant-numeric: tabular-nums; }
+.hy-issue__title { color: var(--hy-fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+@container (max-width: 520px) {
+  .hy-issue { grid-template-columns: 18px 54px minmax(0, 1fr) auto; }
+  .hy-issue .hy-priority, .hy-issue .hy-issue__tag { display: none; }
+}
+
+/* Kbd.css */
+.hy-kbd {
+  display: inline-grid; place-items: center; font-family: var(--hy-font-mono); color: var(--hy-fg-2);
+  background: var(--hy-bg-raise); border: 1px solid var(--hy-line-strong); border-bottom-width: 2px;
+  transition: transform var(--hy-dur-fast) var(--hy-ease-out), border-bottom-width var(--hy-dur-fast), color var(--hy-dur-fast);
+}
+.hy-kbd--sm { font-size: var(--hy-text-2xs); min-width: 20px; height: 20px; padding: 0 5px; border-radius: var(--hy-radius-xs); }
+.hy-kbd--lg { font-size: 15px; min-width: 52px; height: 52px; padding: 0 12px; border-radius: 10px; border-bottom-width: 3px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-fg) 6%, var(--hy-bg-raise)), var(--hy-bg-card)); }
+.hy-kbd--pressed { transform: translateY(2px); border-bottom-width: 1px; color: var(--hy-signal); }
+
+/* Marquee.css */
+.hy-marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); }
+.hy-marquee__track { display: flex; width: max-content; animation: hy-marquee 38s linear infinite; }
+.hy-marquee:hover .hy-marquee__track { animation-play-state: paused; }
+.hy-marquee__item { color: var(--hy-fg-3); white-space: nowrap; transition: color 300ms; }
+.hy-marquee__item:hover { color: var(--hy-fg); }
+@media (prefers-reduced-motion: reduce) {
+  .hy-marquee { -webkit-mask-image: none; mask-image: none; }
+  .hy-marquee__track { animation: none; flex-wrap: wrap; justify-content: center; width: auto; }
+  .hy-marquee__item[aria-hidden="true"] { display: none; }
+}
+
+/* Pill.css */
+.hy-pill { display: inline-flex; align-items: center; gap: 10px; padding: 4px 12px 4px 4px; border-radius: var(--hy-radius-full); border: 1px solid var(--hy-line-strong);
+  background: var(--hy-bg-hover); font-size: 13px; color: var(--hy-fg-2); text-decoration: none; transition: border-color var(--hy-dur-base); }
+.hy-pill:hover { border-color: color-mix(in srgb, var(--hy-fg) 25%, transparent); }
+.hy-pill__badge { font-weight: 500; color: var(--hy-fg-inverse); background: var(--hy-signal); border-radius: var(--hy-radius-full); padding: 2px 8px; font-size: var(--hy-text-xs); }
+[data-theme="light"] .hy-pill__badge { color: #fff; }
+.hy-pill__arrow { transition: transform var(--hy-dur-base) var(--hy-ease-out); }
+.hy-pill:hover .hy-pill__arrow { transform: translateX(3px); }
+
+/* PriorityIcon.css */
+.hy-priority { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; flex: none; }
+.hy-priority i { width: 3px; border-radius: 1px; background: var(--hy-line-strong); }
+.hy-priority i:nth-child(1) { height: 5px; } .hy-priority i:nth-child(2) { height: 8px; } .hy-priority i:nth-child(3) { height: 12px; }
+.hy-priority[data-level="1"] i:nth-child(1),
+.hy-priority[data-level="2"] i:nth-child(-n+2),
+.hy-priority[data-level="3"] i { background: var(--hy-fg-2); }
+
+/* ProgressBar.css */
+.hy-progress { height: 6px; border-radius: var(--hy-radius-full); background: var(--hy-bg-active); overflow: hidden; }
+.hy-progress__fill { display: block; height: 100%; border-radius: inherit; transform-origin: left; transition: width var(--hy-dur-slow) var(--hy-ease-out); }
+.hy-progress--info { background: var(--hy-info); } .hy-progress--signal { background: var(--hy-signal); } .hy-progress--ok { background: var(--hy-ok); }
+
+/* SegmentedControl.css */
+.hy-seg {
+  position: relative; isolation: isolate; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  padding: 3px; border: 1px solid var(--hy-line-strong); border-radius: 10px; background: var(--hy-bg-raise);
+}
+.hy-seg--full { display: grid; width: 100%; }
+.hy-seg__opt { background: none; border: 0; color: var(--hy-fg-2); font: 500 13.5px var(--hy-font-sans); padding: 7px 16px; border-radius: var(--hy-radius-sm); cursor: pointer; transition: color var(--hy-dur-base); white-space: nowrap; }
+.hy-seg__opt[aria-pressed="true"] { color: var(--hy-fg); }
+.hy-seg__opt:focus-visible { outline: 2px solid var(--hy-signal); outline-offset: 1px; }
+.hy-seg__thumb {
+  position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / var(--hy-seg-n)); z-index: -1; border-radius: var(--hy-radius-sm);
+  background: var(--hy-thumb); box-shadow: var(--hy-shadow-thumb);
+  transform: translateX(calc(var(--hy-seg-i) * 100%)); transition: transform var(--hy-dur-slow) var(--hy-ease-spring);
+}
+
+/* StatusIcon.css */
+.hy-status { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--hy-fg-3); flex: none; position: relative; }
+.hy-status--in-progress { border-color: var(--hy-signal); background: conic-gradient(var(--hy-signal) 0 50%, transparent 50%); }
+.hy-status--in-review { border-color: var(--hy-ok); background: conic-gradient(var(--hy-ok) 0 75%, transparent 75%); }
+.hy-status--done { border-color: var(--hy-info); background: var(--hy-info); box-shadow: inset 0 0 0 2px var(--hy-bg-raise); }
+.hy-status--canceled { border-color: var(--hy-fg-3); background: var(--hy-fg-3); }
+.hy-status--canceled::after { content: ""; position: absolute; inset: 0; margin: auto; width: 7px; height: 1.5px; background: var(--hy-bg-raise); transform: rotate(45deg); }
+
+/* Table.css */
+.hy-table-wrap { overflow-x: auto; border: 1px solid var(--hy-line); border-radius: var(--hy-radius-xl); }
+.hy-table { width: 100%; border-collapse: collapse; font-size: var(--hy-text-base); }
+.hy-table th, .hy-table td { padding: 14px 20px; border-bottom: 1px solid var(--hy-line); text-align: left; }
+.hy-table thead th { font-weight: 500; color: var(--hy-fg); background: var(--hy-bg-raise); position: sticky; top: 0; }
+.hy-table td { color: var(--hy-fg-2); font-variant-numeric: tabular-nums; }
+.hy-table tbody tr:last-child td { border-bottom: 0; }
+.hy-table tbody tr:not(.hy-table__group):hover td { background: var(--hy-bg-hover); }
+.hy-table__group td { font-family: var(--hy-font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--hy-fg-3); padding-top: 22px; }
+.hy-table__yes { color: var(--hy-fg); } .hy-table__no { color: var(--hy-fg-3); }
+
+/* Tabs.css */
+.hy-tabs { position: relative; isolation: isolate; display: flex; gap: 2px; }
+.hy-tabs--horizontal { overflow-x: auto; scrollbar-width: none; }
+.hy-tabs--horizontal::-webkit-scrollbar { display: none; }
+.hy-tabs--vertical { flex-direction: column; }
+.hy-tabs--track { display: inline-flex; flex-wrap: wrap; padding: 3px; border: 1px solid var(--hy-line-strong); border-radius: 10px; background: var(--hy-bg-raise); }
+.hy-tabs__item {
+  background: none; border: 0; color: var(--hy-fg-2); font: 500 var(--hy-text-base) var(--hy-font-sans); padding: 6px 12px; border-radius: var(--hy-radius-sm);
+  cursor: pointer; white-space: nowrap; text-align: left; text-decoration: none; transition: color var(--hy-dur-base);
+}
+.hy-tabs__item:hover, .hy-tabs__item[data-active="true"] { color: var(--hy-fg); }
+.hy-tabs__item:focus-visible { outline: 2px solid var(--hy-signal); outline-offset: 1px; }
+.hy-tabs__ind {
+  position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; border-radius: var(--hy-radius-sm);
+  width: var(--hy-ind-w, 0); height: var(--hy-ind-h, 0); opacity: var(--hy-ind-o, 0);
+  transform: translate(var(--hy-ind-x, 0), var(--hy-ind-y, 0));
+  background: var(--hy-bg-active); border: 1px solid var(--hy-line);
+  transition: transform var(--hy-dur-slow) var(--hy-ease-spring), width var(--hy-dur-slow) var(--hy-ease-spring), height var(--hy-dur-slow) var(--hy-ease-spring), opacity 200ms;
+}
+@media (prefers-reduced-motion: reduce) { .hy-tabs__ind { transition: none; } }
+
+/* Tag.css */
+.hy-tag {
+  --tone: var(--hy-fg-2);
+  display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: var(--hy-radius-full);
+  border: 1px solid var(--hy-line-strong); color: var(--hy-fg-2); font: 500 var(--hy-text-xs)/1 var(--hy-font-sans); white-space: nowrap;
+}
+.hy-tag--signal { --tone: var(--hy-signal); }
+.hy-tag--info { --tone: var(--hy-info); }
+.hy-tag--ok { --tone: var(--hy-ok); }
+.hy-tag--danger { --tone: var(--hy-danger); }
+.hy-tag:not(.hy-tag--neutral) { color: var(--tone); border-color: color-mix(in srgb, var(--tone) 40%, transparent); }
+.hy-tag--solid { background: var(--tone); border-color: transparent; color: var(--hy-fg-inverse) !important; }
+.hy-tag--neutral.hy-tag--solid { background: var(--hy-fg); }
+.hy-tag__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tone); }
+
+/* TextField.css */
+.hy-field { display: grid; gap: 6px; }
+.hy-field__label { font-size: var(--hy-text-sm); color: var(--hy-fg-2); }
+.hy-field__input {
+  height: 40px; width: 100%; border-radius: var(--hy-radius-md); border: 1px solid var(--hy-line-strong); background: var(--hy-bg);
+  color: var(--hy-fg); padding: 0 12px; font: 15px var(--hy-font-sans); transition: border-color var(--hy-dur-base), box-shadow var(--hy-dur-base);
+}
+.hy-field__input::placeholder { color: var(--hy-fg-3); }
+.hy-field__input:focus { outline: none; border-color: color-mix(in srgb, var(--hy-signal) 60%, transparent); box-shadow: 0 0 0 3px var(--hy-signal-soft); }
+.hy-field__msg { font-size: var(--hy-text-xs); color: var(--hy-fg-3); }
+.hy-field--error .hy-field__input { border-color: color-mix(in srgb, var(--hy-danger) 70%, transparent); }
+.hy-field--error .hy-field__input:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--hy-danger) 18%, transparent); }
+.hy-field__msg--error { color: var(--hy-danger); }
+
+/* Typography.css */
+.hy-heading { font-family: var(--hy-font-sans); font-weight: 600; color: var(--hy-fg); margin: 0; text-wrap: balance; }
+.hy-heading--display { font-size: var(--hy-text-display-lg); line-height: 1.02; letter-spacing: -0.045em; max-width: 14ch; }
+.hy-heading--title { font-size: var(--hy-text-display-md); line-height: var(--hy-leading-tight); letter-spacing: -0.035em; max-width: 18ch; }
+.hy-heading--section { font-size: var(--hy-text-display-sm); line-height: 1.1; letter-spacing: -0.03em; }
+.hy-heading--card { font-size: var(--hy-text-lg); font-weight: 500; letter-spacing: -0.01em; }
+.hy-eyebrow { display: flex; align-items: center; gap: 10px; font: 400 var(--hy-text-xs)/1.4 var(--hy-font-mono); letter-spacing: var(--hy-tracking-label); text-transform: uppercase; color: var(--hy-signal); }
+.hy-eyebrow--line::before { content: ""; width: 18px; height: 1px; background: currentColor; opacity: .6; }
+.hy-text { margin: 0; max-width: 62ch; }
+.hy-text--xs { font-size: var(--hy-text-xs); } .hy-text--sm { font-size: var(--hy-text-sm); } .hy-text--base { font-size: var(--hy-text-base); }
+.hy-text--md { font-size: var(--hy-text-md); } .hy-text--lede { font-size: clamp(1.05rem, 1.6vw, 1.2rem); max-width: 48ch; }
+.hy-text--primary { color: var(--hy-fg); } .hy-text--secondary { color: var(--hy-fg-2); } .hy-text--tertiary { color: var(--hy-fg-3); }
+
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--hy-bg);color:var(--hy-fg);font:16px/1.55 var(--hy-font-sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--hy-signal);outline-offset:3px;border-radius:6px}
+code{font-family:var(--hy-font-mono);font-size:.86em;background:var(--hy-bg-active);padding:1px 5px;border-radius:4px}
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--hy-line);padding:20px 12px;display:flex;flex-direction:column;gap:2px;font-size:13.5px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.02em;font-size:17px;padding:4px 8px 16px}
+.side a{text-decoration:none;color:var(--hy-fg-2);padding:6px 8px;border-radius:7px}
+.side a:hover,.side a.on{color:var(--hy-fg);background:var(--hy-bg-active)}
+.side .t{font:400 11px var(--hy-font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--hy-fg-3);padding:16px 8px 6px}
+.theme{margin-top:auto;padding-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.theme button{font:500 13px var(--hy-font-sans);padding:7px;border-radius:7px;border:1px solid var(--hy-line-strong);background:var(--hy-bg-raise);color:var(--hy-fg-2);cursor:pointer}
+.theme button[aria-pressed="true"]{color:var(--hy-fg);border-color:var(--hy-signal)}
+main{min-width:0;padding:48px clamp(16px,5vw,64px) 120px;max-width:1040px}
+section.top{padding-block:24px 56px;border-bottom:1px solid var(--hy-line);scroll-margin-top:24px}
+h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;margin:0 0 12px;font-weight:600}
+.eyebrow{font:400 12px var(--hy-font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--hy-signal);display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.eyebrow::before{content:"";width:18px;height:1px;background:currentColor;opacity:.6}
+.prose{max-width:68ch;color:var(--hy-fg-2)}
+.prose h1{display:none}
+.prose h2{color:var(--hy-fg);font-size:1.6rem;letter-spacing:-.03em;margin:2.2em 0 .5em;font-weight:600}
+.prose h3{color:var(--hy-fg);font-size:1.1rem;margin:1.6em 0 .4em;font-weight:500}
+.prose strong{color:var(--hy-fg);font-weight:500}
+.prose li{margin:.3em 0}
+.prose table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto}
+.prose th,.prose td{border-bottom:1px solid var(--hy-line);padding:10px 12px;text-align:left}
+.prose th{color:var(--hy-fg);font-weight:500}
+.sec-title{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.035em;margin:0 0 8px;font-weight:600}
+.lead{color:var(--hy-fg-2);margin:0 0 32px;max-width:60ch}
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.sw{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--hy-line);border-radius:12px;padding:12px;background:var(--hy-bg-card);min-width:0}
+.chip{width:44px;height:44px;border-radius:8px;flex:none;border:1px solid var(--hy-line-strong)}
+.sw div{min-width:0}
+.sw code{background:none;padding:0;color:var(--hy-fg)}
+.sw .v{display:block;font:12px var(--hy-font-mono);color:var(--hy-fg-3)}
+.sw p{margin:4px 0 0;font-size:12.5px;color:var(--hy-fg-2);line-height:1.4}
+.ty{border-top:1px solid var(--hy-line);padding:20px 0;display:grid;gap:8px}
+.ty-meta{display:flex;gap:12px;align-items:center;font:12px var(--hy-font-mono);color:var(--hy-fg-3);flex-wrap:wrap}
+.ty-sample{color:var(--hy-fg);overflow-wrap:anywhere}
+.ty-use{margin:0;font-size:13.5px;color:var(--hy-fg-2)}
+.sp{display:grid;grid-template-columns:150px 1fr 60px;align-items:center;gap:12px;padding:6px 0;font-size:12px}
+.sp .bar{height:12px;background:var(--hy-signal);border-radius:3px;max-width:100%}
+.sp .v{font-family:var(--hy-font-mono);color:var(--hy-fg-3)}
+.rds{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px}
+.rd{display:grid;justify-items:center;gap:6px;font-size:12px}
+.rd span{width:64px;height:64px;border:1px solid var(--hy-line-strong);background:var(--hy-bg-card)}
+.rd em{font-style:normal;color:var(--hy-fg-3);font-family:var(--hy-font-mono)}
+.logos{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+.logos figure{margin:0;border:1px solid var(--hy-line);border-radius:12px;padding:24px;display:grid;justify-items:center;gap:10px;font-size:12px}
+.logos figure.l{background:#f7f7f8;color:#50555f}
+.logos figure.d{background:#0b0c0e;color:#a3a7b0}
+.comp{padding:40px 0;border-top:1px solid var(--hy-line);scroll-margin-top:16px}
+.comp .grp{font:11px var(--hy-font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--hy-fg-3)}
+.frame{border:1px solid var(--hy-line);border-radius:14px;overflow:hidden;background:var(--hy-bg);margin:12px 0 16px}
+.frame iframe{display:block;width:100%;border:0}
+.cover{border:1px solid var(--hy-line);border-radius:16px;overflow:hidden;margin-bottom:32px;aspect-ratio:960/288;max-width:100%}
+.cover iframe{width:960px;height:288px;border:0;transform-origin:0 0}
+@media (max-width:820px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--hy-line)}
+  .side .t{width:100%;padding-top:8px}
+  .theme{margin-top:8px;width:100%}
+  .sp{grid-template-columns:120px 1fr 48px}
+}
+
+
+.pv{background:transparent;min-width:0;overflow:hidden}
+.frame{padding:4px 0}
+.cover{position:relative;aspect-ratio:960/288}
+.cover-in{position:absolute;inset:0;width:960px;height:288px;transform-origin:0 0;background:var(--hy-bg)}
+.cover svg{position:absolute;inset:0;width:960px;height:288px}
+.cv-signal{fill:var(--hy-signal)} .cv-ink{fill:var(--hy-fg)} .cv-info{fill:var(--hy-info)} .cv-ok{fill:var(--hy-ok)}
+.dot{fill:var(--hy-fg-3)} .cv-hair{stroke:var(--hy-line-strong)}
+.cv-name{position:absolute;left:48px;bottom:40px;width:440px}
+.cv-title{font-size:100px;line-height:.92;font-weight:600;letter-spacing:-.045em;color:var(--hy-fg)}
+.cv-name p{margin:14px 0 0;font-size:14px;color:var(--hy-fg-2)}
+.side{top:env(safe-area-inset-top,0px)}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<nav class="side" aria-label="Sections">
+  <div class="brand"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iI2VjZWVmMiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNmMmI2NmQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=" width="22" height="22" alt="" id="mark">Halyard</div>
+  <span class="t">Foundations</span>
+  <a href="#overview">Overview</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#space">Space &amp; radius</a><a href="#logo">Logo</a>
+  <span class="t">Components</span><a href="#c-Accordion">Accordion</a><a href="#c-AppShell">AppShell</a><a href="#c-Avatar">Avatar</a><a href="#c-Button">Button</a><a href="#c-Card">Card</a><a href="#c-CommandMenu">CommandMenu</a><a href="#c-IssueRow">IssueRow</a><a href="#c-Kbd">Kbd</a><a href="#c-Marquee">Marquee</a><a href="#c-Pill">Pill</a><a href="#c-PriorityIcon">PriorityIcon</a><a href="#c-ProgressBar">ProgressBar</a><a href="#c-Reveal">Reveal</a><a href="#c-SegmentedControl">SegmentedControl</a><a href="#c-StatusIcon">StatusIcon</a><a href="#c-Table">Table</a><a href="#c-Tabs">Tabs</a><a href="#c-Tag">Tag</a><a href="#c-TextField">TextField</a><a href="#c-Typography">Typography</a>
+  <div class="theme" role="group" aria-label="Theme"><button aria-pressed="true" data-t="dark">Dark</button><button aria-pressed="false" data-t="light">Light</button></div>
+</nav>
+<main>
+<section class="top" id="overview">
+  <div class="cover"><div class="cover-in">
+<svg viewBox="0 0 960 288" aria-hidden="true">
+  <rect class="cv-signal" x="520" y="-24" width="160" height="232" rx="14"/>
+  <rect class="cv-ink" x="700" y="128" width="96" height="96" rx="12"/>
+  <rect class="cv-info" x="816" y="168" width="120" height="120" rx="12"/>
+  <rect class="cv-ok" x="700" y="244" width="64" height="40" rx="8"/>
+  <circle class="dot" cx="724" cy="28" r="2"/><circle class="dot" cx="748" cy="28" r="2"/><circle class="dot" cx="772" cy="28" r="2"/><circle class="dot" cx="796" cy="28" r="2"/><circle class="dot" cx="820" cy="28" r="2"/><circle class="dot" cx="844" cy="28" r="2"/><circle class="dot" cx="868" cy="28" r="2"/><circle class="dot" cx="892" cy="28" r="2"/><circle class="dot" cx="916" cy="28" r="2"/><circle class="dot" cx="724" cy="52" r="2"/><circle class="dot" cx="748" cy="52" r="2"/><circle class="dot" cx="772" cy="52" r="2"/><circle class="dot" cx="796" cy="52" r="2"/><circle class="dot" cx="820" cy="52" r="2"/><circle class="dot" cx="844" cy="52" r="2"/><circle class="dot" cx="868" cy="52" r="2"/><circle class="dot" cx="892" cy="52" r="2"/><circle class="dot" cx="916" cy="52" r="2"/><circle class="dot" cx="724" cy="76" r="2"/><circle class="dot" cx="748" cy="76" r="2"/><circle class="dot" cx="772" cy="76" r="2"/><circle class="dot" cx="796" cy="76" r="2"/><circle class="dot" cx="820" cy="76" r="2"/><circle class="dot" cx="844" cy="76" r="2"/><circle class="dot" cx="868" cy="76" r="2"/><circle class="dot" cx="892" cy="76" r="2"/><circle class="dot" cx="916" cy="76" r="2"/><circle class="dot" cx="724" cy="100" r="2"/><circle class="dot" cx="748" cy="100" r="2"/><circle class="dot" cx="772" cy="100" r="2"/><circle class="dot" cx="796" cy="100" r="2"/><circle class="dot" cx="820" cy="100" r="2"/><circle class="dot" cx="844" cy="100" r="2"/><circle class="dot" cx="868" cy="100" r="2"/><circle class="dot" cx="892" cy="100" r="2"/><circle class="dot" cx="916" cy="100" r="2"/>
+  <line class="cv-hair" x1="480" y1="232" x2="680" y2="232"/>
+</svg>
+<div class="cv-name"><div class="cv-title">Halyard</div><p>Plan the week. Ship the week. A dark, keyboard-first system for product UI.</p></div>
+</div></div>
+  <div class="eyebrow">Design system · v0.1</div>
+  <h1>Halyard</h1>
+  <div class="prose"><h1>Halyard</h1>
+<p>Halyard is a design system for dark, keyboard-first product UI: one set of tokens, components and motion that builds both the marketing site and the app. It is quiet by default, with graphite surfaces and a single warm accent, and it uses motion to explain what changed.</p>
+<p>The code lives in the <code>@halyard/ui</code> package (React + TypeScript, with Storybook). This folder is the reference: tokens, live component previews and the rules for using them.</p>
+<h2>Principles</h2>
+<ul>
+<li><strong>One accent, used sparingly.</strong> <code>hy-signal</code> (amber) marks the one thing that matters in a view: what is new, live, recommended or focused. Everything else is greyscale.</li>
+<li><strong>Motion explains change.</strong> Indicators slide to the new choice, panels grow from where they open, a new row flashes once. Nothing moves only to decorate.</li>
+<li><strong>Complete at rest.</strong> Every animation ends at the default state, so a screen is fully readable with reduced motion or before scripts load.</li>
+<li><strong>Keyboard first.</strong> Every action is reachable by keyboard, common ones have single-key shortcuts, and everything lives in the ⌘K command menu.</li>
+<li><strong>Dense but calm.</strong> Small type and tight rows in the app; generous space and big type on marketing pages. Both share the same tokens.</li>
+</ul>
+<h2>Colour</h2>
+<ul>
+<li>Surfaces step up in three levels: <code>hy-bg</code> (page), <code>hy-bg-raise</code> (windows, bars, panels), <code>hy-bg-card</code> (cards). Separate them with <code>hy-line</code> hairlines rather than shadows.</li>
+<li>Text has three levels: <code>hy-fg</code> for headings and primary text, <code>hy-fg-2</code> for body and secondary, <code>hy-fg-3</code> for IDs, captions and dates.</li>
+<li><code>hy-signal</code> once per view. Status colours only mean status: <code>hy-ok</code> in review, <code>hy-info</code> done, <code>hy-danger</code> blocked. <code>hy-lavender</code> is an extra categorical colour for projects and charts.</li>
+<li>Dark is the primary theme. The light theme keeps the same roles; the accent darkens to <code>#b8711a</code> so it holds contrast on white.</li>
+<li>Text on a filled accent or the primary button uses <code>hy-fg-inverse</code>.</li>
+</ul>
+<h2>Type</h2>
+<ul>
+<li><strong>Geist</strong> for everything; <strong>Geist Mono</strong> for IDs, numbers, versions, eyebrows and keys. Both are free on Google Fonts.</li>
+<li>Headings are Geist 600 in solid <code>hy-fg</code> with tight negative tracking (-0.045em at the largest size) and balanced wrapping. Never gradient, serif or italic.</li>
+<li>Display sizes are fluid: display-lg is <code>clamp(2.6rem, 7vw, 5.25rem)</code>, display-md <code>clamp(2rem, 4.4vw, 3.3rem)</code>, display-sm <code>clamp(1.6rem, 3vw, 2.25rem)</code>. The type specimens show their maximums.</li>
+<li>Body is 16px at 1.55 line height, about 62 characters wide. Ledes are 17–19px in <code>hy-fg-2</code>, about 48 characters wide.</li>
+<li>Eyebrows: Geist Mono 12px, uppercase, +0.08em tracking, in <code>hy-signal</code>, after an 18px rule.</li>
+</ul>
+<h2>Space and layout</h2>
+<ul>
+<li>4px base. Lay out siblings with <code>gap</code>, never margins between them.</li>
+<li>Content column: 1120px max with a 16px gutter at every width. App sidebar: 220px; it becomes a drawer under 860px.</li>
+<li>Card grids use a 14px gap. Cards pad 26px. Sections pad 96px on desktop, 64px on mobile.</li>
+<li>Radii by role: <code>hy-radius-sm</code> tabs and menu items, <code>hy-radius-md</code> buttons and inputs, <code>hy-radius-lg</code> cards, <code>hy-radius-xl</code> windows and tables, <code>hy-radius-full</code> pills and tags.</li>
+</ul>
+<h2>Motion</h2>
+<p>Two curves and four durations cover everything.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ease-out</td>
+<td>cubic-bezier(.16, 1, .3, 1)</td>
+<td>Entrances, reveals, panels opening</td>
+</tr>
+<tr>
+<td>ease-spring</td>
+<td>cubic-bezier(.34, 1.56, .64, 1)</td>
+<td>Things moving to a new place: indicators, thumbs, fanned cards</td>
+</tr>
+<tr>
+<td>fast</td>
+<td>150ms</td>
+<td>Hover colour, key presses</td>
+</tr>
+<tr>
+<td>base</td>
+<td>250ms</td>
+<td>Buttons, arrows, borders</td>
+</tr>
+<tr>
+<td>slow</td>
+<td>450ms</td>
+<td>Sliding indicators, drawers</td>
+</tr>
+<tr>
+<td>slower</td>
+<td>1000ms</td>
+<td>Page-load entrance</td>
+</tr>
+<tr>
+<td>stagger</td>
+<td>90ms</td>
+<td>Between items in a load sequence</td>
+</tr>
+</tbody>
+</table>
+<p>Presets (CSS classes, or the <code>Reveal</code> component):</p>
+<ul>
+<li><code>.hy-rise</code>: on load, fades in from an 8px blur and 14px below. Stagger with <code>--hy-i</code>.</li>
+<li><code>.hy-reveal</code>: on scroll, fades from 25% and rises 24px. Scroll-driven, no JavaScript.</li>
+<li><code>.hy-tilt-in</code>: a product window flattening from an 18° tilt as it scrolls in.</li>
+<li><code>.hy-grow-x</code>: progress and timeline bars growing from the left.</li>
+<li><code>.hy-flash</code>: a single amber flash behind something that just appeared.</li>
+</ul>
+<p>Rules: one orchestrated moment per screen (the hero entrance on marketing pages, the command menu in the app); move indicators instead of swapping them; wrap every animation in <code>prefers-reduced-motion: no-preference</code>.</p>
+<h2>Signature interactions</h2>
+<ul>
+<li><strong>Sliding indicator</strong>: a soft pill behind the active nav link, tab or filter that springs to the new choice.</li>
+<li><strong>Cursor spotlight</strong>: cards glow under the pointer and their border lights up in amber nearby.</li>
+<li><strong>Command menu</strong>: ⌘K opens a frosted menu that scales in on the spring curve; typing filters; Enter runs.</li>
+<li><strong>Page transition</strong>: the old page fades out with a slight blur, the new one fades up; the header stays put.</li>
+</ul>
+<h2>Voice and copy</h2>
+<ul>
+<li>Plain and specific. Short sentences, active voice, sentence case everywhere.</li>
+<li>Name things the way people recognise them: "notifications", not "webhook config".</li>
+<li>Buttons are verbs that say what happens: "Start building", "Create issue". Confirmations echo them: "Issue created".</li>
+<li>Errors say what went wrong and how to fix it, without apologising.</li>
+<li>Numbers are real and specific ("48 ms", "6 pts left"), set in Geist Mono.</li>
+</ul>
+<h2>Iconography</h2>
+<ul>
+<li>There is no icon font yet. The product uses simple Unicode glyphs (＋ ↻ ◎ ◇ ▤ →) at text size in <code>hy-fg-2</code>, and drawn status and priority icons (<code>StatusIcon</code>, <code>PriorityIcon</code>).</li>
+<li>When adding an icon set, use 1.5px strokes on a 16px grid with round caps, in <code>currentColor</code>, to match the mark.</li>
+</ul>
+<h2>Logo</h2>
+<p>The mark is an A-frame with an amber crossbar. Files and clear-space rules are in <code>assets/logos/</code>. In code use <code>&lt;Logo /&gt;</code> or <code>&lt;LogoMark /&gt;</code>, which follow the theme.</p>
+<h2>Using it in code</h2>
+<ul>
+<li>Install the package and import <code>@halyard/ui/styles.css</code> once. Put <code>class="hy-body"</code> on <code>&lt;body&gt;</code>. Set <code>data-theme="light"</code> on <code>&lt;html&gt;</code> for the light theme.</li>
+<li>Reference tokens as CSS variables: <code>var(--hy-signal)</code>, <code>var(--hy-space-4)</code>, <code>var(--hy-radius-lg)</code>.</li>
+<li>Build screens from the components first. App screens start from <code>AppShell</code>; global actions go in <code>CommandMenu</code>.</li>
+<li>The repository includes Storybook, a GitHub Pages workflow for it, and an <code>AGENTS.md</code> that tells AI coding tools how to use the system.</li>
+</ul></div>
+</section>
+<section class="top" id="colour"><h2 class="sec-title">Colour</h2><p class="lead">Every colour is a CSS variable. Switch the theme in the sidebar to see the light values.</p>
+  <div class="sw-grid" id="sw-dark"><div class="sw"><span class="chip" style="background:#0b0c0e"></span><div><code>--hy-bg</code><span class="v">#0b0c0e</span><p>Page and app background.</p></div></div><div class="sw"><span class="chip" style="background:#121316"></span><div><code>--hy-bg-raise</code><span class="v">#121316</span><p>Raised surfaces: windows, panels, top bars, inputs on cards.</p></div></div><div class="sw"><span class="chip" style="background:#15171b"></span><div><code>--hy-bg-card</code><span class="v">#15171b</span><p>Cards and plan tiles.</p></div></div><div class="sw"><span class="chip" style="background:rgba(255,255,255,.04)"></span><div><code>--hy-bg-hover</code><span class="v">rgba(255,255,255,.04)</span><p>Hover tint for rows, menu items and ghost buttons.</p></div></div><div class="sw"><span class="chip" style="background:rgba(255,255,255,.07)"></span><div><code>--hy-bg-active</code><span class="v">rgba(255,255,255,.07)</span><p>Selected row, active tab indicator, progress track.</p></div></div><div class="sw"><span class="chip" style="background:rgba(24,26,31,.86)"></span><div><code>--hy-overlay</code><span class="v">rgba(24,26,31,.86)</span><p>Frosted command menu and popover fill, used with an 18px backdrop blur.</p></div></div><div class="sw"><span class="chip" style="background:rgba(5,6,8,.6)"></span><div><code>--hy-scrim</code><span class="v">rgba(5,6,8,.6)</span><p>Dims the page behind overlays and the mobile sidebar drawer.</p></div></div><div class="sw"><span class="chip" style="background:rgba(255,255,255,.08)"></span><div><code>--hy-line</code><span class="v">rgba(255,255,255,.08)</span><p>Hairlines between sections, rows and cards.</p></div></div><div class="sw"><span class="chip" style="background:rgba(255,255,255,.14)"></span><div><code>--hy-line-strong</code><span class="v">rgba(255,255,255,.14)</span><p>Control borders: buttons, inputs, tags, keycaps.</p></div></div><div class="sw"><span class="chip" style="background:#eceef2"></span><div><code>--hy-fg</code><span class="v">#eceef2</span><p>Primary text and headings on any surface.</p></div></div><div class="sw"><span class="chip" style="background:#a3a7b0"></span><div><code>--hy-fg-2</code><span class="v">#a3a7b0</span><p>Secondary text: body copy, ledes, inactive tabs.</p></div></div><div class="sw"><span class="chip" style="background:#6b707a"></span><div><code>--hy-fg-3</code><span class="v">#6b707a</span><p>Tertiary text: IDs, captions, placeholders, dates.</p></div></div><div class="sw"><span class="chip" style="background:#0b0c0e"></span><div><code>--hy-fg-inverse</code><span class="v">#0b0c0e</span><p>Text on filled accent or primary-button backgrounds.</p></div></div><div class="sw"><span class="chip" style="background:#f2b66d"></span><div><code>--hy-signal</code><span class="v">#f2b66d</span><p>The one accent. Live state, recommended plan, focus ring, eyebrows. One use per view.</p></div></div><div class="sw"><span class="chip" style="background:rgba(242,182,109,.15)"></span><div><code>--hy-signal-soft</code><span class="v">rgba(242,182,109,.15)</span><p>Focus halo on inputs and the flash behind a newly created row.</p></div></div><div class="sw"><span class="chip" style="background:#6fcf97"></span><div><code>--hy-ok</code><span class="v">#6fcf97</span><p>Status: in review, success.</p></div></div><div class="sw"><span class="chip" style="background:#7aa2f7"></span><div><code>--hy-info</code><span class="v">#7aa2f7</span><p>Status: done; data series in charts.</p></div></div><div class="sw"><span class="chip" style="background:#f07178"></span><div><code>--hy-danger</code><span class="v">#f07178</span><p>Status: blocked, errors, destructive actions.</p></div></div><div class="sw"><span class="chip" style="background:#c9a7f5"></span><div><code>--hy-lavender</code><span class="v">#c9a7f5</span><p>Extra categorical colour for projects and charts only.</p></div></div><div class="sw"><span class="chip" style="background:#eceef2"></span><div><code>--hy-btn-primary-bg</code><span class="v">#eceef2</span><p>Primary button fill.</p></div></div><div class="sw"><span class="chip" style="background:#ffffff"></span><div><code>--hy-btn-primary-hover</code><span class="v">#ffffff</span><p>Primary button fill on hover.</p></div></div><div class="sw"><span class="chip" style="background:#23262d"></span><div><code>--hy-thumb</code><span class="v">#23262d</span><p>Segmented-control thumb.</p></div></div></div><div class="sw-grid" id="sw-light" hidden><div class="sw"><span class="chip" style="background:#f7f7f8"></span><div><code>--hy-bg</code><span class="v">#f7f7f8</span><p>Page and app background.</p></div></div><div class="sw"><span class="chip" style="background:#ffffff"></span><div><code>--hy-bg-raise</code><span class="v">#ffffff</span><p>Raised surfaces: windows, panels, top bars, inputs on cards.</p></div></div><div class="sw"><span class="chip" style="background:#ffffff"></span><div><code>--hy-bg-card</code><span class="v">#ffffff</span><p>Cards and plan tiles.</p></div></div><div class="sw"><span class="chip" style="background:rgba(12,14,18,.04)"></span><div><code>--hy-bg-hover</code><span class="v">rgba(12,14,18,.04)</span><p>Hover tint for rows, menu items and ghost buttons.</p></div></div><div class="sw"><span class="chip" style="background:rgba(12,14,18,.07)"></span><div><code>--hy-bg-active</code><span class="v">rgba(12,14,18,.07)</span><p>Selected row, active tab indicator, progress track.</p></div></div><div class="sw"><span class="chip" style="background:rgba(255,255,255,.88)"></span><div><code>--hy-overlay</code><span class="v">rgba(255,255,255,.88)</span><p>Frosted command menu and popover fill, used with an 18px backdrop blur.</p></div></div><div class="sw"><span class="chip" style="background:rgba(20,22,26,.25)"></span><div><code>--hy-scrim</code><span class="v">rgba(20,22,26,.25)</span><p>Dims the page behind overlays and the mobile sidebar drawer.</p></div></div><div class="sw"><span class="chip" style="background:rgba(12,14,18,.08)"></span><div><code>--hy-line</code><span class="v">rgba(12,14,18,.08)</span><p>Hairlines between sections, rows and cards.</p></div></div><div class="sw"><span class="chip" style="background:rgba(12,14,18,.15)"></span><div><code>--hy-line-strong</code><span class="v">rgba(12,14,18,.15)</span><p>Control borders: buttons, inputs, tags, keycaps.</p></div></div><div class="sw"><span class="chip" style="background:#16181d"></span><div><code>--hy-fg</code><span class="v">#16181d</span><p>Primary text and headings on any surface.</p></div></div><div class="sw"><span class="chip" style="background:#50555f"></span><div><code>--hy-fg-2</code><span class="v">#50555f</span><p>Secondary text: body copy, ledes, inactive tabs.</p></div></div><div class="sw"><span class="chip" style="background:#80858f"></span><div><code>--hy-fg-3</code><span class="v">#80858f</span><p>Tertiary text: IDs, captions, placeholders, dates.</p></div></div><div class="sw"><span class="chip" style="background:#ffffff"></span><div><code>--hy-fg-inverse</code><span class="v">#ffffff</span><p>Text on filled accent or primary-button backgrounds.</p></div></div><div class="sw"><span class="chip" style="background:#b8711a"></span><div><code>--hy-signal</code><span class="v">#b8711a</span><p>The one accent. Live state, recommended plan, focus ring, eyebrows. One use per view.</p></div></div><div class="sw"><span class="chip" style="background:rgba(184,113,26,.14)"></span><div><code>--hy-signal-soft</code><span class="v">rgba(184,113,26,.14)</span><p>Focus halo on inputs and the flash behind a newly created row.</p></div></div><div class="sw"><span class="chip" style="background:#22875a"></span><div><code>--hy-ok</code><span class="v">#22875a</span><p>Status: in review, success.</p></div></div><div class="sw"><span class="chip" style="background:#3d6fd9"></span><div><code>--hy-info</code><span class="v">#3d6fd9</span><p>Status: done; data series in charts.</p></div></div><div class="sw"><span class="chip" style="background:#d0424e"></span><div><code>--hy-danger</code><span class="v">#d0424e</span><p>Status: blocked, errors, destructive actions.</p></div></div><div class="sw"><span class="chip" style="background:#8a5cd1"></span><div><code>--hy-lavender</code><span class="v">#8a5cd1</span><p>Extra categorical colour for projects and charts only.</p></div></div><div class="sw"><span class="chip" style="background:#16181d"></span><div><code>--hy-btn-primary-bg</code><span class="v">#16181d</span><p>Primary button fill.</p></div></div><div class="sw"><span class="chip" style="background:#000000"></span><div><code>--hy-btn-primary-hover</code><span class="v">#000000</span><p>Primary button fill on hover.</p></div></div><div class="sw"><span class="chip" style="background:#ffffff"></span><div><code>--hy-thumb</code><span class="v">#ffffff</span><p>Segmented-control thumb.</p></div></div></div></section>
+<section class="top" id="type"><h2 class="sec-title">Type</h2><p class="lead">Geist for everything, Geist Mono for IDs, numbers and labels. Display sizes are fluid; the specimens show their maximum.</p><div class="ty"><div class="ty-meta"><code>display-lg</code><span>84px / 1.02 · 600</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(84px,9vw);line-height:1.02;font-weight:600;letter-spacing:-0.045em;text-transform:none">Plan the week. Ship the week.</div><p class="ty-use">Page title (H1). Fluid: clamp(2.6rem, 7vw, 5.25rem); 84px is the maximum.</p></div><div class="ty"><div class="ty-meta"><code>display-md</code><span>53px / 1.05 · 600</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(53px,9vw);line-height:1.05;font-weight:600;letter-spacing:-0.035em;text-transform:none">Less status, more shipping.</div><p class="ty-use">Section title (H2). Fluid: clamp(2rem, 4.4vw, 3.3rem).</p></div><div class="ty"><div class="ty-meta"><code>display-sm</code><span>36px / 1.1 · 600</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(36px,9vw);line-height:1.1;font-weight:600;letter-spacing:-0.03em;text-transform:none">Fill the week to the forecast.</div><p class="ty-use">Sub-section (H3). Fluid: clamp(1.6rem, 3vw, 2.25rem).</p></div><div class="ty"><div class="ty-meta"><code>lede</code><span>19px / 1.55 · 400</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(19px,9vw);line-height:1.55;font-weight:400;letter-spacing:normal;text-transform:none">Issues, cycles and roadmaps in one fast workspace.</div><p class="ty-use">Intro paragraph under a page title, in fg-2, max 48 characters wide.</p></div><div class="ty"><div class="ty-meta"><code>card-title</code><span>17px / 1.4 · 500</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(17px,9vw);line-height:1.4;font-weight:500;letter-spacing:-0.01em;text-transform:none">Cycles that close themselves</div><p class="ty-use">Card and plan titles (H4).</p></div><div class="ty"><div class="ty-meta"><code>body</code><span>16px / 1.55 · 400</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(16px,9vw);line-height:1.55;font-weight:400;letter-spacing:normal;text-transform:none">Unfinished work rolls into the next cycle on Friday.</div><p class="ty-use">Running text, max 62 characters wide.</p></div><div class="ty"><div class="ty-meta"><code>ui</code><span>14px / 1.4 · 500</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(14px,9vw);line-height:1.4;font-weight:500;letter-spacing:normal;text-transform:none">Start building</div><p class="ty-use">Buttons, tabs, nav links.</p></div><div class="ty"><div class="ty-meta"><code>small</code><span>13px / 1.45 · 400</span></div><div class="ty-sample" style="font-family:var(--hy-font-sans);font-size:min(13px,9vw);line-height:1.45;font-weight:400;letter-spacing:normal;text-transform:none">Sidebar items and secondary UI</div><p class="ty-use">Sidebar, menus, captions.</p></div><div class="ty"><div class="ty-meta"><code>eyebrow</code><span>12px / 1.4 · 400</span></div><div class="ty-sample" style="font-family:var(--hy-font-mono);font-size:min(12px,9vw);line-height:1.4;font-weight:400;letter-spacing:0.08em;text-transform:uppercase">BUILT FOR WEEKLY CYCLES</div><p class="ty-use">Section labels: uppercase, in signal, after an 18px rule.</p></div><div class="ty"><div class="ty-meta"><code>id</code><span>12px / 1.4 · 400</span></div><div class="ty-sample" style="font-family:var(--hy-font-mono);font-size:min(12px,9vw);line-height:1.4;font-weight:400;letter-spacing:normal;text-transform:none">WEB-318</div><p class="ty-use">Issue IDs, versions, dates, tabular numbers, in fg-3.</p></div><div class="ty"><div class="ty-meta"><code>key</code><span>11px / 1 · 400</span></div><div class="ty-sample" style="font-family:var(--hy-font-mono);font-size:min(11px,9vw);line-height:1;font-weight:400;letter-spacing:normal;text-transform:none">⌘K</div><p class="ty-use">Keycap labels.</p></div></section>
+<section class="top" id="space"><h2 class="sec-title">Space and radius</h2><p class="lead">A 4px base. Lay out siblings with gap, never margins.</p><div class="sp"><code>--hy-space-1</code><span class="bar" style="width:4px"></span><span class="v">4px</span></div><div class="sp"><code>--hy-space-2</code><span class="bar" style="width:8px"></span><span class="v">8px</span></div><div class="sp"><code>--hy-space-3</code><span class="bar" style="width:12px"></span><span class="v">12px</span></div><div class="sp"><code>--hy-space-4</code><span class="bar" style="width:16px"></span><span class="v">16px</span></div><div class="sp"><code>--hy-space-5</code><span class="bar" style="width:20px"></span><span class="v">20px</span></div><div class="sp"><code>--hy-space-6</code><span class="bar" style="width:24px"></span><span class="v">24px</span></div><div class="sp"><code>--hy-space-8</code><span class="bar" style="width:32px"></span><span class="v">32px</span></div><div class="sp"><code>--hy-space-10</code><span class="bar" style="width:40px"></span><span class="v">40px</span></div><div class="sp"><code>--hy-space-12</code><span class="bar" style="width:48px"></span><span class="v">48px</span></div><div class="sp"><code>--hy-space-16</code><span class="bar" style="width:64px"></span><span class="v">64px</span></div><div class="sp"><code>--hy-space-24</code><span class="bar" style="width:96px"></span><span class="v">96px</span></div><div class="rds"><div class="rd"><span style="border-radius:5px"></span><code>xs</code><em>5px</em></div><div class="rd"><span style="border-radius:7px"></span><code>sm</code><em>7px</em></div><div class="rd"><span style="border-radius:8px"></span><code>md</code><em>8px</em></div><div class="rd"><span style="border-radius:12px"></span><code>lg</code><em>12px</em></div><div class="rd"><span style="border-radius:14px"></span><code>xl</code><em>14px</em></div><div class="rd"><span style="border-radius:20px"></span><code>2xl</code><em>20px</em></div><div class="rd"><span style="border-radius:999px"></span><code>full</code><em>999px</em></div></div></section>
+<section class="top" id="logo"><h2 class="sec-title">Logo</h2>
+  <div class="logos"><figure class="d"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iI2VjZWVmMiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNmMmI2NmQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=" width="72" height="72" alt="Halyard mark on dark"><figcaption>On dark</figcaption></figure><figure class="l"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iIzE2MTgxZCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNiODcxMWEiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=" width="72" height="72" alt="Halyard mark on light"><figcaption>On light</figcaption></figure></div>
+  <div class="prose"><h1>Logos</h1>
+<p>The Halyard mark: an A-frame of two strokes with an amber crossbar.</p>
+<ul>
+<li><code>halyard-mark-on-dark.svg</code>: strokes in <code>hy-fg</code> dark value (#eceef2), crossbar in <code>hy-signal</code> (#f2b66d). Use on dark surfaces.</li>
+<li><code>halyard-mark-on-light.svg</code>: strokes #16181d, crossbar #b8711a. Use on light surfaces.</li>
+<li>The wordmark is the mark plus "Halyard" set in Geist 600 at -0.02em tracking, 10px gap. In code use <code>&lt;Logo /&gt;</code> or <code>&lt;LogoMark /&gt;</code>, which follow the theme automatically.</li>
+<li>Minimum size 16px. Keep clear space equal to the crossbar length on every side. Never recolour the crossbar to anything but the signal accent.</li>
+</ul></div></section>
+<h2 class="sec-title" style="margin-top:56px">Components</h2>
+<p class="lead">Live previews running the real components. Each one lists when and how to use it.</p>
+<section class="comp" id="c-Accordion"><span class="grp">Containers</span><div class="frame"><div class="hy-body pv" id="pv-Accordion" style="padding:16px;max-width:620px"></div></div><div class="prose"><h1>Accordion</h1>
+<p>Questions and answers, or any list of sections where people only need one or two open.</p>
+<ul>
+<li>Panels expand by animating their height from zero; the plus turns into a minus.</li>
+<li>One panel open at a time by default; pass <code>multiple</code> to allow several.</li>
+<li>Closed panels are removed from the tab order.</li>
+</ul></div></section><section class="comp" id="c-AppShell"><span class="grp">Layout</span><div class="frame"><div class="hy-body pv" id="pv-AppShell" style="height:300px;overflow:hidden;border:1px solid var(--hy-line);border-radius:12px"></div></div><div class="prose"><h1>AppShell</h1>
+<p>The full-height app layout: sidebar, sticky top bar and scrolling content.</p>
+<ul>
+<li>Compose with <code>Sidebar</code>, <code>SidebarSection</code>, <code>SidebarItem</code> and <code>Topbar</code>.</li>
+<li>Sidebar items show an icon or a coloured <code>dot</code> (teams, projects) and an optional count in mono.</li>
+<li>Under 860px the sidebar becomes a drawer: pass <code>sidebarOpen</code> and <code>onSidebarClose</code>, and give <code>Topbar</code> an <code>onMenu</code> handler to show the menu button.</li>
+</ul></div></section><section class="comp" id="c-Avatar"><span class="grp">Content</span><div class="frame"><div class="hy-body pv" id="pv-Avatar" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Avatar</h1>
+<p>A person's initials in a coloured disc.</p>
+<ul>
+<li>Pass <code>name</code>; the colour is picked from the name so the same person always gets the same colour.</li>
+<li><code>xs</code> 18px in activity feeds, <code>sm</code> 20px in rows, <code>md</code> 28px in quotes and headers.</li>
+<li>The full name is the accessible label and tooltip.</li>
+</ul></div></section><section class="comp" id="c-Button"><span class="grp">Actions</span><div class="frame"><div class="hy-body pv" id="pv-Button" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Button</h1>
+<p>Triggers an action; one primary button per view, for the main next step.</p>
+<ul>
+<li><strong>primary</strong>: the single most important action (Start free, Create issue). Fill <code>hy-btn-primary-bg</code>, text <code>hy-fg-inverse</code>.</li>
+<li><strong>secondary</strong> (default): every other action. <code>hy-bg-raise</code> fill, <code>hy-line-strong</code> border.</li>
+<li><strong>ghost</strong>: low-emphasis actions in dense areas (Log in, toolbar actions).</li>
+<li><code>arrow</code> adds a trailing → that nudges 3px right on hover. Use it for actions that move the person forward.</li>
+<li>Sizes: <code>sm</code> 30px (toolbars), <code>md</code> 36px (default), <code>lg</code> 40px (forms, plan cards).</li>
+<li>For links use <code>LinkButton</code>, or <code>buttonClass()</code> on a router link.</li>
+<li>Labels are verbs in sentence case: "Start building", not "Get Started Now".</li>
+</ul></div></section><section class="comp" id="c-Card"><span class="grp">Containers</span><div class="frame"><div class="hy-body pv" id="pv-Card" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px"></div></div><div class="prose"><h1>Card</h1>
+<p>A bordered surface that groups one idea: a feature, a plan, an integration, a cycle.</p>
+<ul>
+<li><code>spotlight</code> (on by default) adds a soft glow under the cursor and lights the border nearby in <code>hy-signal</code>.</li>
+<li><code>highlighted</code> marks the one recommended item in a set (an amber border and faint top tint).</li>
+<li><code>interactive</code> lifts 2px on hover for clickable cards.</li>
+<li>Cards in a row share padding and baselines; let content set the height.</li>
+</ul></div></section><section class="comp" id="c-CommandMenu"><span class="grp">Navigation</span><div class="frame"><div class="hy-body pv" id="pv-CommandMenu" style="padding:16px"></div></div><div class="prose"><h1>CommandMenu</h1>
+<p>The global action launcher, opened with ⌘K or Ctrl+K.</p>
+<ul>
+<li>Every frequent action belongs here with its single-key shortcut.</li>
+<li>Type to filter, arrows to move, Enter to run, Escape to close.</li>
+<li>Opens with a spring scale from 96% and a fade; the scrim dims the page.</li>
+<li><code>inline</code> renders it without the overlay for docs and empty states.</li>
+</ul></div></section><section class="comp" id="c-IssueRow"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-IssueRow" style="padding:8px 0;background:var(--hy-bg-raise);border:1px solid var(--hy-line);border-radius:12px;container-type:inline-size"></div></div><div class="prose"><h1>IssueRow</h1>
+<p>One work item in a list: priority, ID, status, title, label and assignee.</p>
+<ul>
+<li>Wrap rows in <code>IssueList</code>. Titles truncate with an ellipsis; nothing else wraps.</li>
+<li>In narrow containers (under 520px) the priority and label hide automatically.</li>
+<li><code>flash</code> highlights a row once in <code>hy-signal-soft</code> right after it is created.</li>
+</ul></div></section><section class="comp" id="c-Kbd"><span class="grp">Content</span><div class="frame"><div class="hy-body pv" id="pv-Kbd" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Kbd</h1>
+<p>Shows a keyboard key or shortcut.</p>
+<ul>
+<li><code>sm</code> inline in text and menus ("press ⌘ K"), <code>lg</code> as an illustration.</li>
+<li><code>pressed</code> animates a key press (2px drop, amber label). Use it to demonstrate shortcuts, never as a state.</li>
+<li>Every command-menu item with a shortcut shows it with <code>Kbd</code>.</li>
+</ul></div></section><section class="comp" id="c-Marquee"><span class="grp">Marketing</span><div class="frame"><div class="hy-body pv" id="pv-Marquee" style="padding:20px 0"></div></div><div class="prose"><h1>Marquee</h1>
+<p>An endless horizontal strip, used for customer names under a hero.</p>
+<ul>
+<li>Edges fade out; it pauses on hover. With reduced motion it stops and wraps into centred rows.</li>
+<li>Items are in <code>hy-fg-3</code> and brighten on hover. Keep them all the same height.</li>
+</ul></div></section><section class="comp" id="c-Pill"><span class="grp">Marketing</span><div class="frame"><div class="hy-body pv" id="pv-Pill" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Pill</h1>
+<p>An announcement link at the top of a hero.</p>
+<ul>
+<li>One short sentence plus an optional solid badge ("New", "Beta"). The arrow nudges right on hover.</li>
+<li>Link it to the changelog entry or page that explains the news.</li>
+</ul></div></section><section class="comp" id="c-PriorityIcon"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-PriorityIcon" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>PriorityIcon</h1>
+<p>Three rising bars; the number of lit bars is the priority (0 to 3).</p>
+<ul>
+<li>Sits at the start of an issue row. Lit bars use <code>hy-fg-2</code>, unlit <code>hy-line-strong</code>.</li>
+</ul></div></section><section class="comp" id="c-ProgressBar"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-ProgressBar" style="display:grid;gap:12px;padding:16px;max-width:360px"></div></div><div class="prose"><h1>ProgressBar</h1>
+<p>A 6px bar for how much of a cycle, project or upload is complete.</p>
+<ul>
+<li><code>signal</code> for the live or current item, <code>info</code> for others, <code>ok</code> for review stages.</li>
+<li><code>animateOnScroll</code> grows the bar from zero as it enters the viewport.</li>
+<li>Always give it a <code>label</code>.</li>
+</ul></div></section><section class="comp" id="c-Reveal"><span class="grp">Motion</span><div class="frame"><div class="hy-body pv" id="pv-Reveal" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Reveal</h1>
+<p>Applies the system's motion presets to any element.</p>
+<ul>
+<li><code>mode="load"</code> with <code>index</code>: the hero entrance, blur plus 14px rise, staggered 90ms. Use once per page.</li>
+<li><code>mode="scroll"</code> (default): fades from 25% and rises 24px as the element enters the viewport.</li>
+<li><code>mode="tilt"</code>: a product window that flattens from an 18° tilt as it scrolls in; give the parent <code>perspective: 1600px</code>.</li>
+<li>Everything ends at the resting state, so content is complete with reduced motion or no JavaScript.</li>
+</ul></div></section><section class="comp" id="c-SegmentedControl"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" id="pv-SegmentedControl" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>SegmentedControl</h1>
+<p>Switches between two to four views of the same thing (Monthly/Annual, Sign up/Log in, List/Board).</p>
+<ul>
+<li>The thumb slides to the chosen option with the spring curve, 450ms.</li>
+<li>Options share equal width. Keep labels to one or two words.</li>
+<li>Use <code>Tabs</code> instead when choosing between sections or pages.</li>
+</ul></div></section><section class="comp" id="c-StatusIcon"><span class="grp">Product</span><div class="frame"><div class="hy-body pv" id="pv-StatusIcon" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>StatusIcon</h1>
+<p>A 14px circle that shows where an issue is in the workflow.</p>
+<ul>
+<li>todo: outline. in-progress: half filled in <code>hy-signal</code>. in-review: three-quarters in <code>hy-ok</code>. done: solid <code>hy-info</code>. canceled: grey with a strike.</li>
+<li>Always pair with the text label somewhere on screen, or rely on its built-in accessible label.</li>
+</ul></div></section><section class="comp" id="c-Table"><span class="grp">Containers</span><div class="frame"><div class="hy-body pv" id="pv-Table" style="padding:16px"></div></div><div class="prose"><h1>Table</h1>
+<p>A native table styled to the system, inside a bordered panel that scrolls sideways on small screens.</p>
+<ul>
+<li>Header row sits on <code>hy-bg-raise</code> and stays visible while scrolling.</li>
+<li>Group rows (<code>TableGroupRow</code>) use the mono eyebrow style.</li>
+<li><code>TableCheck</code> renders ✓ in <code>hy-fg</code> and — in <code>hy-fg-3</code>, each with an accessible label.</li>
+<li>Numbers use tabular figures.</li>
+</ul></div></section><section class="comp" id="c-Tabs"><span class="grp">Navigation</span><div class="frame"><div class="hy-body pv" id="pv-Tabs" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Tabs</h1>
+<p>Navigation and filters with a sliding indicator behind the active item.</p>
+<ul>
+<li><code>plain</code> for the site nav, sticky sub-navs and scroll-spy day lists; <code>track</code> for filters inside a bordered track.</li>
+<li><code>orientation="vertical"</code> for side navigation within a page.</li>
+<li>Items with <code>href</code> render as links with <code>aria-current="page"</code>; others as toggle buttons.</li>
+<li>The indicator moves to the new item rather than appearing there. Pass <code>value={null}</code> to hide it (no page active).</li>
+</ul></div></section><section class="comp" id="c-Tag"><span class="grp">Content</span><div class="frame"><div class="hy-body pv" id="pv-Tag" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:16px"></div></div><div class="prose"><h1>Tag</h1>
+<p>A short label for a category or state, one or two words.</p>
+<ul>
+<li><code>neutral</code> for categories (Bug, Feature). Tones only mean status: <code>signal</code> live/new, <code>ok</code> in review, <code>info</code> done, <code>danger</code> blocked.</li>
+<li><code>solid</code> for one high-emphasis label per view, like "New" in an announcement pill.</li>
+<li><code>dot</code> adds a leading dot in the tone colour; use it in lists where the colour carries meaning.</li>
+</ul></div></section><section class="comp" id="c-TextField"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" id="pv-TextField" style="display:grid;gap:12px;padding:16px;max-width:380px"></div></div><div class="prose"><h1>TextField</h1>
+<p>A labelled single-line input with an optional hint or error.</p>
+<ul>
+<li>The label is always visible; placeholders show an example, never the label.</li>
+<li>Focus shows an amber border and a soft <code>hy-signal-soft</code> halo.</li>
+<li>Errors say what went wrong and how to fix it, in <code>hy-danger</code>, and are linked to the input for screen readers.</li>
+</ul></div></section><section class="comp" id="c-Typography"><span class="grp">Foundations</span><div class="frame"><div class="hy-body pv" id="pv-Typography" style="display:grid;gap:12px;padding:16px"></div></div><div class="prose"><h1>Typography</h1>
+<p><code>Heading</code>, <code>Text</code> and <code>Eyebrow</code> apply the type scale so screens never set sizes by hand.</p>
+<ul>
+<li><code>Heading</code> level 1 to 4 maps to display-lg, display-md, display-sm and card-title. Override the look with <code>size</code> when the outline needs a different level.</li>
+<li>Headings are always Geist 600 in solid <code>hy-fg</code>, with tight negative tracking and balanced wrapping. No gradients, serif or italic words.</li>
+<li><code>Text</code> defaults to body in <code>hy-fg-2</code>; <code>size="lede"</code> for intros; <code>mono</code> for IDs and numbers.</li>
+<li><code>Eyebrow</code> labels a section: mono, uppercase, <code>hy-signal</code>, after an 18px rule.</li>
+</ul></div></section>
+</main>
+</div>
+<script>
+/* @ds-bundle: {"format":4,"namespace":"Halyard","components":[{"name":"Button"},{"name":"Tag"},{"name":"Kbd"},{"name":"Avatar"},{"name":"StatusIcon"},{"name":"PriorityIcon"},{"name":"Typography"},{"name":"TextField"},{"name":"SegmentedControl"},{"name":"Tabs"},{"name":"Card"},{"name":"Accordion"},{"name":"ProgressBar"},{"name":"CommandMenu"},{"name":"IssueRow"},{"name":"AppShell"},{"name":"Table"},{"name":"Pill"},{"name":"Marquee"},{"name":"Reveal"}]} */
+"use strict";window.Halyard=(()=>{var ie=Object.create;var k=Object.defineProperty;var ne=Object.getOwnPropertyDescriptor;var se=Object.getOwnPropertyNames;var le=Object.getPrototypeOf,de=Object.prototype.hasOwnProperty;var pe=(e,r)=>()=>(r||e((r={exports:{}}).exports,r),r.exports),he=(e,r)=>{for(var a in r)k(e,a,{get:r[a],enumerable:!0})},D=(e,r,a,o)=>{if(r&&typeof r=="object"||typeof r=="function")for(let i of se(r))!de.call(e,i)&&i!==a&&k(e,i,{get:()=>r[i],enumerable:!(o=ne(r,i))||o.enumerable});return e};var b=(e,r,a)=>(a=e!=null?ie(le(e)):{},D(r||!e||!e.__esModule?k(a,"default",{value:e,enumerable:!0}):a,e)),ce=e=>D(k({},"__esModule",{value:!0}),e);var f=pe((Ge,K)=>{K.exports=window.React});var Ke={};he(Ke,{Accordion:()=>ye,AppShell:()=>ge,Avatar:()=>A,Button:()=>_e,Card:()=>we,CommandMenu:()=>Ne,Eyebrow:()=>qe,Heading:()=>Ve,IssueList:()=>Le,IssueRow:()=>Te,Kbd:()=>E,LinkButton:()=>ke,Logo:()=>Pe,LogoMark:()=>J,Marquee:()=>Me,PRIORITY_LABEL:()=>Y,Pill:()=>He,PriorityIcon:()=>I,ProgressBar:()=>Ae,Reveal:()=>Re,STATUS_LABEL:()=>Q,SegmentedControl:()=>Se,Sidebar:()=>ue,SidebarItem:()=>be,SidebarSection:()=>fe,StatusIcon:()=>C,Table:()=>ze,TableCheck:()=>Ee,TableGroupRow:()=>Ie,Tabs:()=>Ce,Tag:()=>$,Text:()=>De,TextField:()=>$e,Topbar:()=>xe,buttonClass:()=>z,cssVar:()=>ee,cx:()=>n,initials:()=>G,tokens:()=>j,useInert:()=>v,usePrefersReducedMotion:()=>re,useSlidingIndicator:()=>M,useSpotlight:()=>L});var T=b(f(),1);var n=(...e)=>e.filter(Boolean).join(" ");var w=b(f(),1);function v(e){let r=(0,w.useRef)(null);return(0,w.useEffect)(()=>{r.current&&(r.current.inert=e)},[e]),r}var N=window.React,O=(e,r,a)=>{let{children:o,...i}=r||{};return Array.isArray(o)?N.createElement(e,a===void 0?i:{...i,key:a},...o):o===void 0?N.createElement(e,a===void 0?i:{...i,key:a}):N.createElement(e,a===void 0?i:{...i,key:a},o)},t=O,l=O,F=N.Fragment;function ye({items:e,multiple:r,defaultOpen:a=[],className:o}){let[i,s]=(0,T.useState)(a),y=(0,T.useId)(),h=d=>s(p=>p.includes(d)?p.filter(g=>g!==d):r?[...p,d]:[d]);return t("div",{className:n("hy-acc",o),children:e.map(d=>{let p=i.includes(d.id),g=`${y}-${d.id}`;return t(me,{item:d,isOpen:p,pid:g,onToggle:()=>h(d.id)},d.id)})})}function me({item:e,isOpen:r,pid:a,onToggle:o}){let i=v(!r);return l("div",{className:n("hy-acc__item",r&&"is-open"),children:[t("h3",{className:"hy-acc__h",children:l("button",{type:"button",className:"hy-acc__btn","aria-expanded":r,"aria-controls":a,onClick:o,children:[e.title,t("span",{className:"hy-acc__icon","aria-hidden":"true"})]})}),t("div",{ref:i,id:a,className:"hy-acc__panel",role:"region",children:t("div",{children:t("div",{className:"hy-acc__content",children:e.content})})})]})}function ge({sidebar:e,topbar:r,children:a,sidebarOpen:o,onSidebarClose:i,className:s}){return l("div",{className:n("hy-body hy-shell",o&&"is-drawer-open",s),children:[t("aside",{className:"hy-shell__side",children:e}),t("div",{className:"hy-shell__scrim",onClick:i,"aria-hidden":"true"}),l("div",{className:"hy-shell__main",children:[r&&t("header",{className:"hy-shell__top",children:r}),t("main",{className:"hy-shell__content",children:a})]})]})}function ue({workspace:e,children:r,footer:a}){return l("nav",{className:"hy-sidebar","aria-label":"Workspace",children:[e&&t("div",{className:"hy-sidebar__ws",children:e}),t("div",{className:"hy-sidebar__body",children:r}),a&&t("div",{className:"hy-sidebar__foot",children:a})]})}function fe({title:e,children:r}){return l("div",{className:"hy-sidebar__sec",children:[e&&t("div",{className:"hy-sidebar__title",children:e}),r]})}function be({icon:e,dot:r,active:a,count:o,children:i,className:s,...y}){return l("a",{className:n("hy-sidebar__item",a&&"is-active",s),"aria-current":a?"page":void 0,...y,children:[r?t("span",{className:"hy-sidebar__dot",style:{background:r}}):e?t("span",{className:"hy-sidebar__icon","aria-hidden":"true",children:e}):null,t("span",{className:"hy-sidebar__label",children:i}),o!=null&&t("span",{className:"hy-sidebar__count",children:o})]})}function xe({children:e,actions:r,onMenu:a}){return l("div",{className:"hy-topbar",children:[a&&l("button",{type:"button",className:"hy-topbar__menu","aria-label":"Open sidebar",onClick:a,children:[t("span",{}),t("span",{})]}),t("div",{className:"hy-topbar__main",children:e}),r&&t("div",{className:"hy-topbar__actions",children:r})]})}var W=["var(--hy-signal)","var(--hy-info)","var(--hy-ok)","var(--hy-lavender)"],G=e=>e.split(/\s+/).filter(Boolean).slice(0,2).map(r=>r[0].toUpperCase()).join(""),ve=e=>W[[...e].reduce((r,a)=>r+a.charCodeAt(0),0)%W.length];function A({name:e,size:r="sm",color:a,className:o,style:i,...s}){return t("span",{role:"img","aria-label":e,title:e,className:n("hy-avatar",`hy-avatar--${r}`,o),style:{background:a??ve(e),...i},...s,children:G(e)})}var S=b(f(),1);var z=({variant:e="secondary",size:r="md",fullWidth:a}={},o)=>n("hy-btn",`hy-btn--${e}`,`hy-btn--${r}`,a&&"hy-btn--full",o),U=({icon:e,arrow:r,children:a})=>l(F,{children:[e&&t("span",{className:"hy-btn__icon","aria-hidden":"true",children:e}),a,r&&t("span",{className:"hy-btn__arrow","aria-hidden":"true",children:"\u2192"})]}),_e=(0,S.forwardRef)(function({variant:r,size:a,icon:o,arrow:i,fullWidth:s,className:y,children:h,type:d="button",...p},g){return t("button",{ref:g,type:d,className:z({variant:r,size:a,fullWidth:s},y),...p,children:t(U,{icon:o,arrow:i,children:h})})}),ke=(0,S.forwardRef)(function({variant:r,size:a,icon:o,arrow:i,fullWidth:s,className:y,children:h,...d},p){return t("a",{ref:p,className:z({variant:r,size:a,fullWidth:s},y),...d,children:t(U,{icon:o,arrow:i,children:h})})});var X=b(f(),1);function L(){return(0,X.useCallback)(e=>{let r=e.currentTarget,a=r.getBoundingClientRect();r.style.setProperty("--hy-mx",`${e.clientX-a.left}px`),r.style.setProperty("--hy-my",`${e.clientY-a.top}px`)},[])}function we({as:e="article",spotlight:r=!0,highlighted:a,padding:o="md",interactive:i,className:s,onPointerMove:y,...h}){let d=L();return t(e,{className:n("hy-card",`hy-card--p-${o}`,r&&"hy-card--spotlight",a&&"hy-card--highlighted",i&&"hy-card--interactive",s),onPointerMove:p=>{r&&d(p),y?.(p)},...h})}var u=b(f(),1);function E({size:e="sm",pressed:r,className:a,...o}){return t("kbd",{className:n("hy-kbd",`hy-kbd--${e}`,r&&"hy-kbd--pressed",a),...o})}function Ne({open:e,onOpenChange:r,items:a,placeholder:o="Type a command\u2026",hotkey:i=!0,inline:s,emptyText:y="No matching commands"}){let[h,d]=(0,u.useState)(""),[p,g]=(0,u.useState)(0),B=(0,u.useRef)(null),_=(0,u.useId)(),te=v(!e&&!s);(0,u.useEffect)(()=>{if(!i)return;let c=m=>{(m.metaKey||m.ctrlKey)&&m.key.toLowerCase()==="k"&&(m.preventDefault(),r(!e))};return window.addEventListener("keydown",c),()=>window.removeEventListener("keydown",c)},[i,e,r]),(0,u.useEffect)(()=>{e&&(d(""),g(0),requestAnimationFrame(()=>B.current?.focus()))},[e]);let x=(0,u.useMemo)(()=>{let c=h.trim().toLowerCase();return c?a.filter(m=>[m.label,...m.keywords??[]].some(oe=>oe.toLowerCase().includes(c))):a},[a,h]),V=c=>{c&&(c.onSelect?.(),r(!1))},ae=c=>{c.key==="ArrowDown"?(c.preventDefault(),g(m=>Math.min(x.length-1,m+1))):c.key==="ArrowUp"?(c.preventDefault(),g(m=>Math.max(0,m-1))):c.key==="Enter"?(c.preventDefault(),V(x[p])):c.key==="Escape"&&(c.preventDefault(),r(!1))},q=l("div",{className:n("hy-cmdk",!e&&"is-closed",s&&"hy-cmdk--inline"),role:"dialog","aria-modal":!s||void 0,"aria-label":"Command menu",onKeyDown:ae,children:[t("div",{className:"hy-cmdk__q",children:t("input",{ref:B,className:"hy-cmdk__input",value:h,placeholder:o,onChange:c=>{d(c.target.value),g(0)},role:"combobox","aria-expanded":"true","aria-controls":_,"aria-activedescendant":x[p]?`${_}-${x[p].id}`:void 0})}),l("ul",{id:_,role:"listbox",className:"hy-cmdk__list",children:[x.length===0&&t("li",{className:"hy-cmdk__empty",children:y}),x.map((c,m)=>l("li",{id:`${_}-${c.id}`,role:"option","aria-selected":m===p,className:n("hy-cmdk__item",m===p&&"is-active"),onMouseMove:()=>g(m),onClick:()=>V(c),children:[c.icon&&t("span",{className:"hy-cmdk__icon","aria-hidden":"true",children:c.icon}),t("span",{children:c.label}),c.shortcut&&t(E,{className:"hy-cmdk__kbd",children:c.shortcut})]},c.id))]})]});return s?q:l("div",{ref:te,className:n("hy-cmdk-layer",e&&"is-open"),"aria-hidden":!e,children:[t("div",{className:"hy-cmdk-scrim",onClick:()=>r(!1)}),q]})}var Y={0:"No priority",1:"Low",2:"Medium",3:"High"};function I({level:e,className:r}){return l("span",{role:"img","aria-label":Y[e],className:n("hy-priority",r),"data-level":e,children:[t("i",{}),t("i",{}),t("i",{})]})}var Q={todo:"Todo","in-progress":"In progress","in-review":"In review",done:"Done",canceled:"Canceled"};function C({status:e,className:r}){return t("span",{role:"img","aria-label":Q[e],className:n("hy-status",`hy-status--${e}`,r)})}function $({tone:e="neutral",solid:r,dot:a,className:o,children:i,...s}){return l("span",{className:n("hy-tag",`hy-tag--${e}`,r&&"hy-tag--solid",o),...s,children:[a&&t("span",{className:"hy-tag__dot","aria-hidden":"true"}),i]})}function Te({issueId:e,title:r,status:a,priority:o=0,label:i,assignee:s,flash:y,selected:h,className:d,...p}){return l("li",{className:n("hy-issue",y&&"hy-flash",h&&"is-selected",d),...p,children:[t(I,{level:o}),t("span",{className:"hy-issue__id",children:e}),t(C,{status:a}),t("span",{className:"hy-issue__title",children:r}),i?t($,{className:"hy-issue__tag",children:i}):t("span",{}),s?t(A,{name:s}):t("span",{})]})}function Le({className:e,...r}){return t("ul",{className:n("hy-issue-list",e),...r})}function J({size:e=22,...r}){return l("svg",{width:e,height:e,viewBox:"0 0 24 24",fill:"none","aria-hidden":"true",...r,children:[t("path",{d:"M5 20 L12 3 L19 20",stroke:"var(--hy-fg)",strokeWidth:"2.2",strokeLinecap:"round",strokeLinejoin:"round"}),t("path",{d:"M8.2 13h7.6",stroke:"var(--hy-signal)",strokeWidth:"2.2",strokeLinecap:"round"})]})}function Pe({size:e=22}){return l("span",{style:{display:"inline-flex",alignItems:"center",gap:10,fontWeight:600,letterSpacing:"-0.02em",fontSize:e*.78,color:"var(--hy-fg)"},children:[t(J,{size:e}),"Halyard"]})}var Z=b(f(),1);function Me({children:e,duration:r=38,gap:a=64,className:o,...i}){let s=Z.Children.toArray(e);return t("div",{className:n("hy-marquee",o),"aria-label":i["aria-label"],role:i["aria-label"]?"group":void 0,children:l("div",{className:"hy-marquee__track",style:{animationDuration:`${r}s`,gap:a},children:[s.map((y,h)=>t("div",{className:"hy-marquee__item",children:y},`a${h}`)),s.map((y,h)=>t("div",{className:"hy-marquee__item","aria-hidden":"true",children:y},`b${h}`))]})})}function Re({as:e="div",mode:r="scroll",index:a=0,className:o,style:i,...s}){return t(e,{className:n(r==="load"?"hy-rise":r==="tilt"?"hy-tilt-in":"hy-reveal",o),style:{"--hy-i":a,...i},...s})}function He({badge:e,children:r,className:a,...o}){return l("a",{className:n("hy-pill",a),...o,children:[e&&t("b",{className:"hy-pill__badge",children:e}),r,t("span",{className:"hy-pill__arrow","aria-hidden":"true",children:"\u2192"})]})}function Ae({value:e,tone:r="info",label:a,animateOnScroll:o,className:i}){let s=Math.min(100,Math.max(0,e));return t("div",{className:n("hy-progress",i),role:"progressbar","aria-label":a,"aria-valuemin":0,"aria-valuemax":100,"aria-valuenow":Math.round(s),children:t("i",{className:n(`hy-progress__fill hy-progress--${r}`,o&&"hy-grow-x"),style:{width:`${s}%`}})})}function Se({options:e,value:r,onChange:a,fullWidth:o,className:i,...s}){let y=Math.max(0,e.findIndex(h=>h.value===r));return l("div",{role:"group","aria-label":s["aria-label"],className:n("hy-seg",o&&"hy-seg--full",i),style:{"--hy-seg-n":e.length,"--hy-seg-i":y},children:[t("span",{className:"hy-seg__thumb","aria-hidden":"true"}),e.map(h=>t("button",{type:"button",className:"hy-seg__opt","aria-pressed":h.value===r,onClick:()=>a(h.value),children:h.label},h.value))]})}function ze({minWidth:e=560,className:r,style:a,...o}){return t("div",{className:"hy-table-wrap",children:t("table",{className:n("hy-table",r),style:{minWidth:e,...a},...o})})}function Ee({value:e}){return e?t("span",{className:"hy-table__yes","aria-label":"Included",children:"\u2713"}):t("span",{className:"hy-table__no","aria-label":"Not included",children:"\u2014"})}function Ie({colSpan:e,children:r,...a}){return t("tr",{className:"hy-table__group",...a,children:t("td",{colSpan:e,children:r})})}var P=b(f(),1);function M(e){let r=(0,P.useRef)(null);return(0,P.useLayoutEffect)(()=>{let a=r.current;if(!a)return;let o=()=>{let s=a.querySelector('[data-active="true"]');if(!s){a.style.setProperty("--hy-ind-o","0");return}a.style.setProperty("--hy-ind-x",`${s.offsetLeft}px`),a.style.setProperty("--hy-ind-y",`${s.offsetTop}px`),a.style.setProperty("--hy-ind-w",`${s.offsetWidth}px`),a.style.setProperty("--hy-ind-h",`${s.offsetHeight}px`),a.style.setProperty("--hy-ind-o","1")};o();let i=typeof ResizeObserver<"u"?new ResizeObserver(o):null;return i?.observe(a),document.fonts?.ready.then(o).catch(()=>{}),()=>i?.disconnect()},[e]),{containerRef:r}}function Ce({items:e,value:r,onChange:a,orientation:o="horizontal",variant:i="plain",className:s,...y}){let{containerRef:h}=M(`${r}-${e.length}`);return l("div",{ref:h,role:"group","aria-label":y["aria-label"],className:n("hy-tabs",`hy-tabs--${o}`,`hy-tabs--${i}`,s),children:[t("span",{className:"hy-tabs__ind","aria-hidden":"true"}),e.map(d=>{let p=d.value===r;return d.href?t("a",{href:d.href,className:"hy-tabs__item","data-active":p,"aria-current":p?"page":void 0,onClick:()=>a?.(d.value),children:d.label},d.value):t("button",{type:"button",className:"hy-tabs__item","data-active":p,"aria-pressed":p,onClick:()=>a?.(d.value),children:d.label},d.value)})]})}var R=b(f(),1);var $e=(0,R.forwardRef)(function({label:r,hint:a,error:o,id:i,className:s,...y},h){let d=(0,R.useId)(),p=i??d,g=o?`${p}-err`:a?`${p}-hint`:void 0;return l("div",{className:n("hy-field",o?"hy-field--error":void 0,s),children:[t("label",{className:"hy-field__label",htmlFor:p,children:r}),t("input",{ref:h,id:p,className:"hy-field__input","aria-invalid":!!o||void 0,"aria-describedby":g,...y}),o?t("span",{id:`${p}-err`,className:"hy-field__msg hy-field__msg--error",children:o}):a?t("span",{id:`${p}-hint`,className:"hy-field__msg",children:a}):null]})});var Be=e=>e===1?"display":e===2?"title":e===3?"section":"card";function Ve({level:e=2,size:r,className:a,...o}){let i=`h${e}`;return t(i,{className:n("hy-heading",`hy-heading--${r??Be(e)}`,a),...o})}function qe({line:e=!0,className:r,...a}){return t("div",{className:n("hy-eyebrow",e&&"hy-eyebrow--line",r),...a})}function De({as:e="p",size:r="md",tone:a="secondary",mono:o,className:i,...s}){return t(e,{className:n("hy-text",`hy-text--${r}`,`hy-text--${a}`,o&&"hy-mono",i),...s})}var j={$description:"Halyard design tokens. Source of truth: edit here, then run `npm run tokens`.",color:{dark:{bg:"#0b0c0e","bg-raise":"#121316","bg-card":"#15171b","bg-hover":"rgba(255,255,255,.04)","bg-active":"rgba(255,255,255,.07)",overlay:"rgba(24,26,31,.86)",scrim:"rgba(5,6,8,.6)",line:"rgba(255,255,255,.08)","line-strong":"rgba(255,255,255,.14)",fg:"#eceef2","fg-2":"#a3a7b0","fg-3":"#6b707a","fg-inverse":"#0b0c0e",signal:"#f2b66d","signal-soft":"rgba(242,182,109,.15)",ok:"#6fcf97",info:"#7aa2f7",danger:"#f07178",lavender:"#c9a7f5","btn-primary-bg":"#eceef2","btn-primary-hover":"#ffffff",thumb:"#23262d"},light:{bg:"#f7f7f8","bg-raise":"#ffffff","bg-card":"#ffffff","bg-hover":"rgba(12,14,18,.04)","bg-active":"rgba(12,14,18,.07)",overlay:"rgba(255,255,255,.88)",scrim:"rgba(20,22,26,.25)",line:"rgba(12,14,18,.08)","line-strong":"rgba(12,14,18,.15)",fg:"#16181d","fg-2":"#50555f","fg-3":"#80858f","fg-inverse":"#ffffff",signal:"#b8711a","signal-soft":"rgba(184,113,26,.14)",ok:"#22875a",info:"#3d6fd9",danger:"#d0424e",lavender:"#8a5cd1","btn-primary-bg":"#16181d","btn-primary-hover":"#000000",thumb:"#ffffff"}},font:{sans:'"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',mono:'"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace'},text:{"2xs":"11px",xs:"12px",sm:"13px",base:"14px",md:"16px",lg:"17px",xl:"20px","2xl":"28px","display-sm":"clamp(1.6rem, 3vw, 2.25rem)","display-md":"clamp(2rem, 4.4vw, 3.3rem)","display-lg":"clamp(2.6rem, 7vw, 5.25rem)"},leading:{tight:"1.05",snug:"1.2",normal:"1.55"},tracking:{display:"-0.04em",title:"-0.02em",label:"0.08em"},space:{0:"0",1:"4px",2:"8px",3:"12px",4:"16px",5:"20px",6:"24px",8:"32px",10:"40px",12:"48px",16:"64px",24:"96px"},radius:{xs:"5px",sm:"7px",md:"8px",lg:"12px",xl:"14px","2xl":"20px",full:"999px"},shadow:{window:"0 0 0 1px rgba(0,0,0,.6), 0 40px 120px -20px rgba(0,0,0,.8)",overlay:"0 30px 80px -10px rgba(0,0,0,.7)","btn-primary":"inset 0 1px 0 rgba(255,255,255,.6), 0 1px 2px rgba(0,0,0,.4)",thumb:"inset 0 1px 0 rgba(255,255,255,.06), 0 1px 3px rgba(0,0,0,.4)"},motion:{"ease-out":"cubic-bezier(.16,1,.3,1)","ease-spring":"cubic-bezier(.34,1.56,.64,1)","dur-fast":"150ms","dur-base":"250ms","dur-slow":"450ms","dur-slower":"1000ms",stagger:"90ms"},layout:{max:"1120px",gutter:"16px","nav-height":"60px",sidebar:"220px"},z:{sticky:"40",nav:"50",overlay:"100",toast:"200"}},ee=e=>`var(--hy-${e})`;var H=b(f(),1);function re(){let e="(prefers-reduced-motion: reduce)",[r,a]=(0,H.useState)(()=>typeof window<"u"&&window.matchMedia(e).matches);return(0,H.useEffect)(()=>{let o=window.matchMedia(e),i=()=>a(o.matches);return o.addEventListener("change",i),()=>o.removeEventListener("change",i)},[]),r}return ce(Ke);})();
+
+</script>
+<script>
+var MARK_DARK = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iI2VjZWVmMiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNmMmI2NmQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=", MARK_LIGHT = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iIzE2MTgxZCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNiODcxMWEiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=";
+(function(){ var useState = React.useState; 
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(H.Accordion, {defaultOpen:['free'], items:[
+    {id:'free', title:'Is the Free plan really free?', content:'Yes, for up to ten members with no time limit.'},
+    {id:'trial', title:'How does the free trial work?', content:'Team and Business both come with a 14-day trial. No card is needed to start.'},
+    {id:'guests', title:'Do guests count as members?', content:'No. Guests can view and comment on the projects you share with them at no cost.'}]}); }
+  ReactDOM.createRoot(document.getElementById('pv-Accordion')).render(h(Demo));
+})(); } catch (e) { console.error("Accordion", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h('div', {style:{height:'100%'}}, h(H.AppShell, {className:'demo-shell',
+    sidebar: h(H.Sidebar, {workspace: h(React.Fragment, null, h('span', {style:{width:18, height:18, borderRadius:5, background:'var(--hy-signal)'}}), 'Northbeam')},
+      h(H.SidebarSection, null, h(H.SidebarItem, {icon:'▤', active:true, count:5}, 'My issues'), h(H.SidebarItem, {icon:'◎', count:3}, 'Inbox'), h(H.SidebarItem, {icon:'↻'}, 'Cycles')),
+      h(H.SidebarSection, {title:'Teams'}, h(H.SidebarItem, {dot:'var(--hy-signal)'}, 'Web'), h(H.SidebarItem, {dot:'var(--hy-info)'}, 'Mobile'))),
+    topbar: h(H.Topbar, {actions: h(H.Button, {size:'sm', variant:'primary'}, 'New issue')}, h('span', {style:{color:'var(--hy-fg-3)'}}, 'Web ›'), 'Cycle 42')},
+    h(H.IssueList, null, h(H.IssueRow, {issueId:'WEB-318', title:'Checkout: keep basket when session expires', status:'in-progress', priority:3, label:'Bug', assignee:'Kit Dunmore'}), h(H.IssueRow, {issueId:'WEB-322', title:'Saved filters for venue dashboard', status:'in-review', priority:2, label:'Feature', assignee:'Tom Marsh'})))); }
+  var st = document.createElement('style'); st.textContent = '.demo-shell{min-height:0!important;height:100%}'; document.head.appendChild(st);
+  ReactDOM.createRoot(document.getElementById('pv-AppShell')).render(h(Demo));
+})(); } catch (e) { console.error("AppShell", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null, h(H.Avatar, {name:'Kit Dunmore', size:'xs'}), h(H.Avatar, {name:'Tom Marsh'}), h(H.Avatar, {name:'Ana Ruiz', size:'md'}), h(H.Avatar, {name:'Jo Lane', size:'md'})); }
+  ReactDOM.createRoot(document.getElementById('pv-Avatar')).render(h(Demo));
+})(); } catch (e) { console.error("Avatar", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null,
+    h(H.Button, {variant:'primary', arrow:true}, 'Start building'),
+    h(H.Button, null, 'See the method'),
+    h(H.Button, {variant:'ghost'}, 'Log in'),
+    h(H.Button, {size:'sm'}, 'Small'),
+    h(H.Button, {disabled:true}, 'Disabled')); }
+  ReactDOM.createRoot(document.getElementById('pv-Button')).render(h(Demo));
+})(); } catch (e) { console.error("Button", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null,
+    h(H.Card, null, h(H.Heading, {level:4}, 'Cycles that close themselves'), h(H.Text, {size:'sm', style:{marginTop:6}}, 'Move the cursor over this card to see the spotlight.')),
+    h(H.Card, {highlighted:true}, h(H.Heading, {level:4}, 'Team'), h(H.Text, {size:'sm', style:{marginTop:6}}, 'Highlighted: the recommended plan.'))); }
+  ReactDOM.createRoot(document.getElementById('pv-Card')).render(h(Demo));
+})(); } catch (e) { console.error("Card", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  var items = [{id:'new', label:'Create issue', icon:'＋', shortcut:'C'}, {id:'next', label:'Move to next cycle', icon:'↻', shortcut:'⇧C'}, {id:'me', label:'Assign to me', icon:'◎', shortcut:'I'}, {id:'inbox', label:'Go to inbox', icon:'→', shortcut:'G I'}];
+  function Demo(){ return h(H.CommandMenu, {inline:true, open:true, hotkey:false, onOpenChange:function(){}, items:items}); }
+  ReactDOM.createRoot(document.getElementById('pv-CommandMenu')).render(h(Demo));
+})(); } catch (e) { console.error("CommandMenu", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  var rows = [
+    {issueId:'WEB-318', title:'Checkout: keep basket when session expires', status:'in-progress', priority:3, label:'Bug', assignee:'Kit Dunmore'},
+    {issueId:'WEB-322', title:'Saved filters for venue dashboard', status:'in-review', priority:2, label:'Feature', assignee:'Tom Marsh'},
+    {issueId:'WEB-307', title:'Timesheet export to CSV with week totals', status:'done', priority:3, label:'Feature', assignee:'Ana Ruiz'},
+    {issueId:'WEB-325', title:'Empty state for first project', status:'todo', priority:1, label:'Design', assignee:'Jo Lane'}];
+  function Demo(){ return h(H.IssueList, null, rows.map(function(r){ return h(H.IssueRow, Object.assign({key:r.issueId}, r)); })); }
+  ReactDOM.createRoot(document.getElementById('pv-IssueRow')).render(h(Demo));
+})(); } catch (e) { console.error("IssueRow", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ var s = useState(0), i = s[0], set = s[1];
+    React.useEffect(function(){ var t = setInterval(function(){ set(function(x){ return x+1; }); }, 700); return function(){ clearInterval(t); }; }, []);
+    var keys = ['G','I','⌘K'];
+    return h(React.Fragment, null,
+      h('span', {style:{color:'var(--hy-fg-3)', fontSize:13, display:'inline-flex', gap:6, alignItems:'center'}}, 'or press ', h(H.Kbd, null, '⌘'), h(H.Kbd, null, 'K')),
+      keys.map(function(k, n){ return h(H.Kbd, {key:k, size:'lg', pressed: i % 3 === n}, k); })); }
+  ReactDOM.createRoot(document.getElementById('pv-Kbd')).render(h(Demo));
+})(); } catch (e) { console.error("Kbd", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  var names = ['Northbeam','Ferrow & Co','Quillon','Saltmarsh','Pellucid','Ardent','Kestrel/OS','Brightwater'];
+  function Demo(){ return h(H.Marquee, {'aria-label':'Teams using Halyard'}, names.map(function(n){ return h('span', {key:n, style:{fontSize:21, fontWeight:600, letterSpacing:'-0.03em'}}, n); })); }
+  ReactDOM.createRoot(document.getElementById('pv-Marquee')).render(h(Demo));
+})(); } catch (e) { console.error("Marquee", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(H.Pill, {badge:'New', href:'#'}, 'Cycle forecasts that learn your pace'); }
+  ReactDOM.createRoot(document.getElementById('pv-Pill')).render(h(Demo));
+})(); } catch (e) { console.error("Pill", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  var L = ['No priority','Low','Medium','High'];
+  function Demo(){ return h(React.Fragment, null, [0,1,2,3].map(function(p){ return h('span', {key:p, style:{display:'flex', gap:10, alignItems:'center', fontSize:13.5, color:'var(--hy-fg-2)'}}, h(H.PriorityIcon, {level:p}), L[p]); })); }
+  ReactDOM.createRoot(document.getElementById('pv-PriorityIcon')).render(h(Demo));
+})(); } catch (e) { console.error("PriorityIcon", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null,
+    h(H.ProgressBar, {value:100, tone:'info', label:'Cycle 41'}), h(H.ProgressBar, {value:82, tone:'signal', label:'Cycle 42 (live)'}), h(H.ProgressBar, {value:18, tone:'info', label:'Cycle 43'})); }
+  ReactDOM.createRoot(document.getElementById('pv-ProgressBar')).render(h(Demo));
+})(); } catch (e) { console.error("ProgressBar", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ var s = useState(0);
+    return h('div', {key:s[0], style:{display:'grid', gap:12}},
+      h(H.Reveal, {mode:'load', index:0}, h(H.Eyebrow, null, 'Load sequence')),
+      h(H.Reveal, {mode:'load', index:1}, h(H.Heading, {level:3}, 'Plan the week. Ship the week.')),
+      h(H.Reveal, {mode:'load', index:2}, h(H.Text, null, 'Each line blurs in and rises 14px, 90ms after the one before.')),
+      h(H.Reveal, {mode:'load', index:3}, h(H.Button, {size:'sm', onClick:function(){ s[1](s[0]+1); }}, 'Replay'))); }
+  ReactDOM.createRoot(document.getElementById('pv-Reveal')).render(h(Demo));
+})(); } catch (e) { console.error("Reveal", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ var a = useState('m'), b = useState('list');
+    return h(React.Fragment, null,
+      h('div', null, h(H.SegmentedControl, {'aria-label':'Billing period', value:a[0], onChange:a[1], options:[{value:'m', label:'Monthly'}, {value:'y', label:h('span', null, 'Annual ', h('span', {style:{color:'var(--hy-signal)', fontSize:12}}, '−20%'))}]})),
+      h('div', null, h(H.SegmentedControl, {'aria-label':'View', value:b[0], onChange:b[1], options:[{value:'list', label:'List'}, {value:'board', label:'Board'}, {value:'timeline', label:'Timeline'}]}))); }
+  ReactDOM.createRoot(document.getElementById('pv-SegmentedControl')).render(h(Demo));
+})(); } catch (e) { console.error("SegmentedControl", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  var L = {'todo':'Todo','in-progress':'In progress','in-review':'In review','done':'Done','canceled':'Canceled'};
+  function Demo(){ return h(React.Fragment, null, Object.keys(L).map(function(s){ return h('span', {key:s, style:{display:'flex', gap:10, alignItems:'center', fontSize:13.5, color:'var(--hy-fg-2)'}}, h(H.StatusIcon, {status:s}), L[s]); })); }
+  ReactDOM.createRoot(document.getElementById('pv-StatusIcon')).render(h(Demo));
+})(); } catch (e) { console.error("StatusIcon", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ var Y = h(H.TableCheck, {value:true}), N = h(H.TableCheck, {value:false});
+    return h(H.Table, {minWidth:520}, h('thead', null, h('tr', null, h('th', null, 'Compare plans'), h('th', null, 'Free'), h('th', null, 'Team'), h('th', null, 'Business'))),
+      h('tbody', null, h(H.TableGroupRow, {colSpan:4}, 'Planning'), h('tr', null, h('td', null, 'Members'), h('td', null, 'Up to 10'), h('td', null, 'Unlimited'), h('td', null, 'Unlimited')),
+        h('tr', null, h('td', null, 'Cycle forecasts'), h('td', null, N), h('td', null, Y), h('td', null, Y)), h(H.TableGroupRow, {colSpan:4}, 'Security'),
+        h('tr', null, h('td', null, 'SSO and SCIM'), h('td', null, N), h('td', null, N), h('td', null, Y)))); }
+  ReactDOM.createRoot(document.getElementById('pv-Table')).render(h(Demo));
+})(); } catch (e) { console.error("Table", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ var a = useState('product'), b = useState('all'), c = useState('mon');
+    return h(React.Fragment, null,
+      h(H.Tabs, {'aria-label':'Primary', value:a[0], onChange:a[1], items:[{value:'product', label:'Product'}, {value:'method', label:'Method'}, {value:'pricing', label:'Pricing'}, {value:'changelog', label:'Changelog'}]}),
+      h('div', null, h(H.Tabs, {'aria-label':'Filter', variant:'track', value:b[0], onChange:b[1], items:[{value:'all', label:'All'}, {value:'feature', label:'Features'}, {value:'fix', label:'Fixes'}]})),
+      h('div', {style:{width:180}}, h(H.Tabs, {'aria-label':'Days', orientation:'vertical', value:c[0], onChange:c[1], items:[{value:'mon', label:'Monday'}, {value:'mid', label:'Tue – Thu'}, {value:'fri', label:'Friday'}]}))); }
+  ReactDOM.createRoot(document.getElementById('pv-Tabs')).render(h(Demo));
+})(); } catch (e) { console.error("Tabs", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null,
+    h(H.Tag, null, 'Bug'), h(H.Tag, {tone:'signal', dot:true}, 'In progress'), h(H.Tag, {tone:'ok', dot:true}, 'In review'),
+    h(H.Tag, {tone:'info', dot:true}, 'Done'), h(H.Tag, {tone:'danger', dot:true}, 'Blocked'), h(H.Tag, {tone:'signal', solid:true}, 'New')); }
+  ReactDOM.createRoot(document.getElementById('pv-Tag')).render(h(Demo));
+})(); } catch (e) { console.error("Tag", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null,
+    h(H.TextField, {label:'Work email', placeholder:'kit@company.com', hint:'We will email you a sign-in link.'}),
+    h(H.TextField, {label:'Work email', defaultValue:'kit@', error:'Enter a full email address, like kit@company.com.'})); }
+  ReactDOM.createRoot(document.getElementById('pv-TextField')).render(h(Demo));
+})(); } catch (e) { console.error("TextField", e); }
+  try { (function(){
+  var H = window.Halyard, h = React.createElement, useState = React.useState;
+  function Demo(){ return h(React.Fragment, null,
+    h(H.Eyebrow, null, 'Built for weekly cycles'),
+    h(H.Heading, {level:1}, 'Plan the week. Ship the week.'),
+    h(H.Heading, {level:3}, 'Less status, more shipping.'),
+    h(H.Text, {size:'lede'}, 'Issues, cycles and roadmaps in one fast, keyboard-first workspace.'),
+    h(H.Text, {size:'sm', tone:'tertiary', mono:true}, 'WEB-318 · 48 ms')); }
+  ReactDOM.createRoot(document.getElementById('pv-Typography')).render(h(Demo));
+})(); } catch (e) { console.error("Typography", e); }
+})();
+
+(function(){
+  var btns = document.querySelectorAll('.theme button');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.t === t)); });
+    document.getElementById('sw-dark').hidden = t !== 'dark';
+    document.getElementById('sw-light').hidden = t !== 'light';
+    document.getElementById('mark').src = t === 'light' ? MARK_LIGHT : MARK_DARK;
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ setTheme(b.dataset.t); }); });
+  if (document.documentElement.getAttribute('data-theme') === 'light') setTheme('light');
+  var cv = document.querySelector('.cover'), ci = cv.querySelector('.cover-in');
+  function fit(){ ci.style.transform = 'scale(' + (cv.clientWidth / 960) + ')'; }
+  fit(); window.addEventListener('resize', fit);
+  var links = [].slice.call(document.querySelectorAll('.side a'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  links.forEach(function(a, i){ a.addEventListener('click', function(e){ e.preventDefault(); secs[i].scrollIntoView({behavior:'smooth', block:'start'}); }); });
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting) { var i = secs.indexOf(e.target); links.forEach(function(l, n){ l.classList.toggle('on', n === i); }); } });
+    }, { rootMargin: '-30% 0px -65% 0px' });
+    secs.forEach(function(s){ if (s) io.observe(s); });
+  }
+})();
+
+</script>
+</body>
+</html>
