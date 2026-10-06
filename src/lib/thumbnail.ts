@@ -49,6 +49,22 @@ async function settleTemplate(iframe: HTMLIFrameElement, doc: Document) {
     }
   }
 
+  // html-to-image clones the DOM before painting it. Without this override,
+  // CSS entrance animations restart inside that fresh clone and the JPEG is
+  // taken from their opacity:0 first frame.
+  const freezeStyle = doc.createElement("style");
+  freezeStyle.dataset.thumbnailCapture = "true";
+  freezeStyle.textContent = `
+    *, *::before, *::after {
+      animation-delay: 0s !important;
+      animation-duration: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  `;
+  doc.head.appendChild(freezeStyle);
+
   // Some templates keep hero content at opacity:0 until an observer adds a
   // class. If that observer cannot see the hidden capture frame, reveal only
   // zero-opacity elements that occupy the captured viewport.
