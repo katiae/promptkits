@@ -555,6 +555,37 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
 .cv-name p{margin:14px 0 0;font-size:14px;color:var(--hy-fg-2)}
 .side{top:env(safe-area-inset-top,0px)}
 
+/* Forms.css — Checkbox, Radio, Switch, Select, DatePicker */
+.hy-check, .hy-radio, .hy-switch { display: inline-flex; align-items: center; gap: 10px; font: 14px var(--hy-font-sans); color: var(--hy-fg); cursor: pointer; user-select: none; }
+.hy-check input, .hy-radio input, .hy-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.hy-check__box { width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--hy-line-strong); background: var(--hy-bg); display: grid; place-items: center; transition: background var(--hy-dur-base), border-color var(--hy-dur-base), box-shadow var(--hy-dur-base); }
+.hy-check__box::after { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--hy-fg-inverse); border-bottom: 2px solid var(--hy-fg-inverse); transform: rotate(-45deg) scale(0); margin-top: -2px; transition: transform var(--hy-dur-base); }
+.hy-check input:checked + .hy-check__box { background: var(--hy-signal); border-color: var(--hy-signal); }
+.hy-check input:checked + .hy-check__box::after { transform: rotate(-45deg) scale(1); }
+.hy-radio__dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--hy-line-strong); background: var(--hy-bg); display: grid; place-items: center; transition: border-color var(--hy-dur-base), box-shadow var(--hy-dur-base); }
+.hy-radio__dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--hy-signal); transform: scale(0); transition: transform var(--hy-dur-base); }
+.hy-radio input:checked + .hy-radio__dot { border-color: var(--hy-signal); }
+.hy-radio input:checked + .hy-radio__dot::after { transform: scale(1); }
+.hy-switch__track { width: 34px; height: 20px; border-radius: 999px; background: var(--hy-line-strong); position: relative; transition: background var(--hy-dur-base); }
+.hy-switch__track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--hy-fg); transition: transform var(--hy-dur-base) cubic-bezier(.32,.72,0,1); }
+.hy-switch input:checked + .hy-switch__track { background: var(--hy-signal); }
+.hy-switch input:checked + .hy-switch__track::after { transform: translateX(14px); background: var(--hy-fg-inverse); }
+.hy-check input:focus-visible + span, .hy-radio input:focus-visible + span, .hy-switch input:focus-visible + span { box-shadow: 0 0 0 3px var(--hy-signal-soft); }
+.hy-check input:disabled + span, .hy-radio input:disabled + span, .hy-switch input:disabled + span { opacity: .4; }
+.hy-select { appearance: none; height: 40px; width: 100%; border-radius: var(--hy-radius-md); border: 1px solid var(--hy-line-strong); background: var(--hy-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23a3a7b0' stroke-width='1.6'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E") no-repeat right 12px center; color: var(--hy-fg); padding: 0 34px 0 12px; font: 15px var(--hy-font-sans); }
+.hy-select:focus { outline: none; border-color: color-mix(in srgb, var(--hy-signal) 60%, transparent); box-shadow: 0 0 0 3px var(--hy-signal-soft); }
+.hy-date { width: 280px; padding: 12px; border-radius: var(--hy-radius-lg, 12px); border: 1px solid var(--hy-line); background: var(--hy-bg-raise); font: 13px var(--hy-font-sans); color: var(--hy-fg); }
+.hy-date__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-weight: 500; }
+.hy-date__nav { background: none; border: 0; color: var(--hy-fg-2); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; }
+.hy-date__nav:hover { background: var(--hy-bg-hover); color: var(--hy-fg); }
+.hy-date__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.hy-date__dow { color: var(--hy-fg-3); font: 11px var(--hy-font-mono); padding: 4px 0; }
+.hy-date__day { height: 32px; border: 0; border-radius: 6px; background: none; color: var(--hy-fg); cursor: pointer; font: inherit; }
+.hy-date__day:hover { background: var(--hy-bg-hover); }
+.hy-date__day.is-muted { color: var(--hy-fg-3); }
+.hy-date__day.is-today { box-shadow: inset 0 0 0 1px var(--hy-line-strong); }
+.hy-date__day.is-selected { background: var(--hy-signal); color: var(--hy-fg-inverse); }
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
@@ -565,7 +596,7 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
   <div class="brand"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBkPSJNNSAyMCBMMTIgMyBMMTkgMjAiIHN0cm9rZT0iI2VjZWVmMiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik04LjIgMTNoNy42IiBzdHJva2U9IiNmMmI2NmQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=" width="22" height="22" alt="" id="mark">Halyard</div>
   <span class="t">Foundations</span>
   <a href="#overview">Overview</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#space">Space &amp; radius</a><a href="#logo">Logo</a>
-  <span class="t">Components</span><a href="#c-Accordion">Accordion</a><a href="#c-AppShell">AppShell</a><a href="#c-Avatar">Avatar</a><a href="#c-Button">Button</a><a href="#c-Card">Card</a><a href="#c-CommandMenu">CommandMenu</a><a href="#c-IssueRow">IssueRow</a><a href="#c-Kbd">Kbd</a><a href="#c-Marquee">Marquee</a><a href="#c-Pill">Pill</a><a href="#c-PriorityIcon">PriorityIcon</a><a href="#c-ProgressBar">ProgressBar</a><a href="#c-Reveal">Reveal</a><a href="#c-SegmentedControl">SegmentedControl</a><a href="#c-StatusIcon">StatusIcon</a><a href="#c-Table">Table</a><a href="#c-Tabs">Tabs</a><a href="#c-Tag">Tag</a><a href="#c-TextField">TextField</a><a href="#c-Typography">Typography</a>
+  <span class="t">Components</span><a href="#c-Accordion">Accordion</a><a href="#c-AppShell">AppShell</a><a href="#c-Avatar">Avatar</a><a href="#c-Button">Button</a><a href="#c-Card">Card</a><a href="#c-Checkbox">Checkbox</a><a href="#c-CommandMenu">CommandMenu</a><a href="#c-DatePicker">DatePicker</a><a href="#c-IssueRow">IssueRow</a><a href="#c-Kbd">Kbd</a><a href="#c-Marquee">Marquee</a><a href="#c-Pill">Pill</a><a href="#c-PriorityIcon">PriorityIcon</a><a href="#c-ProgressBar">ProgressBar</a><a href="#c-Radio">Radio</a><a href="#c-Reveal">Reveal</a><a href="#c-SegmentedControl">SegmentedControl</a><a href="#c-Select">Select</a><a href="#c-StatusIcon">StatusIcon</a><a href="#c-Switch">Switch</a><a href="#c-Table">Table</a><a href="#c-Tabs">Tabs</a><a href="#c-Tag">Tag</a><a href="#c-TextField">TextField</a><a href="#c-Typography">Typography</a>
   <div class="theme" role="group" aria-label="Theme"><button aria-pressed="true" data-t="dark">Dark</button><button aria-pressed="false" data-t="light">Light</button></div>
 </nav>
 <main>
@@ -846,6 +877,7 @@ h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;marg
 <li><code>Text</code> defaults to body in <code>hy-fg-2</code>; <code>size="lede"</code> for intros; <code>mono</code> for IDs and numbers.</li>
 <li><code>Eyebrow</code> labels a section: mono, uppercase, <code>hy-signal</code>, after an 18px rule.</li>
 </ul></div></section>
+<section class="comp" id="c-Checkbox"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-check"><input type="checkbox" checked><span class="hy-check__box"></span>Email me updates</label><label class="hy-check"><input type="checkbox"><span class="hy-check__box"></span>Include archived</label><label class="hy-check"><input type="checkbox" disabled><span class="hy-check__box"></span>Disabled</label></div></div><div class="prose"><h1>Checkbox</h1><p>For independent on/off choices in a list or form.</p><ul><li>Checked state fills with <code>hy-signal</code>.</li><li>The whole label is clickable.</li><li>Use a Switch instead when the change applies immediately.</li></ul></div></section><section class="comp" id="c-Radio"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-radio"><input type="radio" name="r1" checked><span class="hy-radio__dot"></span>Weekly</label><label class="hy-radio"><input type="radio" name="r1"><span class="hy-radio__dot"></span>Every two weeks</label><label class="hy-radio"><input type="radio" name="r1"><span class="hy-radio__dot"></span>Monthly</label></div></div><div class="prose"><h1>Radio</h1><p>One choice from a small set of options that are all visible.</p><ul><li>Use for 2 to 5 options; use Select for more.</li><li>Always preselect a sensible default.</li></ul></div></section><section class="comp" id="c-Switch"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><label class="hy-switch"><input type="checkbox" checked><span class="hy-switch__track"></span>Auto-assign issues</label><label class="hy-switch"><input type="checkbox"><span class="hy-switch__track"></span>Weekend mode</label></div></div><div class="prose"><h1>Switch</h1><p>A setting that takes effect immediately.</p><ul><li>The thumb slides with the same easing as SegmentedControl.</li><li>Label states what is on, never “Enable/Disable”.</li></ul></div></section><section class="comp" id="c-Select"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><div class="hy-field" style="width:260px"><label class="hy-field__label">Cycle length</label><select class="hy-select"><option>1 week</option><option selected>2 weeks</option><option>3 weeks</option></select></div><div class="hy-field" style="width:260px"><label class="hy-field__label">Priority</label><select class="hy-select"><option>Urgent</option><option>High</option><option selected>Medium</option><option>Low</option></select></div></div></div><div class="prose"><h1>Select</h1><p>Pick one option from a longer list.</p><ul><li>Shares height, radius and focus halo with TextField.</li><li>Uses the native control for accessibility and mobile pickers.</li></ul></div></section><section class="comp" id="c-DatePicker"><span class="grp">Inputs</span><div class="frame"><div class="hy-body pv" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:24px"><div class="hy-date" id="hy-date-demo"></div></div></div><div class="prose"><h1>DatePicker</h1><p>Choose a single day, such as a due date or cycle start.</p><ul><li>Today is outlined; the selection fills with <code>hy-signal</code>.</li><li>Weeks start on Monday.</li><li>Pair with a TextField showing the formatted date when space is tight.</li></ul></div></section>
 </main>
 </div>
 <script>
@@ -1040,5 +1072,12 @@ var MARK_DARK = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vc
 })();
 
 </script>
+<script>(function(){var el=document.getElementById('hy-date-demo');if(!el)return;var now=new Date(),view=new Date(now.getFullYear(),now.getMonth(),1),sel=new Date(now.getFullYear(),now.getMonth(),now.getDate()+3);
+function same(a,b){return a.toDateString()===b.toDateString()}
+function render(){var y=view.getFullYear(),m=view.getMonth(),start=(new Date(y,m,1).getDay()+6)%7,h='<div class="hy-date__head"><button class="hy-date__nav" data-d="-1" aria-label="Previous month">‹</button>'+view.toLocaleString('en',{month:'long',year:'numeric'})+'<button class="hy-date__nav" data-d="1" aria-label="Next month">›</button></div><div class="hy-date__grid">';
+['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(function(d){h+='<span class="hy-date__dow">'+d+'</span>'});
+for(var i=0;i<42;i++){var d=new Date(y,m,i-start+1);h+='<button class="hy-date__day'+(d.getMonth()!==m?' is-muted':'')+(same(d,now)?' is-today':'')+(same(d,sel)?' is-selected':'')+'" data-t="'+d.getTime()+'">'+d.getDate()+'</button>'}
+el.innerHTML=h+'</div>'}
+el.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.d){view=new Date(view.getFullYear(),view.getMonth()+ +b.dataset.d,1)}else{sel=new Date(+b.dataset.t)}render()});render()})();</script>
 </body>
 </html>
