@@ -12,7 +12,7 @@ export function EntryGrid({ entries, empty = "Nothing here yet.", loading = fals
       setShowSkeleton(true);
       return;
     }
-    const timer = setTimeout(() => setShowSkeleton(false), 480);
+    const timer = setTimeout(() => setShowSkeleton(false), 160);
     return () => clearTimeout(timer);
   }, [loading]);
 
