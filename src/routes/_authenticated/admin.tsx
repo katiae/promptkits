@@ -8,6 +8,10 @@ import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
 import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
+import { useServerFn } from "@tanstack/react-start";
+import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
+
+type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -69,6 +73,25 @@ function Admin() {
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);
+  const fetchDsStatus = useServerFn(listDesignSystemStatus);
+  const generateDs = useServerFn(generateDesignSystem);
+  const { data: dsStatus = [] } = useQuery({ queryKey: ["ds-status"], queryFn: () => fetchDsStatus(), enabled: !!isAdmin });
+  const [generating, setGenerating] = useState<Set<string>>(new Set());
+  const runGenerate = async (entryId: string, name: string) => {
+    setGenerating((s) => new Set(s).add(entryId));
+    const t = toast.loading(`Building the ${name} design system — this takes a minute or two…`);
+    try {
+      const r = await generateDs({ data: { entryId } });
+      if (r.ok) toast.success(`${name} design system is ready`, { id: t });
+      else toast.error(r.error, { id: t });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Generation failed", { id: t });
+    } finally {
+      setGenerating((s) => { const n = new Set(s); n.delete(entryId); return n; });
+      qc.invalidateQueries({ queryKey: ["ds-status"] });
+      qc.invalidateQueries({ queryKey: ["design-systems"] });
+    }
+  };
 
   const autofill = async () => {
     if (!form || form.prompt.trim().length < 20) {
