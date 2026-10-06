@@ -116,8 +116,33 @@ function Admin() {
       </main>
     );
 
+  const snap = async (html: string) => {
+    setCapturing(true);
+    try {
+      return await captureThumbnail(html);
+    } catch (e) {
+      toast.error("Couldn't capture the thumbnail — saving without it");
+      console.error(e);
+      return null;
+    } finally {
+      setCapturing(false);
+    }
+  };
+
+  const regenerate = async () => {
+    if (!form?.html_content) return;
+    const url = await snap(form.html_content);
+    if (url) { setForm((f) => f && { ...f, thumbnail_url: url }); toast.success("Thumbnail updated — save to keep it"); }
+  };
+
   const save = async () => {
     if (!form) return;
+    let thumb = form.thumbnail_url;
+    const original = form.id ? entries.find((e) => e.id === form.id) : undefined;
+    const htmlChanged = !!form.html_content && form.html_content !== (original?.html_content ?? "");
+    if (form.html_content && (htmlChanged || !thumb) && !(report && !report.ok)) {
+      thumb = (await snap(form.html_content)) ?? thumb;
+    }
     const payload = {
       name: form.name,
       slug: form.slug || slugify(form.name),
@@ -126,7 +151,7 @@ function Admin() {
       tags: normalizeTags(form.tags.split(",")),
       original_url: null,
       demo_url: form.demo_url || null,
-      thumbnail_url: form.thumbnail_url || null,
+      thumbnail_url: thumb || null,
       prompt: form.prompt,
       status: form.status,
       hue: Number(form.hue) || 150,
