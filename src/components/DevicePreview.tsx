@@ -12,8 +12,17 @@ export const DEVICES: { id: Device; label: string; icon: typeof Monitor; w?: num
 ];
 
 export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (d: Device) => void }) {
+  const activeIndex = DEVICES.findIndex((d) => d.id === value);
+  const STEP = 30; // 28px button + 2px gap
+
   return (
-    <div role="radiogroup" aria-label="Preview size" className="flex shrink-0 items-center gap-0.5 rounded-full bg-tray p-0.5">
+    <div role="radiogroup" aria-label="Preview size" className="relative flex shrink-0 items-center gap-0.5 rounded-full bg-tray p-0.5">
+      {/* Sliding active pill, like the iOS segmented control */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0.5 top-0.5 size-7 rounded-full bg-card shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        style={{ transform: `translateX(${activeIndex * STEP}px)` }}
+      />
       {DEVICES.map(({ id, label, icon: Icon }) => (
         <div key={id} className="group relative">
           <button
@@ -21,7 +30,7 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
             aria-checked={value === id}
             aria-label={label}
             onClick={() => onChange(id)}
-            className={`grid size-7 place-items-center rounded-full transition-colors ${value === id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            className={`relative z-10 grid size-7 place-items-center rounded-full transition-colors ${value === id ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
           >
             <Icon className="size-3.5" />
           </button>
