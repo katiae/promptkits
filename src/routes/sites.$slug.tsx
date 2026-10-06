@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ArrowUpRight, Copy, Check, Heart, Download } from "lucide-react";
 import { toast } from "sonner";
-import { entryQuery, slugify } from "@/lib/entries";
+import { entryMetaQuery, entryContentQuery, slugify } from "@/lib/entries";
 import { useFavorites } from "@/hooks/use-favorites";
 import { OrbThumb } from "@/components/Orb";
 import { buildReport } from "@/lib/security-scanner";
@@ -71,7 +71,8 @@ function DetailSkeleton() {
 
 function Detail() {
   const { slug } = Route.useParams();
-  const { data: entry, isLoading } = useQuery(entryQuery(slug));
+  const { data: entry, isLoading } = useQuery(entryMetaQuery(slug));
+  const { data: content, isLoading: contentLoading } = useQuery(entryContentQuery(slug));
   const { isFav, toggle } = useFavorites();
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
@@ -86,13 +87,13 @@ function Detail() {
     );
 
   const copy = async () => {
-    await navigator.clipboard.writeText(entry.prompt);
+    await navigator.clipboard.writeText(content?.prompt ?? "");
     setCopied(true);
     toast.success("Prompt copied");
     setTimeout(() => setCopied(false), 1800);
   };
   const fav = isFav(entry.id);
-  const html = entry.html_content && buildReport(entry.html_content, "").ok ? entry.html_content : null;
+  const html = content?.html_content && buildReport(content.html_content, "").ok ? content.html_content : null;
   const hasDemo = !!(html || entry.demo_url);
   const openDemo = () => {
     const url = html
@@ -177,7 +178,14 @@ function Detail() {
               </button>
             )}
           </div>
-          {html ? (
+          {contentLoading ? (
+            <div className="p-2">
+              <div className="skeleton-art skeleton-palette-1 relative h-[604px] w-full overflow-hidden rounded-xl bg-tray">
+                <div className="skeleton-cloud skeleton-cloud-first" />
+                <div className="skeleton-cloud skeleton-cloud-second" />
+              </div>
+            </div>
+          ) : html ? (
             <iframe
               srcDoc={html}
               title={`${entry.name} demo`}
@@ -201,14 +209,26 @@ function Detail() {
           )}
         </section>
 
-        <aside className={`${tab === "prompt" ? "flex" : "hidden"} flex-col rounded-2xl bg-card lg:flex`}>
+        <aside className={`${tab === "prompt" ? "flex" : "hidden"} flex-col overflow-hidden rounded-2xl bg-card lg:flex`}>
           <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
             <span className="label-mono text-muted-foreground">Build prompt</span>
             <button onClick={copy} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-sm text-primary-foreground hover:opacity-90">
               {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />} {copied ? "Copied" : "Copy"}
             </button>
           </div>
-          <pre className="max-h-[620px] flex-1 overflow-auto whitespace-pre-wrap p-5 font-mono text-[13px] leading-relaxed text-foreground/80">{entry.prompt}</pre>
+          {contentLoading ? (
+            <div className="flex-1 space-y-3 p-5" aria-hidden="true">
+              <div className="h-3.5 w-11/12 rounded bg-secondary" />
+              <div className="h-3.5 w-full rounded bg-secondary" />
+              <div className="h-3.5 w-4/5 rounded bg-secondary" />
+              <div className="h-3.5 w-11/12 rounded bg-secondary" />
+              <div className="h-3.5 w-2/3 rounded bg-secondary" />
+              <div className="h-3.5 w-5/6 rounded bg-secondary" />
+              <div className="h-3.5 w-3/4 rounded bg-secondary" />
+            </div>
+          ) : (
+            <pre className="max-h-[620px] flex-1 overflow-auto whitespace-pre-wrap p-5 font-mono text-[13px] leading-relaxed text-foreground/80">{content?.prompt ?? ""}</pre>
+          )}
         </aside>
       </div>
     </main>

@@ -31,6 +31,32 @@ export const entryQuery = (slug: string) =>
     },
   });
 
+// Detail page splits into a light meta fetch (fast first paint) and a heavy
+// content fetch (full HTML file + prompt) that streams in after.
+export const entryMetaQuery = (slug: string) =>
+  queryOptions({
+    queryKey: ["entry", slug, "meta"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("entries").select(LIST_COLUMNS).eq("slug", slug).maybeSingle();
+      if (error) throw error;
+      return data as unknown as Entry | null;
+    },
+  });
+
+export const entryContentQuery = (slug: string) =>
+  queryOptions({
+    queryKey: ["entry", slug, "content"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("entries")
+        .select("id,html_content,prompt,scan_report")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (error) throw error;
+      return data as Pick<Entry, "id" | "html_content" | "prompt" | "scan_report"> | null;
+    },
+  });
+
 export function slugify(s: string) {
   return s
     .toLowerCase()
