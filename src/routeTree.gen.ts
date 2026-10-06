@@ -17,6 +17,7 @@ import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as SitesSlugRouteImport } from './routes/sites.$slug'
 import { Route as TagSlugRouteImport } from './routes/tag.$slug'
+import { Route as SitesSlugLiveDemoRouteImport } from './routes/sites.$slug.live-demo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -57,6 +58,11 @@ const TagSlugRoute = TagSlugRouteImport.update({
   path: '/tag/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitesSlugLiveDemoRoute = SitesSlugLiveDemoRouteImport.update({
+  id: '/live-demo',
+  path: '/live-demo',
+  getParentRoute: () => SitesSlugRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -64,8 +70,9 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/saved': typeof AuthenticatedSavedRoute
   '/category/$slug': typeof CategorySlugRoute
-  '/sites/$slug': typeof SitesSlugRoute
+  '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -73,8 +80,9 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/saved': typeof AuthenticatedSavedRoute
   '/category/$slug': typeof CategorySlugRoute
-  '/sites/$slug': typeof SitesSlugRoute
+  '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -84,8 +92,9 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
   '/category/$slug': typeof CategorySlugRoute
-  '/sites/$slug': typeof SitesSlugRoute
+  '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/sites/$slug/live-demo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/sites/$slug/live-demo'
   id:
     | '__root__'
     | '/'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/sites/$slug/live-demo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -123,7 +135,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CategorySlugRoute: typeof CategorySlugRoute
-  SitesSlugRoute: typeof SitesSlugRoute
+  SitesSlugRoute: typeof SitesSlugRouteWithChildren
   TagSlugRoute: typeof TagSlugRoute
 }
 
@@ -185,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TagSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sites/$slug/live-demo': {
+      id: '/sites/$slug/live-demo'
+      path: '/live-demo'
+      fullPath: '/sites/$slug/live-demo'
+      preLoaderRoute: typeof SitesSlugLiveDemoRouteImport
+      parentRoute: typeof SitesSlugRoute
+    }
   }
 }
 
@@ -201,12 +220,24 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface SitesSlugRouteChildren {
+  SitesSlugLiveDemoRoute: typeof SitesSlugLiveDemoRoute
+}
+
+const SitesSlugRouteChildren: SitesSlugRouteChildren = {
+  SitesSlugLiveDemoRoute: SitesSlugLiveDemoRoute,
+}
+
+const SitesSlugRouteWithChildren = SitesSlugRoute._addFileChildren(
+  SitesSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CategorySlugRoute: CategorySlugRoute,
-  SitesSlugRoute: SitesSlugRoute,
+  SitesSlugRoute: SitesSlugRouteWithChildren,
   TagSlugRoute: TagSlugRoute,
 }
 export const routeTree = rootRouteImport

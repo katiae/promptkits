@@ -123,7 +123,7 @@ function Detail() {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
-            <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `${entry.slug}.html · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
+            <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `/sites/${entry.slug}/live-demo · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
             {hasDemo && (
               <button onClick={openDemo} className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
                 Open demo <ArrowUpRight className="size-3.5" />
