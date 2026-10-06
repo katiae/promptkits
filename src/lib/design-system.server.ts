@@ -11,5 +11,5 @@ export function getBundle(slug: string): Record<string, string> | null {
 }
 
 export function availableSlugs(): string[] {
-  return [...new Set(Object.keys(files).map((p) => p.split("/")[3]))];
+  return [...new Set(Object.keys(files).map((p) => p.split("/")[3] ?? ""))].filter(Boolean);
 }
