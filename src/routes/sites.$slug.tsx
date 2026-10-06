@@ -87,7 +87,7 @@ function Detail() {
     );
 
   const copy = async () => {
-    await navigator.clipboard.writeText(entry.prompt);
+    await navigator.clipboard.writeText(content?.prompt ?? "");
     setCopied(true);
     toast.success("Prompt copied");
     setTimeout(() => setCopied(false), 1800);
