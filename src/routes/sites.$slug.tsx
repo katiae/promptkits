@@ -29,7 +29,7 @@ function Detail() {
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
 
-  if (isLoading) return <p className="py-32 text-center text-muted-foreground">Loading…</p>;
+  if (isLoading) return <DetailSkeleton />;
   if (!entry)
     return (
       <main className="py-32 text-center">
