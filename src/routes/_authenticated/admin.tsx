@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { entriesQuery, slugify, type Entry } from "@/lib/entries";
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
+import { autofillEntry } from "@/lib/autofill.functions";
 import type { Json } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -65,6 +66,34 @@ function Admin() {
   });
   const { data: entries = [] } = useQuery({ ...entriesQuery(), enabled: !!isAdmin });
   const [form, setForm] = useState<Form | null>(null);
+  const [autofilling, setAutofilling] = useState(false);
+
+  const autofill = async () => {
+    if (!form || form.prompt.trim().length < 20) {
+      toast.error("Paste the build prompt first");
+      return;
+    }
+    setAutofilling(true);
+    try {
+      const meta = await autofillEntry({ data: { prompt: form.prompt } });
+      setForm((f) =>
+        f && {
+          ...f,
+          name: meta.name,
+          slug: slugify(meta.name),
+          description: meta.description,
+          category: meta.category,
+          tags: meta.tags.join(", "),
+          hue: Math.max(0, Math.min(360, Math.round(meta.hue))),
+        },
+      );
+      toast.success("Fields filled — edit anything you like");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Auto-fill failed");
+    } finally {
+      setAutofilling(false);
+    }
+  };
   const report: ScanReport | null = form ? buildReport(form.html_content || null, form.prompt) : null;
 
   const onFile = async (file?: File) => {
@@ -179,6 +208,14 @@ function Admin() {
             <p className="mt-1 text-xs text-muted-foreground">
               Cover four sections: Overview, Layout &amp; structure, Styling, and Animations &amp; transitions.
             </p>
+            <button
+              type="button"
+              onClick={autofill}
+              disabled={autofilling}
+              className="mt-2 rounded-full border border-border px-4 py-1.5 text-sm hover:bg-secondary disabled:opacity-50"
+            >
+              {autofilling ? "Filling fields…" : "✨ Auto-fill fields from prompt"}
+            </button>
           </div>
           <div className="md:col-span-2">
             <span className="label-mono text-muted-foreground">Template HTML file (demo + download)</span>
