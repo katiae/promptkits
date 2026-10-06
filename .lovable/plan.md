@@ -7,7 +7,7 @@ A curated directory (like Mobbin) where every entry is a well-known site or app 
 - **Entry detail** (`/sites/$slug`): header with name, tags, "Original" link, favourite. Split view: large framed live demo on the left (embedded URL in a browser-chrome frame, with "open full screen"), build prompt on the right with Copy button. Demo / Prompt tabs on smaller screens.
 - **Category** (`/category/$slug`) and **Tag** (`/tag/$slug`): filtered grids.
 - **Saved** (`/saved`): your favourites (sign-in required).
-- **Sign in** (`/auth`): email + Google.
+- **Sign in** (`/auth`): Google account only (one button).
 - **Admin** (`/admin`, admin only): list, add, edit, delete entries (name, slug, description, original URL, demo URL, thumbnail upload, prompt, category, tags, published toggle).
 
 ## Visitor features (v1)
