@@ -48,11 +48,10 @@ function Detail() {
   const html = entry.html_content && buildReport(entry.html_content, "").ok ? entry.html_content : null;
   const hasDemo = !!(html || entry.demo_url);
   const openDemo = () => {
-    if (html) {
-      const url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
-      window.open(url, "_blank", "noopener");
-      setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    } else if (entry.demo_url) window.open(entry.demo_url, "_blank", "noopener,noreferrer");
+    const url = html
+      ? `${window.location.origin}/sites/${entry.slug}/live-demo`
+      : entry.demo_url;
+    if (url) window.open(url, "_blank", "noopener");
   };
   const download = () => {
     if (!html) return;
@@ -124,7 +123,7 @@ function Detail() {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
-            <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `${entry.slug}.html · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
+            <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `/sites/${entry.slug}/live-demo · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
             {hasDemo && (
               <button onClick={openDemo} className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
                 Open demo <ArrowUpRight className="size-3.5" />
