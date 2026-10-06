@@ -1,0 +1,68 @@
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Monitor, Tablet, Smartphone, BookOpen } from "lucide-react";
+
+export type Device = "desktop" | "tablet" | "phone" | "fold";
+
+export const DEVICES: { id: Device; label: string; icon: typeof Monitor; w?: number; h?: number }[] = [
+  { id: "desktop", label: "Desktop", icon: Monitor },
+  { id: "tablet", label: "Tablet", icon: Tablet, w: 820, h: 1180 },
+  { id: "fold", label: "Foldable", icon: BookOpen, w: 673, h: 841 },
+  { id: "phone", label: "Phone", icon: Smartphone, w: 390, h: 844 },
+];
+
+export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (d: Device) => void }) {
+  return (
+    <div role="radiogroup" aria-label="Preview size" className="flex shrink-0 items-center gap-0.5 rounded-full bg-tray p-0.5">
+      {DEVICES.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          role="radio"
+          aria-checked={value === id}
+          aria-label={label}
+          title={label}
+          onClick={() => onChange(id)}
+          className={`grid size-7 place-items-center rounded-full transition-colors ${value === id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+        >
+          <Icon className="size-3.5" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Renders children at the device's real size, scaled down to fit the available area. */
+export function DeviceFrame({ device, children }: { device: Device; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const spec = DEVICES.find((d) => d.id === device)!;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setBox({ w: e.contentRect.width, h: e.contentRect.height }));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  if (!spec.w || !spec.h) {
+    return <div ref={ref} className="flex min-h-[620px] w-full flex-1 flex-col">{children}</div>;
+  }
+  const pad = 24;
+  const scale = box.w ? Math.min(1, (box.w - pad) / spec.w, (box.h - pad) / spec.h) : 0;
+
+  return (
+    <div ref={ref} className="relative flex min-h-[620px] w-full flex-1 items-center justify-center overflow-hidden rounded-b-2xl bg-tray/60">
+      <div style={{ width: spec.w * scale, height: spec.h * scale }} className="transition-[width,height] duration-300">
+        <div
+          style={{ width: spec.w, height: spec.h, transform: `scale(${scale})`, transformOrigin: "top left" }}
+          className="flex flex-col overflow-hidden rounded-[28px] bg-card shadow-lg ring-1 ring-border"
+        >
+          {children}
+        </div>
+      </div>
+      <span className="label-mono absolute bottom-2 right-3 text-[10px] text-muted-foreground">
+        {spec.label} · {spec.w}×{spec.h}
+      </span>
+    </div>
+  );
+}
