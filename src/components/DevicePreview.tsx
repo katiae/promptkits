@@ -20,7 +20,7 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
       {/* Sliding active pill, like the iOS segmented control */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-0.5 top-0.5 size-7 rounded-full bg-card shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        className="pointer-events-none absolute left-0.5 top-0.5 size-7 rounded-full bg-card shadow-sm transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
         style={{ transform: `translateX(${activeIndex * STEP}px)` }}
       />
       {DEVICES.map(({ id, label, icon: Icon }) => (
