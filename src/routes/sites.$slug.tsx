@@ -77,6 +77,7 @@ function Detail() {
   const { isFav, toggle } = useFavorites();
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
+  const [device, setDevice] = useState<Device>("desktop");
 
   if (isLoading) return <DetailSkeleton />;
   if (!entry)
