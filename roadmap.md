@@ -10,4 +10,4 @@
 - [x] Halyard design system page, visitor sign-in prompt, extra form controls and ZIP download.
 - [x] In-app generator to create design systems for new templates.
 - [x] AI design system generator for new templates
-- [ ] Polish and verify generated guidelines spacing in existing pages and downloads.
+- [x] Polish and verify generated guidelines spacing in existing pages and downloads.
