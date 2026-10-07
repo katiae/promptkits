@@ -49,8 +49,8 @@ export function extractSourceVisuals(html: string): SourceVisuals {
       // Splitting is delegated to the parser's selector list, so commas inside :is() remain intact.
       const parsed = node.prelude.type === "SelectorList" ? node.prelude.children.toArray().map((n) => css.generate(n)) : selectors;
       const scoped = parsed.map((sel) => /^(?:\*|:root|html|body)(?:$|[\s:.\[])/.test(sel)
-        ? sel.replace(/^(?:\*|:root|html|body)/, ".ds-source")
-        : /^\[data-(mode|theme)=/.test(sel) ? ".ds-source" + sel : ".ds-source " + sel);
+        ? sel.replace(/^(?:\*|:root|html|body)/, ".template-source")
+        : /^\[data-(mode|theme)=/.test(sel) ? ".template-source" + sel : ".template-source " + sel);
       node.prelude = css.parse(scoped.join(","), { context: "selectorList" });
     },
   });
@@ -93,15 +93,15 @@ export function extractSourceVisuals(html: string): SourceVisuals {
 }
 
 export const sourceVisualCss = (v: SourceVisuals) => v.css + `
-.ds-source { width:100%;min-width:0;isolation:isolate;font-family:var(--font-body);color:var(--ink); }
-.ds-source *, .ds-source *::before, .ds-source *::after { box-sizing:border-box; }
+.template-source { width:100%;min-width:0;isolation:isolate;font-family:var(--font-body);color:var(--ink); }
+.template-source *, .template-source *::before, .template-source *::after { box-sizing:border-box; }
 .source-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:24px;width:100%; }
 .source-figure { margin:0;min-width:0; }
 .source-figure figcaption { margin-top:14px;font-size:13px; }
 .source-art { min-height:180px;display:grid;place-items:center;overflow:hidden; }
 .source-art svg { max-width:100%;max-height:300px; }
 .source-tasks { display:grid;gap:12px;max-width:500px; }
-.ds-source [data-mode],.ds-source { transition:background .6s var(--soft,ease),color .6s var(--soft,ease); }
-.ds-source[data-mode="day"] .is-night,.ds-source[data-mode="night"] .is-day { display:none; }
-@media(prefers-reduced-motion:reduce) { .ds-source *, .ds-source *::before,.ds-source *::after { animation:none!important;transition:none!important; } }
+.template-source [data-mode],.template-source { transition:background .6s var(--soft,ease),color .6s var(--soft,ease); }
+.template-source[data-mode="day"] .is-night,.template-source[data-mode="night"] .is-day { display:none; }
+@media(prefers-reduced-motion:reduce) { .template-source *, .template-source *::before,.template-source *::after { animation:none!important;transition:none!important; } }
 `;

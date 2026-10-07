@@ -242,12 +242,12 @@ function specimen(name: string): string {
   return "";
 }
 
-function sourceSections(v: SourceVisuals) {
-  const wrap = (html: string) => `<div class="ds-source" data-theme="dark" data-mode="night">${html}</div>`;
+function sourceSections(v: SourceVisuals, p: string) {
+  const wrap = (html: string) => `<div class="template-source" data-theme="dark" data-mode="night">${html}</div>`;
   return `<section id="source-cards"><div class="eyebrow">Template visuals &amp; motion</div><h2>Template cards</h2><p class="lead">Original surfaces, illustration treatments and hover motion.</p>${wrap(`<div class="source-grid">${v.cards.map((x) => x.html).join("")}</div>`)}</section>
 <section id="source-tasks"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animated tasks</h2>${wrap(`<div class="source-tasks">${v.tasks || "No task controls in this template."}</div>`)}</section>
 <section id="source-art"><div class="eyebrow">Template visuals &amp; motion</div><h2>Illustrations &amp; icons</h2>${wrap(`<div class="source-grid">${v.illustrations.map((x) => `<figure class="source-figure"><div class="source-art">${x.html}</div><figcaption>${esc(x.name)}</figcaption></figure>`).join("")}</div>`)}</section>
-<section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="ds-btn ds-btn--secondary" data-source-replay>Replay animations</button><button class="ds-btn ds-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p></section>`;
+<section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="${p}-btn ${p}-btn--secondary" data-source-replay>Replay animations</button><button class="${p}-btn ${p}-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p></section>`;
 }
 
 function sourceReactFile(v: SourceVisuals) {
@@ -259,7 +259,7 @@ const tasks = ${JSON.stringify(v.tasks)};
 function Source({html,theme="light",tasks=false}: {html:string;theme?:"light"|"dark";tasks?:boolean}) {
   const ref=React.useRef<HTMLDivElement>(null);
   React.useEffect(()=>{const el=ref.current;if(!el||!tasks)return;const click=(e:MouseEvent)=>{const target=e.target;if(!(target instanceof Element))return;const b=target.closest('.item[aria-pressed]');if(b&&el.contains(b))b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));};el.addEventListener('click',click);return()=>el.removeEventListener('click',click);},[tasks]);
-  return <div ref={ref} className="ds-source" data-theme={theme} data-mode={theme==='dark'?'night':'day'} dangerouslySetInnerHTML={{__html:html}}/>;
+  return <div ref={ref} className="template-source" data-theme={theme} data-mode={theme==='dark'?'night':'day'} dangerouslySetInnerHTML={{__html:html}}/>;
 }
 export function TemplateCard({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={cards[index]?.html??''}/>;}
 export function Illustration({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={illustrations[index]?.html??''}/>;}
@@ -328,7 +328,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
   const js = px(`
 (function(){
   var html=document.documentElement;
-  function setTheme(t){ document.querySelectorAll('.ds-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
+  function setTheme(t){ document.querySelectorAll('.template-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
   document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(){ setTheme(b.dataset.themeBtn); }; });
   setTheme(html.getAttribute('data-theme')||'dark');
   window.addEventListener('message', function(e){ var d=e.data; if(d && d.type==='hy-theme' && (d.theme==='dark'||d.theme==='light')) setTheme(d.theme); });
@@ -340,9 +340,9 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
   document.querySelectorAll('[data-seg],[data-tabs]').forEach(function(g){ var attr=g.hasAttribute('data-seg')?'aria-pressed':'aria-selected'; g.querySelectorAll('button').forEach(function(b){ b.onclick=function(){ g.querySelectorAll('button').forEach(function(x){ x.setAttribute(attr, String(x===b)); }); }; }); });
   document.querySelectorAll('[data-toggle]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed')!=='true')); }; });
   document.querySelectorAll('[data-breathe]').forEach(function(b){ b.onclick=function(){ var on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',String(on)); b.textContent=on?'Pause session':'Start session'; b.closest('.ds-pattern').classList.toggle('is-breathing',on); }; });
-  document.querySelectorAll('.ds-source .item[aria-pressed]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true')); }; });
+  document.querySelectorAll('.template-source .item[aria-pressed]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true')); }; });
   document.querySelectorAll('[data-source-theme]').forEach(function(b){ b.onclick=function(){ setTheme(html.getAttribute('data-theme')==='dark'?'light':'dark'); }; });
-  document.querySelectorAll('[data-source-replay]').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.ds-source').forEach(function(el){ el.getAnimations({subtree:true}).forEach(function(a){a.cancel();a.play();}); }); }; });
+  document.querySelectorAll('[data-source-replay]').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.template-source').forEach(function(el){ el.getAnimations({subtree:true}).forEach(function(a){a.cancel();a.play();}); }); }; });
   document.querySelectorAll('[data-switch]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-checked', String(b.getAttribute('aria-checked')!=='true')); }; });
   document.querySelectorAll('[data-cal]').forEach(function(c){ var d=new Date(), sel=d.getDate(); function draw(){ var y=d.getFullYear(), m=d.getMonth(), first=(new Date(y,m,1).getDay()+6)%7, days=new Date(y,m+1,0).getDate(); var h='<div class="ds-cal-head"><button class="ds-btn ds-btn--ghost ds-btn--sm" data-p>‹</button>'+d.toLocaleString('en',{month:'long',year:'numeric'})+'<button class="ds-btn ds-btn--ghost ds-btn--sm" data-n>›</button></div><div class="ds-cal-grid">'+['Mo','Tu','We','Th','Fr','Sa','Su'].map(function(x){return '<span>'+x+'</span>';}).join(''); for(var i=0;i<first;i++) h+='<i></i>'; for(var k=1;k<=days;k++) h+='<button aria-selected="'+(k===sel)+'">'+k+'</button>'; c.innerHTML=h+'</div>'; c.querySelector('[data-p]').onclick=function(){ d.setMonth(m-1); draw(); }; c.querySelector('[data-n]').onclick=function(){ d.setMonth(m+1); draw(); }; c.querySelectorAll('.ds-cal-grid button').forEach(function(b){ b.onclick=function(){ sel=+b.textContent; draw(); }; }); } draw(); });
   function reveal(){ document.querySelectorAll('[data-reveal]').forEach(function(r){ r.classList.remove('is-in'); requestAnimationFrame(function(){ requestAnimationFrame(function(){ r.classList.add('is-in'); }); }); }); }
@@ -360,7 +360,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
 ${tokensCss(s)}
 ${componentCss(s)}
 ${shell}
-${visuals ? sourceVisualCss(visuals) + visuals.cardCss : ""}
+${visuals ? sourceVisualCss(visuals) + px(visuals.cardCss, p) : ""}
 </style>
 </head>
 <body>
@@ -377,7 +377,7 @@ ${visuals ? sourceVisualCss(visuals) + visuals.cardCss : ""}
   <section id="space"><div class="eyebrow">Foundations</div><h2>Space &amp; radius</h2><p class="lead">A ${s.space}px base unit.</p><table class="tok">${[1, 2, 3, 4, 6, 8, 12, 16].map((n) => `<tr><td><code>--${p}-space-${n}</code></td><td>${n * s.space}px</td><td><div style="height:8px;width:${n * s.space}px;background:var(--${p}-accent);border-radius:2px"></div></td></tr>`).join("")}</table><div class="row" style="margin-top:20px">${(["sm", "md", "lg"] as const).map((k) => `<div style="width:84px;height:60px;border:1px solid var(--${p}-line-strong);border-radius:var(--${p}-radius-${k});display:grid;place-items:center;font-size:11px;color:var(--${p}-fg-3)">${k} · ${s.radius[k]}px</div>`).join("")}</div></section>
   <section id="motion"><div class="eyebrow">Foundations</div><h2>Motion</h2><table class="tok"><tr><td><code>--${p}-dur-fast</code></td><td>${s.motion.fast}ms · hovers, presses</td></tr><tr><td><code>--${p}-dur-base</code></td><td>${s.motion.base}ms · toggles, tabs</td></tr><tr><td><code>--${p}-dur-slow</code></td><td>${s.motion.slow}ms · reveals, progress</td></tr><tr><td><code>--${p}-ease</code></td><td>${esc(s.motion.ease)}</td></tr></table></section>
   ${s.product.patterns.map((x, i) => `<section id="pattern-${i}"><div class="eyebrow">Product patterns</div><h2>${esc(x.name)}</h2><p class="lead">${esc(x.summary)}</p><div class="stage">${px(patternSpecimen(x), p)}</div><p>${esc(x.usage)}</p><pre><code>&lt;ProductPattern name="${esc(x.name)}" /&gt;</code></pre></section>`).join("\n")}
-  ${visuals ? sourceSections(visuals) : ""}
+  ${visuals ? sourceSections(visuals, p) : ""}
   ${COMPONENT_GROUPS.flatMap((g) => g.items.map((n) => comp(n, g.group))).join("\n  ")}
 </main>
 </div>
@@ -566,7 +566,7 @@ export function renderPackage(s: Spec, visuals?: SourceVisuals): Record<string, 
     "README.md": readme(s),
     "tokens/tokens.css": tokensCss(s),
     "tokens/tokens.json": tokensJson(s),
-    [`dist/${p}.css`]: componentCss(s) + (visuals ? visuals.cardCss : ""),
+    [`dist/${p}.css`]: componentCss(s) + (visuals ? px(visuals.cardCss, p) : ""),
     "react/Components.tsx": reactFile(s),
     "react/Components.stories.tsx": storiesFile(s),
     "guidelines/brand.md": brandMd(s),
