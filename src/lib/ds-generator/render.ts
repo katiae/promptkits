@@ -332,7 +332,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
 (function(){
   var html=document.documentElement;
   function setTheme(t){ document.querySelectorAll('.template-source .mode-sw').forEach(function(b){b.setAttribute('aria-checked',String(t==='dark'));}); document.querySelectorAll('.template-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
-  document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(){ setTheme(b.dataset.themeBtn); }; });
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(e){ var t=b.dataset.themeBtn; if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches){ setTheme(t); return; } html.style.setProperty('--${p}-vt-x',e.clientX+'px'); html.style.setProperty('--${p}-vt-y',e.clientY+'px'); html.classList.add('${p}-theme-vt'); document.startViewTransition(function(){ setTheme(t); }).finished.finally(function(){ html.classList.remove('${p}-theme-vt'); }); }; });
   setTheme(html.getAttribute('data-theme')||'dark');
   window.addEventListener('message', function(e){ var d=e.data; if(d && d.type==='hy-theme' && (d.theme==='dark'||d.theme==='light')) setTheme(d.theme); });
   var links=[].slice.call(document.querySelectorAll('aside a[href^="#"]')); var lock=0;
@@ -368,6 +368,7 @@ ${visuals ? sourceVisualCss(visuals) + px(visuals.cardCss, p) : ""}
 </head>
 <body>
 <div class="layout">
+${s.identity ? `<style>${transitionCss(s.identity, p)}</style>` : ""}
 <aside>
   <div class="brand"><i></i>${name}</div>
   ${nav.map((g) => `<div class="grp">${esc(g.group)}</div>${g.items.map(([id, label]) => `<a href="#${id}">${label}</a>`).join("")}`).join("\n  ")}
