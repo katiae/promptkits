@@ -253,6 +253,7 @@ function sourceSections(v: SourceVisuals, p: string) {
 
 function sourceReactFile(v: SourceVisuals) {
   return `import * as React from "react";
+import { Button } from "./Components";
 import "../dist/source-visuals.css";
 export const cards = ${JSON.stringify(v.cards)};
 export const illustrations = ${JSON.stringify(v.illustrations)};
@@ -265,7 +266,7 @@ function Source({html,theme="light",tasks=false}: {html:string;theme?:"light"|"d
 export function TemplateCard({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={cards[index]?.html??''}/>;}
 export function Illustration({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={illustrations[index]?.html??''}/>;}
 export function AnimatedTasks({theme="light"}: {theme?:"light"|"dark"}){return <Source tasks theme={theme} html={'<div class="source-tasks">'+tasks+'</div>'}/>;}
-export function ThemeTransition(){const [theme,set]=React.useState<"light"|"dark">('light');return <><button type="button" className="template-theme-command" onClick={()=>set(theme==='light'?'dark':'light')}>Switch day / night</button><TemplateCard theme={theme}/><Illustration theme={theme}/></>;}
+export function ThemeTransition(){const [theme,set]=React.useState<"light"|"dark">('light');return <><Button onClick={()=>set(theme==='light'?'dark':'light')}>Switch day / night</Button><TemplateCard theme={theme}/><Illustration theme={theme}/></>;}
 `;
 }
 
