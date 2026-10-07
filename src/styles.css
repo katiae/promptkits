@@ -104,6 +104,7 @@
   --sidebar-accent-foreground: oklch(0.25 0.008 70);
   --sidebar-border: oklch(0.91 0.004 80);
   --sidebar-ring: oklch(0.7 0.01 80);
+  --skeleton-sheen: oklch(1 0 0 / 0.78);
 }
 
 .dark {
@@ -139,6 +140,7 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --skeleton-sheen: oklch(0.97 0.012 250 / 0.16);
 }
 
 @layer base {
@@ -184,6 +186,25 @@
 .skeleton-cloud-first { left: -12%; top: -24%; background: var(--cloud-first); }
 .skeleton-cloud-second { right: -10%; bottom: -28%; background: var(--cloud-second); animation-delay: -2.5s; }
 .template-skeleton:nth-child(2n) .skeleton-cloud { animation-delay: -1.5s; }
+/* A soft band of light crosses the artwork, then rests — the loading cue. */
+.skeleton-palette-0::after,
+.skeleton-palette-1::after,
+.skeleton-palette-2::after {
+  content: "";
+  position: absolute;
+  inset: -30% -60%;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, var(--skeleton-sheen) 50%, transparent 62%);
+  transform: translateX(-72%);
+  animation: skeleton-sheen 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.template-skeleton:nth-child(2n) .skeleton-palette-0::after,
+.template-skeleton:nth-child(2n) .skeleton-palette-1::after,
+.template-skeleton:nth-child(2n) .skeleton-palette-2::after { animation-delay: 0.9s; }
+@keyframes skeleton-sheen {
+  0% { transform: translateX(-72%); }
+  55%, 100% { transform: translateX(72%); }
+}
 .template-grid-placeholders-exit {
   position: absolute;
   inset: 0;
