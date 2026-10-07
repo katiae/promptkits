@@ -33,11 +33,12 @@ export const Route = createFileRoute("/api/public/ds-generate")({
         try {
           const { generateSpec } = await import("@/lib/ds-generator/generate.server");
           const { renderPackage } = await import("@/lib/ds-generator/render");
+          const { extractSourceVisuals } = await import("@/lib/ds-generator/source-visuals");
           const spec = await generateSpec(
             { name: entry.name, prompt: entry.prompt ?? "", html: entry.html_content ?? "" },
             process.env["LOVABLE_API_KEY"]!,
           );
-          const files = renderPackage(spec);
+          const files = renderPackage(spec, entry.html_content ? extractSourceVisuals(entry.html_content) : undefined);
           await supabaseAdmin
             .from("design_systems")
             .update({ status: "ready", spec, files, error: null, updated_at: new Date().toISOString() })

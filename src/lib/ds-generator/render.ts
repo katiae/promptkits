@@ -1,3 +1,4 @@
+import { sourceVisualCss, type SourceVisuals } from "./source-visuals";
 import { COMPONENT_GROUPS, THEME_KEYS, type Spec, type Theme, type ThemeKey, type ProductPattern } from "./spec";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -203,7 +204,8 @@ const statusSvg = (k: string) => {
 const prioritySvg = (n: number) => `<svg width="14" height="14" viewBox="0 0 14 14" aria-label="priority ${n}">${[0, 1, 2].map((i) => `<rect x="${2 + i * 4}" y="${10 - i * 3}" width="2.5" height="${3 + i * 3}" rx="1" fill="${i < n ? "var(--ds-fg)" : "var(--ds-line-strong)"}"/>`).join("")}</svg>`;
 
 const chevron = `<svg class="ds-select-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 6 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-function patternSpecimen(x: ProductPattern): string {
+function patternSpecimen(x: ProductPattern, visuals?: SourceVisuals): string {
+  if (x.kind === "checklist" && visuals?.tasks) return `<div class="template-source" data-mode="night"><div class="source-tasks">${visuals.tasks}</div></div>`;
   const title = `<h3>${esc(x.title || x.name)}</h3>`;
   const items = x.items.map((v) => `<div class="ds-pattern-item">${esc(v)}</div>`).join("");
   const content = x.kind === "checklist" ? `<div class="ds-pattern-list">${x.items.map((v, i) => `<label class="ds-pattern-item ds-check"><input type="checkbox" ${i === 0 ? "checked" : ""}/> ${esc(v)}</label>`).join("")}</div>`
@@ -241,12 +243,40 @@ function specimen(name: string): string {
   return "";
 }
 
-export function guidelinesHtml(s: Spec) {
+function sourceSections(v: SourceVisuals, p: string) {
+  const wrap = (html: string) => `<div class="template-source" data-theme="dark" data-mode="night">${html}</div>`;
+  return `<section id="source-cards"><div class="eyebrow">Template visuals &amp; motion</div><h2>Template cards</h2><p class="lead">Original surfaces, illustration treatments and hover motion.</p>${wrap(`<div class="source-grid">${v.cards.filter((x)=>!x.html.includes('class="step')).map((x) => x.html).join("")}</div><div class="source-grid" style="margin-top:24px">${v.cards.filter((x)=>x.html.includes('class="step')).map((x) => x.html).join("")}</div>`)}</section>
+<section id="source-tasks"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animated tasks</h2>${wrap(`<div class="source-tasks">${v.tasks || "No task controls in this template."}</div>`)}</section>
+<section id="source-art"><div class="eyebrow">Template visuals &amp; motion</div><h2>Illustrations &amp; icons</h2>${wrap(`<div class="source-grid">${v.illustrations.map((x) => `<figure class="source-figure"><div class="source-art">${x.html}</div><figcaption>${esc(x.name)}</figcaption></figure>`).join("")}</div>`)}</section>
+<section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="${p}-btn ${p}-btn--secondary" data-source-replay>Replay animations</button><button class="${p}-btn ${p}-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p>${wrap(v.themeToggle.replace(/<button /, '<button data-source-theme '))}</section>`;
+}
+
+function sourceReactFile(v: SourceVisuals) {
+  return `import * as React from "react";
+import { Button } from "./Components";
+import "../dist/source-visuals.css";
+export const cards = ${JSON.stringify(v.cards)};
+export const illustrations = ${JSON.stringify(v.illustrations)};
+const tasks = ${JSON.stringify(v.tasks)};
+function Source({html,theme="light",tasks=false}: {html:string;theme?:"light"|"dark";tasks?:boolean}) {
+  const ref=React.useRef<HTMLDivElement>(null);
+  React.useEffect(()=>{const el=ref.current;if(!el||!tasks)return;const click=(e:MouseEvent)=>{const target=e.target;if(!(target instanceof Element))return;const b=target.closest('.item[aria-pressed]');if(b&&el.contains(b))b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));};el.addEventListener('click',click);return()=>el.removeEventListener('click',click);},[tasks]);
+  return <div ref={ref} className="template-source" data-theme={theme} data-mode={theme==='dark'?'night':'day'} dangerouslySetInnerHTML={{__html:html}}/>;
+}
+export function TemplateCard({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={cards[index]?.html??''}/>;}
+export function Illustration({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={illustrations[index]?.html??''}/>;}
+export function AnimatedTasks({theme="light"}: {theme?:"light"|"dark"}){return <Source tasks theme={theme} html={'<div class="source-tasks">'+tasks+'</div>'}/>;}
+export function ThemeTransition(){const [theme,set]=React.useState<"light"|"dark">('light');return <><Button onClick={()=>set(theme==='light'?'dark':'light')}>Switch day / night</Button><TemplateCard theme={theme}/><Illustration theme={theme}/></>;}
+`;
+}
+
+export function guidelinesHtml(s: Spec, visuals?: SourceVisuals) {
   const p = s.brand.prefix;
   const notes = new Map(s.components.map((c) => [c.name, c]));
   const nav = [
     { group: "Foundations", items: [["overview", "Overview"], ["colour", "Colour"], ["type", "Type"], ["space", "Space & radius"], ["motion", "Motion"]] },
     ...(s.product.patterns.length ? [{ group: "Product patterns", items: s.product.patterns.map((x, i) => [`pattern-${i}`, x.name]) }] : []),
+    ...(visuals ? [{ group: "Template visuals & motion", items: [["source-cards", "Template cards"], ["source-tasks", "Animated tasks"], ["source-art", "Illustrations & icons"], ["source-motion", "Animation library"]] }] : []),
     ...COMPONENT_GROUPS.map((g) => ({ group: g.group, items: g.items.map((n) => [n.toLowerCase(), n]) })),
   ];
   const swatch = (k: ThemeKey) => `<div class="sw"><i style="background:var(--${p}-${kebab(k)})"></i><b>${k}</b><code>--${p}-${kebab(k)}</code><code class="hex">${esc(s.dark[k])} / ${esc(s.light[k])}</code></div>`;
@@ -254,7 +284,7 @@ export function guidelinesHtml(s: Spec) {
     const n = notes.get(name);
     if (!n) return "";
     const list = (items: string[], cls: string) => items.length ? `<ul class="${cls}">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
-    return `<section id="${name.toLowerCase()}"><div class="eyebrow">${esc(group)}</div><h2>${name}</h2>${n.summary ? `<p class="lead">${esc(n.summary)}</p>` : ""}<div class="stage">${px(specimen(name), p)}</div>${n.usage ? `<p>${esc(n.usage)}</p>` : ""}${n.dos.length || n.donts.length ? `<div class="dd"><div><h5>Do</h5>${list(n.dos, "do")}</div><div><h5>Don't</h5>${list(n.donts, "dont")}</div></div>` : ""}<pre><code>&lt;${name} /&gt;  // react/Components.tsx · class .${p}-${name.toLowerCase()}</code></pre></section>`;
+    return `<section id="${name.toLowerCase()}"><div class="eyebrow">${esc(group)}</div><h2>${name}</h2>${n.summary ? `<p class="lead">${esc(n.summary)}</p>` : ""}<div class="stage">${name === "Card" && visuals?.cards.length ? `<div class="template-source" data-mode="night"><div class="source-grid">${visuals.cards.slice(0, 4).map((x)=>x.html).join("")}</div></div>` : px(specimen(name), p)}</div>${n.usage ? `<p>${esc(n.usage)}</p>` : ""}${n.dos.length || n.donts.length ? `<div class="dd"><div><h5>Do</h5>${list(n.dos, "do")}</div><div><h5>Don't</h5>${list(n.donts, "dont")}</div></div>` : ""}<pre><code>&lt;${name} /&gt;  // react/Components.tsx · class .${p}-${name.toLowerCase()}</code></pre></section>`;
   };
   const fontHref = s.fonts.googleHref || `https://fonts.googleapis.com/css2?family=${[s.fonts.display, s.fonts.body, s.fonts.mono].map((f) => encodeURIComponent(f).replace(/%20/g, "+") + ":wght@400;500;600;700").join("&family=")}&display=swap`;
   const shell = px(`
@@ -300,7 +330,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
   const js = px(`
 (function(){
   var html=document.documentElement;
-  function setTheme(t){ html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
+  function setTheme(t){ document.querySelectorAll('.template-source .mode-sw').forEach(function(b){b.setAttribute('aria-checked',String(t==='dark'));}); document.querySelectorAll('.template-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
   document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(){ setTheme(b.dataset.themeBtn); }; });
   setTheme(html.getAttribute('data-theme')||'dark');
   window.addEventListener('message', function(e){ var d=e.data; if(d && d.type==='hy-theme' && (d.theme==='dark'||d.theme==='light')) setTheme(d.theme); });
@@ -312,6 +342,9 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
   document.querySelectorAll('[data-seg],[data-tabs]').forEach(function(g){ var attr=g.hasAttribute('data-seg')?'aria-pressed':'aria-selected'; g.querySelectorAll('button').forEach(function(b){ b.onclick=function(){ g.querySelectorAll('button').forEach(function(x){ x.setAttribute(attr, String(x===b)); }); }; }); });
   document.querySelectorAll('[data-toggle]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed')!=='true')); }; });
   document.querySelectorAll('[data-breathe]').forEach(function(b){ b.onclick=function(){ var on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',String(on)); b.textContent=on?'Pause session':'Start session'; b.closest('.ds-pattern').classList.toggle('is-breathing',on); }; });
+  document.querySelectorAll('.template-source .item[aria-pressed]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true')); }; });
+  document.querySelectorAll('[data-source-theme]').forEach(function(b){ b.onclick=function(){ setTheme(html.getAttribute('data-theme')==='dark'?'light':'dark'); }; });
+  document.querySelectorAll('[data-source-replay]').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.template-source').forEach(function(el){ el.getAnimations({subtree:true}).forEach(function(a){a.cancel();a.play();}); }); }; });
   document.querySelectorAll('[data-switch]').forEach(function(b){ b.onclick=function(){ b.setAttribute('aria-checked', String(b.getAttribute('aria-checked')!=='true')); }; });
   document.querySelectorAll('[data-cal]').forEach(function(c){ var d=new Date(), sel=d.getDate(); function draw(){ var y=d.getFullYear(), m=d.getMonth(), first=(new Date(y,m,1).getDay()+6)%7, days=new Date(y,m+1,0).getDate(); var h='<div class="ds-cal-head"><button class="ds-btn ds-btn--ghost ds-btn--sm" data-p>‹</button>'+d.toLocaleString('en',{month:'long',year:'numeric'})+'<button class="ds-btn ds-btn--ghost ds-btn--sm" data-n>›</button></div><div class="ds-cal-grid">'+['Mo','Tu','We','Th','Fr','Sa','Su'].map(function(x){return '<span>'+x+'</span>';}).join(''); for(var i=0;i<first;i++) h+='<i></i>'; for(var k=1;k<=days;k++) h+='<button aria-selected="'+(k===sel)+'">'+k+'</button>'; c.innerHTML=h+'</div>'; c.querySelector('[data-p]').onclick=function(){ d.setMonth(m-1); draw(); }; c.querySelector('[data-n]').onclick=function(){ d.setMonth(m+1); draw(); }; c.querySelectorAll('.ds-cal-grid button').forEach(function(b){ b.onclick=function(){ sel=+b.textContent; draw(); }; }); } draw(); });
   function reveal(){ document.querySelectorAll('[data-reveal]').forEach(function(r){ r.classList.remove('is-in'); requestAnimationFrame(function(){ requestAnimationFrame(function(){ r.classList.add('is-in'); }); }); }); }
@@ -329,6 +362,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
 ${tokensCss(s)}
 ${componentCss(s)}
 ${shell}
+${visuals ? sourceVisualCss(visuals) + px(visuals.cardCss, p) : ""}
 </style>
 </head>
 <body>
@@ -344,7 +378,8 @@ ${shell}
   <section id="type"><div class="eyebrow">Foundations</div><h2>Type</h2><div class="col" style="gap:18px"><div><code>--${p}-font-display · ${esc(s.fonts.display)}</code><div style="font:600 40px/1.1 var(--${p}-font-display);letter-spacing:-.02em">The quick brown fox</div></div><div><code>--${p}-font-body · ${esc(s.fonts.body)}</code><div style="font:400 16px/1.6 var(--${p}-font-body)">Body copy reads calmly at sixteen pixels with generous line height.</div></div><div><code>--${p}-font-mono · ${esc(s.fonts.mono)}</code><div style="font:500 13px var(--${p}-font-mono)">const token = "--${p}-accent";</div></div></div></section>
   <section id="space"><div class="eyebrow">Foundations</div><h2>Space &amp; radius</h2><p class="lead">A ${s.space}px base unit.</p><table class="tok">${[1, 2, 3, 4, 6, 8, 12, 16].map((n) => `<tr><td><code>--${p}-space-${n}</code></td><td>${n * s.space}px</td><td><div style="height:8px;width:${n * s.space}px;background:var(--${p}-accent);border-radius:2px"></div></td></tr>`).join("")}</table><div class="row" style="margin-top:20px">${(["sm", "md", "lg"] as const).map((k) => `<div style="width:84px;height:60px;border:1px solid var(--${p}-line-strong);border-radius:var(--${p}-radius-${k});display:grid;place-items:center;font-size:11px;color:var(--${p}-fg-3)">${k} · ${s.radius[k]}px</div>`).join("")}</div></section>
   <section id="motion"><div class="eyebrow">Foundations</div><h2>Motion</h2><table class="tok"><tr><td><code>--${p}-dur-fast</code></td><td>${s.motion.fast}ms · hovers, presses</td></tr><tr><td><code>--${p}-dur-base</code></td><td>${s.motion.base}ms · toggles, tabs</td></tr><tr><td><code>--${p}-dur-slow</code></td><td>${s.motion.slow}ms · reveals, progress</td></tr><tr><td><code>--${p}-ease</code></td><td>${esc(s.motion.ease)}</td></tr></table></section>
-  ${s.product.patterns.map((x, i) => `<section id="pattern-${i}"><div class="eyebrow">Product patterns</div><h2>${esc(x.name)}</h2><p class="lead">${esc(x.summary)}</p><div class="stage">${px(patternSpecimen(x), p)}</div><p>${esc(x.usage)}</p><pre><code>&lt;ProductPattern name="${esc(x.name)}" /&gt;</code></pre></section>`).join("\n")}
+  ${s.product.patterns.map((x, i) => `<section id="pattern-${i}"><div class="eyebrow">Product patterns</div><h2>${esc(x.name)}</h2><p class="lead">${esc(x.summary)}</p><div class="stage">${px(patternSpecimen(x, visuals), p)}</div><p>${esc(x.usage)}</p><pre><code>&lt;ProductPattern name="${esc(x.name)}" /&gt;</code></pre></section>`).join("\n")}
+  ${visuals ? sourceSections(visuals, p) : ""}
   ${COMPONENT_GROUPS.flatMap((g) => g.items.map((n) => comp(n, g.group))).join("\n  ")}
 </main>
 </div>
@@ -507,9 +542,10 @@ function readme(s: Spec) {
   return `# ${s.brand.name} design system\n\n${s.brand.tagline}\n\nOpen \`index.html\` in a browser for the full guidelines (dark + light).\n\n## Contents\n\n- \`tokens/tokens.css\`, \`tokens/tokens.json\` — colour (dark + light), type, radius, space, motion\n- \`dist/${p}.css\` — component styles using only tokens\n- \`react/Components.tsx\` — React components\n- \`react/Components.stories.tsx\` — Storybook stories\n- \`guidelines/\` — brand and per-component usage notes\n\n## Use in a project\n\n1. Copy this folder into your repo (e.g. \`src/design-system\`).\n2. Import \`tokens/tokens.css\` and \`dist/${p}.css\` once at your app root.\n3. Set \`data-theme="dark"\` or \`data-theme="light"\` on \`<html>\`.\n4. Import components: \`import { Button } from "./design-system/react/Components";\`\n\n## Storybook\n\nAdd \`"../src/design-system/react/*.stories.tsx"\` to \`stories\` in \`.storybook/main.ts\`. Optionally add a \`theme\` global toolbar (dark/light) — the stories read \`globals.theme\`.\n\n## Fonts\n\n${s.fonts.display}, ${s.fonts.body}, ${s.fonts.mono} — load from Google Fonts.\n`;
 }
 
-function productReactFile(s: Spec) {
+function productReactFile(s: Spec, visuals?: SourceVisuals) {
   return px(`import * as React from "react";
 import { Button, Checkbox, ProgressBar } from "./Components";
+${visuals?.tasks ? 'import { AnimatedTasks } from "./TemplateVisuals";' : ""}
 export const patterns = ${JSON.stringify(s.product.patterns)};
 export function ProductPattern({ name }: { name: string }) {
   const x = patterns.find((p) => p.name === name);
@@ -518,7 +554,7 @@ export function ProductPattern({ name }: { name: string }) {
   return <section className={"ds-pattern ds-pattern--" + x.kind + (running ? " is-breathing" : "")}>
     <h3>{x.title || x.name}</h3>
     {x.kind === "timer" ? <><div className="ds-breath-orbit"/><p>{x.items[0]}</p><Button variant="highlight" aria-pressed={running} onClick={() => setRunning(!running)}>{running ? "Pause session" : "Start session"}</Button></>
-      : x.kind === "checklist" ? <div className="ds-pattern-list">{x.items.map((item, i) => <div className="ds-pattern-item" key={item}><Checkbox label={item} defaultChecked={i === 0}/></div>)}</div>
+      : x.kind === "checklist" ? ${visuals?.tasks ? "<AnimatedTasks/>" : '<div className="ds-pattern-list">'}${visuals?.tasks ? "" : '{x.items.map((item, i) => <div className="ds-pattern-item" key={item}><Checkbox label={item} defaultChecked={i === 0}/></div>)}</div>'}
       : <>{x.kind === "progress" && <><div className="ds-pattern-value">3 / 7</div><ProgressBar value={43}/></>}{x.kind === "stat" && <div className="ds-pattern-value">24</div>}{x.items.map((item) => <div key={item} className="ds-pattern-item">{item}</div>)}{x.kind === "plan" && <Button>Choose plan</Button>}</>}
   </section>;
 }
@@ -526,24 +562,38 @@ export function ProductPattern({ name }: { name: string }) {
 }
 
 /** Spec → every file in the package, keyed by relative path. */
-export function renderPackage(s: Spec): Record<string, string> {
+export function renderPackage(s: Spec, visuals?: SourceVisuals): Record<string, string> {
   const p = s.brand.prefix;
   const files: Record<string, string> = {
-    "index.html": guidelinesHtml(s),
+    "index.html": guidelinesHtml(s, visuals),
     "README.md": readme(s),
     "tokens/tokens.css": tokensCss(s),
     "tokens/tokens.json": tokensJson(s),
-    [`dist/${p}.css`]: componentCss(s),
+    [`dist/${p}.css`]: componentCss(s) + (visuals ? px(visuals.cardCss, p) : ""),
     "react/Components.tsx": reactFile(s),
     "react/Components.stories.tsx": storiesFile(s),
     "guidelines/brand.md": brandMd(s),
   };
   for (const g of COMPONENT_GROUPS) for (const n of g.items) files[`guidelines/components/${n}.md`] = componentMd(s, n);
   if (s.product.patterns.length) {
-    files["react/ProductPatterns.tsx"] = productReactFile(s);
+    files["react/ProductPatterns.tsx"] = productReactFile(s, visuals);
     files["react/ProductPatterns.stories.tsx"] = `import * as React from "react";\nimport { ProductPattern, patterns } from "./ProductPatterns";\nexport default { title: ${JSON.stringify(s.brand.name + "/Product patterns")} };\nexport const Examples = { render: () => <div className="${p}-root" style={{display:"grid",gap:24,padding:24}}>{patterns.map((x) => <ProductPattern key={x.name} name={x.name}/>)}</div> };`;
     for (const [i, x] of s.product.patterns.entries()) files[`guidelines/patterns/${i + 1}.md`] = `# ${x.name}\n\n${x.summary}\n\n${x.usage}\n\nImport ProductPattern from react/ProductPatterns and pass name=${JSON.stringify(x.name)}.`;
     files["guidelines/product.md"] = `# Product context\n\n${s.product.purpose}\n\n## Pages & workflows\n${s.product.pages.map((x) => `- ${x}`).join("\n")}`;
+  }
+  if (visuals) {
+    files["dist/source-visuals.css"] = sourceVisualCss(visuals);
+    files["react/TemplateVisuals.tsx"] = sourceReactFile(visuals);
+    files["react/TemplateVisuals.stories.tsx"] = `import * as React from "react";
+import { TemplateCard, Illustration, AnimatedTasks, ThemeTransition, cards, illustrations } from "./TemplateVisuals";
+export default { title: ${JSON.stringify(s.brand.name + "/Template visuals & motion")} };
+export const Cards = { render: () => <div className="source-grid">{cards.map((x,i)=><TemplateCard key={i} index={i}/>)}</div> };
+export const Art = { render: () => <div className="source-grid">{illustrations.map((x,i)=><Illustration key={i} index={i}/>)}</div> };
+export const Tasks = { render: () => <AnimatedTasks/> };
+export const Theme = { render: () => <ThemeTransition/> };`;
+    files["guidelines/template-visuals.md"] = `# Source visuals and motion\n\nThese are sanitized assets and declarative styles from the actual template, not generic replacements. Original scripts and remote resources are excluded.\n\nImport TemplateCard, Illustration, AnimatedTasks and ThemeTransition from react/TemplateVisuals. Task buttons retain their animated checked state; theme controls change local colours and day/night art without resetting content.\n\n## Animation inventory\n${visuals.animations.map((x)=>`- ${x}`).join("\n")}\n\nAnimations are included in dist/source-visuals.css and automatically respect reduced-motion preferences.`;
+    visuals.illustrations.forEach((x,i) => { files[`assets/illustrations/${i + 1}.html`] = x.html; });
+    files["README.md"] += "\n## Template illustrations & motion\n\n`react/TemplateVisuals.tsx` exports original cards, vector illustrations/icons, animated task controls and a theme-transition example. `assets/illustrations/` contains reusable sanitized markup; `dist/source-visuals.css` includes the template's scoped motion and reduced-motion alternative.\n";
   }
   return files;
 }
