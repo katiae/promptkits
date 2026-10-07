@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { inspectDesignSystemZip } from "@/lib/design-system-import";
 import type { ScanReport } from "@/lib/security-scanner";
 
-export function DesignSystemUpload({ onPrepared, disabled = false }: { onPrepared: (base64: string | null) => void; disabled?: boolean }) {
+export function DesignSystemUpload({ onPrepared, disabled = false }: { onPrepared: (base64: string | null, blocked?: boolean) => void; disabled?: boolean }) {
   const [name, setName] = useState("");
   const [report, setReport] = useState<ScanReport | null>(null);
   const [count, setCount] = useState(0);
   const [busy, setBusy] = useState(false);
   const choose = async (file?: File) => {
     if (!file) return;
-    onPrepared(null); setName(file.name); setReport(null); setBusy(true);
+    onPrepared(null, true); setName(file.name); setReport(null); setBusy(true);
     try {
       if (!/\.zip$/i.test(file.name) || file.size > 5_000_000) throw new Error("Choose a .zip file smaller than 5 MB.");
       const bytes = new Uint8Array(await file.arrayBuffer());

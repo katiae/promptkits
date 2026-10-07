@@ -7,7 +7,7 @@ describe("design-system ZIP import", () => {
     const zip = zipSync({ "claude/tokens.css": strToU8(":root{--primary:#227755}"), "claude/Button.tsx": strToU8('export function Button(){return <button>Continue</button>}'), "claude/README.md": strToU8("# Kit\nOriginal documentation"), "claude/logo.png": new Uint8Array([137, 80, 78, 71]) });
     const result = inspectDesignSystemZip(zip);
     expect(result.report.ok).toBe(true);
-    expect(strFromU8(result.files["claude/README.md"])).toContain("Original documentation");
+    expect(strFromU8(result.files["claude/README.md"] ?? new Uint8Array())).toContain("Original documentation");
     expect(result.files["claude/logo.png"]).toEqual(new Uint8Array([137, 80, 78, 71]));
     const guide = buildImportedGuidelines("Sprig", result.files);
     expect(guide).toContain("#227755");

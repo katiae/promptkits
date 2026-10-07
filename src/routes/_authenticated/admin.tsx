@@ -47,6 +47,7 @@ type Form = {
   html_content: string;
   html_name: string;
   ds_zip?: string | null;
+  ds_zip_blocked?: boolean;
 };
 
 const blank: Form = {
@@ -184,7 +185,7 @@ function Admin() {
   };
 
   const save = async () => {
-    if (!form) return;
+    if (!form || importing || form.ds_zip_blocked) return;
     let thumb = form.thumbnail_url;
     const htmlChanged = !!form.html_content && form.html_content !== (original?.html_content ?? "");
     if (form.html_content && (htmlChanged || !thumb) && !(report && !report.ok)) {
@@ -406,10 +407,10 @@ function Admin() {
                 />
               )}
             </div>
-            <DesignSystemUpload key={form.id ?? "new"} disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip) => setForm((f) => f && { ...f, ds_zip })} />
+            <DesignSystemUpload key={form.id ?? "new"} disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip, ds_zip_blocked = false) => setForm((f) => f && { ...f, ds_zip, ds_zip_blocked })} />
           </div>
           <div className="flex gap-2 md:col-span-2">
-            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
+            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing || form.ds_zip_blocked} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
             <Button variant="outline" disabled={importing} onClick={() => setForm(null)} className="rounded-full px-5">Cancel</Button>
           </div>
         </div>
