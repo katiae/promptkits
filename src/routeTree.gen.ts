@@ -17,6 +17,7 @@ import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as SitesSlugRouteImport } from './routes/sites.$slug'
 import { Route as TagSlugRouteImport } from './routes/tag.$slug'
+import { Route as ApiPublicDsGenerateRouteImport } from './routes/api/public/ds-generate'
 import { Route as SitesSlugLiveDemoRouteImport } from './routes/sites.$slug.live-demo'
 import { Route as SitesSlugDesignSystemRouteImport } from './routes/sites_.$slug.design-system'
 import { Route as SitesSlugDesignSystemPreviewRouteImport } from './routes/sites_.$slug.design-system_.preview'
@@ -60,6 +61,11 @@ const TagSlugRoute = TagSlugRouteImport.update({
   path: '/tag/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDsGenerateRoute = ApiPublicDsGenerateRouteImport.update({
+  id: '/api/public/ds-generate',
+  path: '/api/public/ds-generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitesSlugLiveDemoRoute = SitesSlugLiveDemoRouteImport.update({
   id: '/live-demo',
   path: '/live-demo',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/category/$slug': typeof CategorySlugRoute
   '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
   '/sites/$slug/design-system/preview': typeof SitesSlugDesignSystemPreviewRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/category/$slug': typeof CategorySlugRoute
   '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
   '/sites/$slug/design-system/preview': typeof SitesSlugDesignSystemPreviewRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/category/$slug': typeof CategorySlugRoute
   '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites_/$slug/design-system': typeof SitesSlugDesignSystemRoute
   '/sites_/$slug/design-system_/preview': typeof SitesSlugDesignSystemPreviewRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
     | '/sites/$slug/design-system/preview'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
     | '/sites/$slug/design-system/preview'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites_/$slug/design-system'
     | '/sites_/$slug/design-system_/preview'
@@ -162,6 +174,7 @@ export interface RootRouteChildren {
   CategorySlugRoute: typeof CategorySlugRoute
   SitesSlugRoute: typeof SitesSlugRouteWithChildren
   TagSlugRoute: typeof TagSlugRoute
+  ApiPublicDsGenerateRoute: typeof ApiPublicDsGenerateRoute
   SitesSlugDesignSystemRoute: typeof SitesSlugDesignSystemRoute
   SitesSlugDesignSystemPreviewRoute: typeof SitesSlugDesignSystemPreviewRoute
 }
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TagSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ds-generate': {
+      id: '/api/public/ds-generate'
+      path: '/api/public/ds-generate'
+      fullPath: '/api/public/ds-generate'
+      preLoaderRoute: typeof ApiPublicDsGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sites/$slug/live-demo': {
       id: '/sites/$slug/live-demo'
       path: '/live-demo'
@@ -280,6 +300,7 @@ const rootRouteChildren: RootRouteChildren = {
   CategorySlugRoute: CategorySlugRoute,
   SitesSlugRoute: SitesSlugRouteWithChildren,
   TagSlugRoute: TagSlugRoute,
+  ApiPublicDsGenerateRoute: ApiPublicDsGenerateRoute,
   SitesSlugDesignSystemRoute: SitesSlugDesignSystemRoute,
   SitesSlugDesignSystemPreviewRoute: SitesSlugDesignSystemPreviewRoute,
 }

@@ -9,29 +9,30 @@ async function assertAdmin(ctx: { supabase: any; userId: string }) {
   if (!data) throw new Error("Forbidden");
 }
 
-/** Admin: generate (or regenerate) a template's design system with AI. */
+/**
+ * Admin: generate (or regenerate) a template's design system with AI.
+ * Marks the row "generating" and hands the real work to an internal
+ * background route, so the build keeps running even if the admin
+ * closes or refreshes the page. Poll listDesignSystemStatus for the result.
+ */
 export const generateDesignSystem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(idInput)
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const sb = context.supabase;
-    const { data: entry, error } = await sb.from("entries").select("id, slug, name, prompt, html_content").eq("id", data.entryId).single();
+    const { data: entry, error } = await sb.from("entries").select("id, slug").eq("id", data.entryId).single();
     if (error || !entry) return { ok: false as const, error: "Template not found." };
     await sb.from("design_systems").upsert({ entry_id: entry.id, slug: entry.slug, status: "generating", error: null, updated_at: new Date().toISOString() }, { onConflict: "entry_id" });
-    try {
-      const { generateSpec } = await import("./ds-generator/generate.server");
-      const { renderPackage } = await import("./ds-generator/render");
-      const spec = await generateSpec({ name: entry.name, prompt: entry.prompt ?? "", html: entry.html_content ?? "" }, process.env["LOVABLE_API_KEY"]!);
-      const files = renderPackage(spec);
-      await sb.from("design_systems").update({ status: "ready", spec, files, error: null, updated_at: new Date().toISOString() }).eq("entry_id", entry.id);
-      return { ok: true as const, files: Object.keys(files).length };
-    } catch (e) {
-      console.error("design system generation failed", e);
-      const msg = e instanceof Error && e.message ? e.message : "Generation failed.";
-      await sb.from("design_systems").update({ status: "failed", error: msg, updated_at: new Date().toISOString() }).eq("entry_id", entry.id);
-      return { ok: false as const, error: msg };
-    }
+    // Fire-and-forget: the background route does the AI build and writes the result.
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const origin = new URL(getRequest().url).origin;
+    void fetch(`${origin}/api/public/ds-generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-internal-token": process.env["DS_INTERNAL_TOKEN"]! },
+      body: JSON.stringify({ entryId: entry.id }),
+    }).catch((e) => console.error("failed to start design system generation", e));
+    return { ok: true as const, started: true };
   });
 
 /** Admin: generation status for every template. */
