@@ -44,6 +44,8 @@ export function tokensJson(s: Spec) {
 }
 
 const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
+.ds-root, .ds-root *, .ds-root *::before, .ds-root *::after,
+:where([class^="ds-"], [class*=" ds-"]), :where([class^="ds-"], [class*=" ds-"]) * { box-sizing:border-box; }
 .ds-root { background: var(--ds-bg); color: var(--ds-fg); font-family: var(--ds-font-body); }
 .ds-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:1px solid transparent; border-radius:var(--ds-radius-md); font:500 13px/1 var(--ds-font-body); height:32px; padding:0 12px; cursor:pointer; transition:background var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease), transform var(--ds-dur-fast) var(--ds-ease); }
 .ds-btn:active { transform: scale(.98); }
@@ -59,7 +61,8 @@ const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
 .ds-btn--ghost:hover { background:var(--ds-line); color:var(--ds-fg); }
 .ds-btn--danger { background:var(--ds-danger); color:#fff; }
 .ds-label { display:block; font:500 12px/1.4 var(--ds-font-body); color:var(--ds-fg-2); margin-bottom:6px; }
-.ds-field, .ds-select { width:100%; height:34px; padding:0 10px; background:var(--ds-bg-raise); color:var(--ds-fg); border:1px solid var(--ds-line-strong); border-radius:var(--ds-radius-md); font:13px var(--ds-font-body); transition:border-color var(--ds-dur-fast) var(--ds-ease); }
+.ds-field, .ds-select { width:100%; min-width:0; height:34px; padding:0 12px; background:var(--ds-bg-raise); color:var(--ds-fg); border:1px solid var(--ds-line-strong); border-radius:var(--ds-radius-md); font:13px var(--ds-font-body); transition:border-color var(--ds-dur-fast) var(--ds-ease); }
+.ds-select { padding-right:32px; }
 .ds-field:hover, .ds-select:hover { border-color:var(--ds-fg-3); }
 .ds-field[aria-invalid="true"] { border-color:var(--ds-danger); }
 .ds-hint { font-size:12px; color:var(--ds-fg-3); margin-top:6px; }
@@ -74,7 +77,7 @@ const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
 .ds-switch::after { content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; box-shadow:var(--ds-shadow-sm); transition:transform var(--ds-dur-base) var(--ds-ease); }
 .ds-switch[aria-checked="true"] { background:var(--ds-accent); }
 .ds-switch[aria-checked="true"]::after { transform:translateX(14px); }
-.ds-cal { width:252px; padding:12px; background:var(--ds-bg-card); border:1px solid var(--ds-line); border-radius:var(--ds-radius-lg); box-shadow:var(--ds-shadow-md); }
+.ds-cal { width:252px; max-width:100%; padding:12px; background:var(--ds-bg-card); border:1px solid var(--ds-line); border-radius:var(--ds-radius-lg); box-shadow:var(--ds-shadow-md); }
 .ds-cal-head { display:flex; justify-content:space-between; align-items:center; font:600 13px var(--ds-font-body); margin-bottom:8px; }
 .ds-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; font-size:12px; }
 .ds-cal-grid span { color:var(--ds-fg-3); padding:4px 0; }
@@ -89,7 +92,8 @@ const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
 .ds-tabs button[aria-selected="true"] { color:var(--ds-fg); border-color:var(--ds-accent); }
 .ds-cmd { width:min(440px,100%); background:var(--ds-bg-card); border:1px solid var(--ds-line-strong); border-radius:var(--ds-radius-lg); box-shadow:var(--ds-shadow-md); overflow:hidden; }
 .ds-cmd input { width:100%; border:0; border-bottom:1px solid var(--ds-line); background:transparent; color:var(--ds-fg); padding:12px 14px; font:14px var(--ds-font-body); outline:none; }
-.ds-cmd li { list-style:none; display:flex; justify-content:space-between; padding:8px 14px; font-size:13px; color:var(--ds-fg-2); }
+.ds-cmd li { list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 14px; font-size:13px; color:var(--ds-fg-2); }
+.ds-cmd li > :last-child { flex-shrink:0; }
 .ds-cmd li[aria-selected="true"] { background:var(--ds-line); color:var(--ds-fg); }
 .ds-cmd ul { margin:0; padding:4px 0; }
 .ds-pill { display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 10px; border-radius:999px; border:1px solid var(--ds-line-strong); font-size:12px; color:var(--ds-fg-2); background:var(--ds-bg-raise); }
@@ -139,8 +143,8 @@ function specimen(name: string): string {
     case "CommandMenu": return `<div class="ds-cmd"><input placeholder="Type a command or search…" /><ul><li aria-selected="true">Create new item <span class="ds-kbd">C</span></li><li>Go to inbox <span><span class="ds-kbd">G</span> <span class="ds-kbd">I</span></span></li><li>Switch theme <span class="ds-kbd">⌘K</span></li></ul></div>`;
     case "Pill": return `<div class="row"><button class="ds-pill" aria-pressed="true" data-toggle>Active</button><button class="ds-pill" aria-pressed="false" data-toggle>Backlog</button><button class="ds-pill" aria-pressed="false" data-toggle>Mine</button></div>`;
     case "Button": return `<div class="col"><div class="row"><button class="ds-btn ds-btn--primary">Primary</button><button class="ds-btn ds-btn--secondary">Secondary</button><button class="ds-btn ds-btn--ghost">Ghost</button><button class="ds-btn ds-btn--danger">Delete</button><button class="ds-btn ds-btn--primary" disabled>Disabled</button></div><div class="row"><button class="ds-btn ds-btn--primary ds-btn--sm">Small</button><button class="ds-btn ds-btn--primary">Medium</button><button class="ds-btn ds-btn--primary ds-btn--lg">Large</button></div></div>`;
-    case "TextField": return `<div class="row" style="align-items:flex-start;width:100%"><div style="flex:1"><label class="ds-label">Project name</label><input class="ds-field" placeholder="e.g. Spring launch" /><div class="ds-hint">Visible to your team.</div></div><div style="flex:1"><label class="ds-label">Email</label><input class="ds-field" aria-invalid="true" value="not-an-email" /><div class="ds-hint" style="color:var(--ds-danger)">Enter a valid email.</div></div></div>`;
-    case "Select": return `<div style="width:240px"><label class="ds-label">Status</label><select class="ds-select"><option>Todo</option><option>In progress</option><option>Done</option></select></div>`;
+    case "TextField": return `<div class="specimen-grid"><div><label class="ds-label" for="project-name">Project name</label><input id="project-name" class="ds-field" placeholder="e.g. Spring launch" /><div class="ds-hint">Visible to your team.</div></div><div><label class="ds-label" for="email">Email</label><input id="email" class="ds-field" aria-invalid="true" value="not-an-email" /><div class="ds-hint" style="color:var(--ds-danger)">Enter a valid email.</div></div></div>`;
+    case "Select": return `<div style="width:240px;max-width:100%"><label class="ds-label">Status</label><select class="ds-select"><option>Todo</option><option>In progress</option><option>Done</option></select></div>`;
     case "Checkbox": return `<div class="col"><label class="ds-check"><input type="checkbox" checked /> Email notifications</label><label class="ds-check"><input type="checkbox" /> Weekly digest</label></div>`;
     case "Radio": return `<div class="col" role="radiogroup"><label class="ds-radio"><input type="radio" name="r" checked /> Everyone</label><label class="ds-radio"><input type="radio" name="r" /> Only my team</label><label class="ds-radio"><input type="radio" name="r" /> Only me</label></div>`;
     case "Switch": return `<div class="col"><label class="row"><button class="ds-switch" role="switch" aria-checked="true" data-switch></button> Auto-assign</label><label class="row"><button class="ds-switch" role="switch" aria-checked="false" data-switch></button> Compact mode</label></div>`;
@@ -148,7 +152,7 @@ function specimen(name: string): string {
     case "StatusIcon": return `<div class="row">${["todo", "progress", "done", "cancelled"].map((k) => `<span class="row" style="gap:6px;font-size:13px">${statusSvg(k)} ${k.charAt(0).toUpperCase() + k.slice(1)}</span>`).join("")}</div>`;
     case "PriorityIcon": return `<div class="row">${[1, 2, 3].map((n) => `<span class="row" style="gap:6px;font-size:13px">${prioritySvg(n)} ${["Low", "Medium", "High"][n - 1]}</span>`).join("")}</div>`;
     case "ProgressBar": return `<div class="col" style="width:100%">${[24, 62, 100].map((v) => `<div class="ds-progress"><i style="width:${v}%"></i></div>`).join("")}</div>`;
-    case "Card": return `<div class="row" style="width:100%;align-items:stretch">${["Roadmap", "Insights"].map((t) => `<div class="ds-card" style="flex:1"><div class="ds-tag ds-tag--accent">New</div><h4 style="margin:10px 0 4px;font:600 15px var(--ds-font-display)">${t}</h4><p style="margin:0;font-size:13px;color:var(--ds-fg-2)">A grouped surface for related content.</p></div>`).join("")}</div>`;
+    case "Card": return `<div class="specimen-grid">${["Roadmap", "Insights"].map((t) => `<div class="ds-card"><div class="ds-tag ds-tag--accent">New</div><h4 style="margin:10px 0 4px;font:600 15px var(--ds-font-display)">${t}</h4><p style="margin:0;font-size:13px;color:var(--ds-fg-2)">A grouped surface for related content.</p></div>`).join("")}</div>`;
     case "Table": return `<table class="ds-table"><thead><tr><th>Name</th><th>Status</th><th>Owner</th></tr></thead><tbody><tr><td>Onboarding flow</td><td><span class="ds-tag ds-tag--ok">Done</span></td><td>KD</td></tr><tr><td>Billing page</td><td><span class="ds-tag ds-tag--info">In review</span></td><td>AL</td></tr><tr><td>Search</td><td><span class="ds-tag">Todo</span></td><td>MR</td></tr></tbody></table>`;
     case "Tag": return `<div class="row"><span class="ds-tag">Default</span><span class="ds-tag ds-tag--accent">Accent</span><span class="ds-tag ds-tag--ok">Success</span><span class="ds-tag ds-tag--info">Info</span><span class="ds-tag ds-tag--danger">Danger</span></div>`;
     case "Avatar": return `<div class="row"><span class="ds-avatar ds-avatar--lg">KD</span><span class="row" style="gap:0">${["AL", "MR", "JS"].map((i, n) => `<span class="ds-avatar" style="margin-left:${n ? -8 : 0}px">${i}</span>`).join("")}</span></div>`;
@@ -169,14 +173,16 @@ export function guidelinesHtml(s: Spec) {
   ];
   const swatch = (k: ThemeKey) => `<div class="sw"><i style="background:var(--${p}-${kebab(k)})"></i><b>${k}</b><code>--${p}-${kebab(k)}</code><code class="hex">${esc(s.dark[k])} / ${esc(s.light[k])}</code></div>`;
   const comp = (name: string, group: string) => {
-    const n = notes.get(name)!;
+    const n = notes.get(name);
+    if (!n) return "";
     const list = (items: string[], cls: string) => items.length ? `<ul class="${cls}">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
     return `<section id="${name.toLowerCase()}"><div class="eyebrow">${esc(group)}</div><h2>${name}</h2>${n.summary ? `<p class="lead">${esc(n.summary)}</p>` : ""}<div class="stage">${px(specimen(name), p)}</div>${n.usage ? `<p>${esc(n.usage)}</p>` : ""}${n.dos.length || n.donts.length ? `<div class="dd"><div><h5>Do</h5>${list(n.dos, "do")}</div><div><h5>Don't</h5>${list(n.donts, "dont")}</div></div>` : ""}<pre><code>&lt;${name} /&gt;  // react/Components.tsx · class .${p}-${name.toLowerCase()}</code></pre></section>`;
   };
   const fontHref = s.fonts.googleHref || `https://fonts.googleapis.com/css2?family=${[s.fonts.display, s.fonts.body, s.fonts.mono].map((f) => encodeURIComponent(f).replace(/%20/g, "+") + ":wght@400;500;600;700").join("&family=")}&display=swap`;
   const shell = px(`
+ *, *::before, *::after { box-sizing:border-box; }
 body { margin:0; background:var(--ds-bg); color:var(--ds-fg); font-family:var(--ds-font-body); -webkit-font-smoothing:antialiased; transition:background var(--ds-dur-base) var(--ds-ease), color var(--ds-dur-base) var(--ds-ease); }
-.layout { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
+ .layout { display:grid; grid-template-columns:240px minmax(0,1fr); min-height:100vh; }
 aside { position:sticky; top:0; height:100vh; overflow:auto; border-right:1px solid var(--ds-line); padding:24px 16px; box-sizing:border-box; display:flex; flex-direction:column; }
 .brand { font:600 17px var(--ds-font-display); margin:0 8px 20px; display:flex; align-items:center; gap:8px; }
 .brand i { width:18px; height:18px; border-radius:var(--ds-radius-sm); background:var(--ds-accent); }
@@ -185,28 +191,33 @@ aside a { display:block; padding:5px 8px; border-radius:var(--ds-radius-sm); col
 aside a:hover { color:var(--ds-fg); background:var(--ds-line); }
 aside a.active { color:var(--ds-fg); background:var(--ds-line); font-weight:500; }
 .theme { margin-top:auto; padding-top:20px; }
-main { max-width:860px; padding:48px 56px 120px; }
+ main { width:100%; min-width:0; max-width:972px; padding:48px 56px 120px; overflow-wrap:anywhere; }
 section { padding:40px 0; border-bottom:1px solid var(--ds-line); scroll-margin-top:16px; }
 h1 { font:600 44px/1.05 var(--ds-font-display); letter-spacing:-.02em; margin:8px 0 12px; }
 h2 { font:600 26px var(--ds-font-display); letter-spacing:-.01em; margin:6px 0 8px; }
 .eyebrow { font:500 11px var(--ds-font-mono); text-transform:uppercase; letter-spacing:.08em; color:var(--ds-accent); }
 .lead { color:var(--ds-fg-2); font-size:15px; line-height:1.6; margin:0 0 18px; }
 p { color:var(--ds-fg-2); font-size:14px; line-height:1.65; }
-.stage { display:flex; justify-content:center; align-items:center; padding:32px; background:var(--ds-bg-raise); border:1px solid var(--ds-line); border-radius:var(--ds-radius-lg); margin:8px 0 16px; }
-.row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-.col { display:flex; flex-direction:column; gap:10px; }
-.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; }
+ .stage { display:flex; justify-content:center; align-items:center; min-width:0; padding:32px; background:var(--ds-bg-raise); border:1px solid var(--ds-line); border-radius:var(--ds-radius-lg); margin:24px 0; overflow-x:auto; }
+ .stage > * { min-width:0; max-width:100%; }
+ .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+ .row > *, .col > *, .dd > *, .specimen-grid > * { min-width:0; }
+ .col { display:flex; flex-direction:column; gap:16px; }
+ .specimen-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:24px; width:100%; align-items:start; }
+ .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr)); gap:16px; }
 .sw { border:1px solid var(--ds-line); border-radius:var(--ds-radius-md); padding:10px; display:flex; flex-direction:column; gap:3px; font-size:12px; }
 .sw i { height:44px; border-radius:var(--ds-radius-sm); border:1px solid var(--ds-line); margin-bottom:6px; }
 code, pre { font-family:var(--ds-font-mono); font-size:11.5px; color:var(--ds-fg-3); }
-pre { background:var(--ds-bg-raise); border:1px solid var(--ds-line); border-radius:var(--ds-radius-md); padding:10px 12px; overflow:auto; }
-.dd { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+ pre { max-width:100%; background:var(--ds-bg-raise); border:1px solid var(--ds-line); border-radius:var(--ds-radius-md); padding:14px 16px; margin:24px 0 0; overflow:auto; }
+ .dd { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin-top:24px; }
 .dd h5 { margin:0 0 6px; font:500 11px var(--ds-font-mono); text-transform:uppercase; letter-spacing:.06em; }
 .dd ul { margin:0; padding-left:18px; font-size:13px; color:var(--ds-fg-2); line-height:1.6; }
+ .dd li + li { margin-top:6px; }
 ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-danger); }
 .tok { width:100%; border-collapse:collapse; font-size:13px; }
 .tok td { border-bottom:1px solid var(--ds-line); padding:8px 6px; color:var(--ds-fg-2); }
-@media (max-width:760px){ .layout{grid-template-columns:1fr} aside{position:static;height:auto} main{padding:24px} }
+ @media (max-width:1000px){ main{padding:32px 28px 80px} .stage{padding:24px} }
+ @media (max-width:760px){ .layout{grid-template-columns:minmax(0,1fr)} aside{position:static;height:auto} main{padding:24px 20px 64px} section{padding:32px 0} .stage{padding:20px} .dd{grid-template-columns:minmax(0,1fr)} .tok{table-layout:fixed} .tok td{overflow-wrap:anywhere} }
 `, p);
   const js = px(`
 (function(){
@@ -373,7 +384,7 @@ const meta: Meta = {
 export default meta;
 type S = StoryObj;
 
-export const Buttons: S = { render: () => <div style={{ display: "flex", gap: 8 }}><C.Button>Primary</C.Button><C.Button variant="secondary">Secondary</C.Button><C.Button variant="ghost">Ghost</C.Button><C.Button variant="danger">Delete</C.Button><C.Button size="sm">Small</C.Button><C.Button size="lg">Large</C.Button></div> };
+export const Buttons: S = { render: () => <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}><C.Button>Primary</C.Button><C.Button variant="secondary">Secondary</C.Button><C.Button variant="ghost">Ghost</C.Button><C.Button variant="danger">Delete</C.Button><C.Button size="sm">Small</C.Button><C.Button size="lg">Large</C.Button></div> };
 export const TextField: S = { render: () => <C.TextField label="Project name" placeholder="e.g. Spring launch" hint="Visible to your team." /> };
 export const Select: S = { render: () => <C.Select label="Status" options={["Todo", "In progress", "Done"]} /> };
 export const Checkbox: S = { render: () => <C.Checkbox label="Email notifications" defaultChecked /> };

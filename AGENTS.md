@@ -20,3 +20,4 @@
 - Template list loading is handled by EntryGrid with a shared EntrySkeleton and CSS crossfade — keeps card geometry and accessible loading states consistent across browsing views.
 - Design system packages live as files in src/design-systems/<template-slug>/ and are served only through signed-in server functions (guidelines HTML in a sandboxed iframe, ZIP built in the browser) — keeps paid-ready content out of public reads.
 - AI design systems: the model returns a strict JSON brief (spec.ts); code renders every file (render.ts) and stores them in `design_systems.files`; repo bundles in src/design-systems/ take precedence — keeps every generated package complete and consistent.
+- Serve generated packages from their saved brief using the current renderer, falling back to stored files only for legacy packages — layout fixes reach existing guidelines and downloads without another AI run.
