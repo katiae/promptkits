@@ -1,4 +1,6 @@
 // Design system bundles. Hand-built packages live in the repo; AI-generated ones live in the database.
+import { renderPackage } from "./ds-generator/render";
+import { normalizeSpec } from "./ds-generator/spec";
 const files = import.meta.glob("/src/design-systems/**/*", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 
 export function getBundledFiles(slug: string): Record<string, string> | null {
@@ -25,8 +27,10 @@ export async function getBundle(slug: string): Promise<Record<string, string> | 
   const sb = await admin();
   const { data: entry } = await sb.from("entries").select("id").eq("slug", slug).eq("status", "published").maybeSingle();
   if (!entry) return null;
-  const { data } = await sb.from("design_systems").select("files").eq("entry_id", entry.id).eq("status", "ready").maybeSingle();
-  return (data?.files as Record<string, string> | null) ?? null;
+   const { data } = await sb.from("design_systems").select("files, spec").eq("entry_id", entry.id).eq("status", "ready").maybeSingle();
+   // Re-render saved briefs so layout corrections also reach existing guidelines and ZIPs without another AI run.
+   if (data?.spec) return renderPackage(normalizeSpec(data.spec, slug));
+   return (data?.files as Record<string, string> | null) ?? null;
 }
 
 export async function availableSlugs(): Promise<string[]> {
