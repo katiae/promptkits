@@ -29,11 +29,13 @@ export function tokensCss(s: Spec) {
   color-scheme: dark;
 ${themeVars(s.dark)}
 ${pastelVars(s.dark, s)}
+  --ds-danger-fg: ${readablePastel(s.dark.danger, s).fg};
 }
 [data-theme="light"] {
   color-scheme: light;
 ${themeVars(s.light)}
 ${pastelVars(s.light, s)}
+  --ds-danger-fg: ${readablePastel(s.light.danger, s).fg};
 }
 :root {
   --ds-font-display: "${f.display}", ui-sans-serif, system-ui, sans-serif;
@@ -163,6 +165,7 @@ export const componentCss = (s: Spec) => px(COMPONENT_CSS + `
 .ds-btn--lg { height:calc(var(--ds-button-height) + 8px); font-size:calc(var(--ds-control-font) + 1px); }
 .ds-btn--primary { background:var(--ds-action);color:var(--ds-action-fg); }
 .ds-btn--highlight { background:var(--ds-highlight);color:var(--ds-highlight-fg); }
+.ds-btn--danger { color:var(--ds-danger-fg); }
 .ds-btn--ghost { box-shadow:none; border-color:transparent; }
 ${s.appearance.shadowOffset ? ".ds-btn:not(.ds-btn--ghost):hover { transform:translateY(-2px);box-shadow:0 calc(var(--ds-offset) + 2px) 0 var(--ds-stroke);filter:none; } .ds-btn:not(.ds-btn--ghost):active { transform:translateY(var(--ds-offset));box-shadow:0 0 0 var(--ds-stroke); }" : ""}
 .ds-field,.ds-select { height:var(--ds-control-height);border-radius:var(--ds-control-radius);font-size:var(--ds-control-font);border-width:var(--ds-border-width); ${s.appearance.borderWidth > 1 ? "border-color:var(--ds-stroke);" : ""} }
