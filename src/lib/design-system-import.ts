@@ -6,8 +6,8 @@ export const IMPORT_META = "__promptfolio_import.json";
 export type ImportResult = { report: ScanReport; files: Record<string, Uint8Array>; count: number };
 const MAX_ZIP = 10_000_000;
 const MAX_TOTAL = 40_000_000;
-const textExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml)$/i;
-const allowedExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml|png|jpe?g|webp|gif|ico|woff2?|ttf|otf)$/i;
+const textExtension = /(\.(mdx|gitignore|npmrc|nvmrc|prettierrc|editorconfig)|(^|\/)(LICENSE|NOTICE|CHANGELOG)(\.\w+)?)$|\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml)$/i;
+const allowedExtension = /(\.(mdx|gitignore|npmrc|nvmrc|prettierrc|editorconfig)|(^|\/)(LICENSE|NOTICE|CHANGELOG)(\.\w+)?)$|\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml|png|jpe?g|webp|gif|ico|woff2?|ttf|otf)$/i;
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c);
 
 /** Validate the original central directory before inflation (fflate normalizes unsafe paths). */
@@ -51,7 +51,7 @@ export function inspectDesignSystemZip(bytes: Uint8Array): ImportResult {
       const text = strFromU8(content);
       const add = (severity: "block" | "warn", rule: string, detail: string) => findings.push({ severity, rule, detail: `${name}: ${detail}` });
       if (/\.(html?|svg)$/i.test(name)) {
-        for (const f of scanHtml(/\.svg$/i.test(name) ? `<div>${text}</div>` : text)) add(f.severity, f.rule, f.detail);
+        for (const f of scanHtml(/\.svg$/i.test(name) || !/<(html|body)\b/i.test(text) ? `<div>${text}</div>` : text)) add(f.severity, f.rule, f.detail);
       }
       if (/\b(eval\s*\(|new\s+Function\s*\(|child_process|execSync\s*\(|spawnSync\s*\(|document\.cookie|navigator\.sendBeacon)|(?:curl|wget)[^\n]*\|\s*(?:ba)?sh|rm\s+-rf|powershell|Invoke-Expression/i.test(text)) add("block", "risky-code", "Contains potentially dangerous executable code or commands.");
       if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|\b(?:sk_live_|sk-proj-|ghp_)[\w-]{16,}/.test(text)) add("block", "secret", "Contains what looks like a private credential.");
@@ -95,7 +95,7 @@ export function buildImportedGuidelines(name: string, files: Record<string, Uint
   const groups = [
     { id: "foundations", title: "Foundations & tokens", match: /tokens?|theme|variables|\.css$/i },
     { id: "components", title: "Components & patterns", match: /\.(tsx?|jsx?|mjs|cjs)$/i },
-    { id: "documentation", title: "Documentation & configuration", match: /\.(md|txt|json|yaml|yml)$/i },
+    { id: "documentation", title: "Documentation & configuration", match: /\.(mdx?|txt|json|yaml|yml)$|LICENSE|gitignore/i },
   ];
   const preview = entries.filter(([p]) => /\.html?$/i.test(p));
   const sections = groups.map((g) => {
