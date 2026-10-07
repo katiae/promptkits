@@ -8,5 +8,6 @@
 - [x] Update the admin labels and verify the main directory and detail view.
 
 - [x] Halyard design system page, visitor sign-in prompt, extra form controls and ZIP download.
-- [ ] In-app generator to create design systems for new templates.
+- [x] In-app generator to create design systems for new templates.
 - [x] AI design system generator for new templates
+- [ ] Polish and verify generated guidelines spacing in existing pages and downloads.
