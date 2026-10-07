@@ -10,7 +10,7 @@ import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
 import { useServerFn } from "@tanstack/react-start";
 import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DesignSystemUpload } from "@/components/DesignSystemUpload";
 import { importDesignSystem } from "@/lib/design-system-import.functions";
@@ -240,6 +240,24 @@ function Admin() {
     if (!confirm("Delete this entry?")) return;
     const { error } = await supabase.from("entries").delete().eq("id", id);
     if (error) { toast.error(error.message); return; }
+    qc.invalidateQueries();
+  };
+
+  // Reorder the home page list: swap with the neighbour, then persist the
+  // whole sequence so every row gets a clean, gapless sort_order.
+  const [ordering, setOrdering] = useState(false);
+  const move = async (id: string, dir: -1 | 1) => {
+    const i = entries.findIndex((e) => e.id === id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= entries.length) return;
+    const next = [...entries];
+    [next[i], next[j]] = [next[j]!, next[i]!];
+    setOrdering(true);
+    const results = await Promise.all(
+      next.map((e, idx) => supabase.from("entries").update({ sort_order: idx }).eq("id", e.id)),
+    );
+    setOrdering(false);
+    if (results.some((r) => r.error)) { toast.error("Couldn't save the new order."); return; }
     qc.invalidateQueries();
   };
 
