@@ -246,4 +246,5 @@
   .heart-ring { display: none; }
   .skeleton-cloud, .template-grid-placeholders-exit, .template-grid-reveal, .animate-fade-up { animation: none; }
   .template-grid-placeholders-exit { opacity: 0; }
+  .skeleton-palette-0::after, .skeleton-palette-1::after, .skeleton-palette-2::after { display: none; }
 }
