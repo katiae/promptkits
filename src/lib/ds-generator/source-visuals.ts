@@ -38,7 +38,7 @@ export function extractSourceVisuals(html: string): SourceVisuals {
     visit: "Declaration",
     enter(node, item, list) {
       const value = css.generate(node.value);
-      if (!safeValue(value) || /^(behavior|content|z-index)$/i.test(node.property) || (node.property === "position" && /fixed|sticky/.test(value))) { if (item && list) list.remove(item); }
+      if (!safeValue(value) || /^(behavior|z-index)$/i.test(node.property) || (node.property === "position" && /fixed|sticky/.test(value))) { if (item && list) list.remove(item); }
     },
   });
   css.walk(ast, {
@@ -51,11 +51,16 @@ export function extractSourceVisuals(html: string): SourceVisuals {
       const scoped = parsed.map((sel) => /^(?:\*|:root|html|body)(?:$|[\s:.\[])/.test(sel)
         ? sel.replace(/^(?:\*|:root|html|body)/, ".template-source")
         : /^\[data-(mode|theme)=/.test(sel) ? ".template-source" + sel : ".template-source " + sel);
-      node.prelude = css.parse(scoped.join(","), { context: "selectorList" });
+      const prelude = css.parse(scoped.join(","), { context: "selectorList" });
+      if (prelude.type === "SelectorList") node.prelude = prelude;
     },
   });
   let sourceCss = css.generate(ast);
-  for (const name of animations) sourceCss = sourceCss.replace(new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g"), "source-" + name);
+  // Rename animation values and keyframe identifiers, never selectors such as .pop or .float.
+  const motionAst = css.parse(sourceCss);
+  css.walk(motionAst, { visit: "Atrule", enter(n) { if (/keyframes$/.test(n.name) && n.prelude) n.prelude = css.parse("source-" + css.generate(n.prelude), { context: "atrulePrelude" }); } });
+  css.walk(motionAst, { visit: "Declaration", enter(n) { if (/^animation(?:-name)?$/.test(n.property)) { let value = css.generate(n.value); for (const name of animations) value = value.replace(new RegExp(`\\b${name}\\b`, "g"), "source-" + name); n.value = css.parse(value, { context: "value" }); } } });
+  sourceCss = css.generate(motionAst);
 
   let serial = 0;
   function sanitize(el: Element): string {
@@ -76,19 +81,19 @@ export function extractSourceVisuals(html: string): SourceVisuals {
     }
     return clone.outerHTML;
   }
-  const cards = Array.from(document.querySelectorAll(".habit, .step, .steps > article, .steps > div" )).slice(0, 12).map((el, i) => ({ name: el.querySelector("h2,h3,h4")?.textContent?.trim() || `Card ${i + 1}`, html: sanitize(el) }));
+  const cards = Array.from(document.querySelectorAll(".habit, .card, .feature-card, .product-card, .step, .steps > article, .steps > div" )).filter((el) => el.querySelector("h2,h3,h4")).slice(0, 24).map((el, i) => ({ name: el.querySelector("h2,h3,h4")?.textContent?.trim() || `Card ${i + 1}`, html: sanitize(el) }));
   const seen = new Set<string>();
   const illustrations = Array.from(document.querySelectorAll("svg")).filter((el) => { const shape = el.innerHTML; if (seen.has(shape)) return false; seen.add(shape); return true; }).slice(0, 80).map((el, i) => {
     let markup = sanitize(el);
     let parent = el.parentElement;
     for (let n = 0; n < 3 && parent && !/^(BODY|HTML|MAIN)$/.test(parent.tagName); n++, parent = parent.parentElement) {
-      const classes = (parent.getAttribute("class") ?? "").replace(/[^\w\s-]/g, "");
+      const classes = (parent.getAttribute("class") ?? "").replace(/[^\w\s-]/g, "").split(/\s+/).filter((c) => !/^(pop|reveal|up|pagein)$/.test(c)).join(" ");
       markup = `<div class="${classes}">${markup}</div>`;
     }
-    return { name: el.querySelector("title")?.textContent || `Illustration / icon ${i + 1}`, html: markup };
+    return { name: el.querySelector("title")?.textContent || el.closest("article, .habit, section")?.querySelector("h2,h3,h4")?.textContent?.trim() || `Illustration / icon ${i + 1}`, html: markup };
   });
   const tasks = Array.from(document.querySelectorAll('.item[aria-pressed]')).slice(0, 5).map(sanitize).join("");
-  const toggle = document.querySelector('.theme-toggle, .theme-switch, .mode-toggle, .toggle-theme, .theme-btn, .mode-btn, button[aria-label*="theme" i], button[aria-label*="mode" i]');
+  const toggle = document.querySelector('.mode-sw, .theme-toggle, .theme-switch, .mode-toggle, .toggle-theme, .theme-btn, .mode-btn, button[aria-label*="theme" i], button[aria-label*="mode" i]');
   return { css: sourceCss, cardCss, cards, illustrations, tasks, themeToggle: toggle ? sanitize(toggle) : "", animations };
 }
 
@@ -100,6 +105,12 @@ export const sourceVisualCss = (v: SourceVisuals) => v.css + `
 .source-figure figcaption { margin-top:14px;font-size:13px; }
 .source-art { min-height:180px;display:grid;place-items:center;overflow:hidden; }
 .source-art svg { max-width:100%;max-height:300px; }
+.source-art > div { width:100%;max-width:100%; }
+.source-art .hero,.source-art .phone,.source-art .auth-art,.source-art .app { min-height:0;height:auto;padding:20px;max-width:100%; }
+.source-art .hero { display:block; }
+.source-art .scene { width:100%;height:240px;min-height:0; }
+.source-art .habit { border:0;background:transparent;box-shadow:none; }
+.source-art .item { background:transparent;border:0; }
 .source-tasks { display:grid;gap:12px;max-width:500px; }
 .template-source [data-mode],.template-source { transition:background .6s var(--soft,ease),color .6s var(--soft,ease); }
 .template-source[data-mode="day"] .is-night,.template-source[data-mode="night"] .is-day { display:none; }
