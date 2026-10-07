@@ -10,7 +10,7 @@ import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
 import { useServerFn } from "@tanstack/react-start";
 import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DesignSystemUpload } from "@/components/DesignSystemUpload";
 import { importDesignSystem } from "@/lib/design-system-import.functions";
@@ -243,6 +243,24 @@ function Admin() {
     qc.invalidateQueries();
   };
 
+  // Reorder the home page list: swap with the neighbour, then persist the
+  // whole sequence so every row gets a clean, gapless sort_order.
+  const [ordering, setOrdering] = useState(false);
+  const move = async (id: string, dir: -1 | 1) => {
+    const i = entries.findIndex((e) => e.id === id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= entries.length) return;
+    const next = [...entries];
+    [next[i], next[j]] = [next[j]!, next[i]!];
+    setOrdering(true);
+    const results = await Promise.all(
+      next.map((e, idx) => supabase.from("entries").update({ sort_order: idx }).eq("id", e.id)),
+    );
+    setOrdering(false);
+    if (results.some((r) => r.error)) { toast.error("Couldn't save the new order."); return; }
+    qc.invalidateQueries();
+  };
+
   const field = (k: keyof Form, label: string, multiline = false) => (
     <label className="block">
       <span className="label-mono text-muted-foreground">{label}</span>
@@ -423,8 +441,31 @@ function Admin() {
       )}
 
       <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
-        {entries.map((e) => (
+        {entries.map((e, i) => (
           <div key={e.id} className="flex items-center gap-4 px-5 py-3.5">
+            <div className="flex flex-col items-center gap-0.5">
+              <button
+                onClick={() => move(e.id, -1)}
+                disabled={ordering || i === 0}
+                aria-label={`Move ${e.name} up`}
+                className="rounded-full p-1 text-muted-foreground hover:bg-secondary hover:text-foreground disabled:opacity-30"
+              >
+                <ArrowUp className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => move(e.id, 1)}
+                disabled={ordering || i === entries.length - 1}
+                aria-label={`Move ${e.name} down`}
+                className="rounded-full p-1 text-muted-foreground hover:bg-secondary hover:text-foreground disabled:opacity-30"
+              >
+                <ArrowDown className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            {e.thumbnail_url ? (
+              <img src={e.thumbnail_url} alt="" className="h-12 w-20 shrink-0 rounded-lg border border-border object-cover object-top" />
+            ) : (
+              <div className="h-12 w-20 shrink-0 rounded-lg border border-border bg-secondary" style={{ background: `hsl(${e.hue} 40% 92%)` }} />
+            )}
             <div className="min-w-0">
               <Link to="/sites/$slug" params={{ slug: e.slug }} className="font-serif text-lg">{e.name}</Link>
               <p className="truncate text-sm text-muted-foreground">{e.category} · {e.status}</p>

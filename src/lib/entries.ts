@@ -15,6 +15,7 @@ export const entriesQuery = (full = false) =>
       const { data, error } = await supabase
         .from("entries")
         .select(full ? "*" : LIST_COLUMNS)
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Entry[];

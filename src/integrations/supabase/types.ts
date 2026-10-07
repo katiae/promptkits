@@ -69,6 +69,7 @@ export type Database = {
           prompt: string
           scan_report: Json | null
           slug: string
+          sort_order: number
           status: string
           submitted_by: string | null
           tags: string[]
@@ -88,6 +89,7 @@ export type Database = {
           prompt?: string
           scan_report?: Json | null
           slug: string
+          sort_order?: number
           status?: string
           submitted_by?: string | null
           tags?: string[]
@@ -107,6 +109,7 @@ export type Database = {
           prompt?: string
           scan_report?: Json | null
           slug?: string
+          sort_order?: number
           status?: string
           submitted_by?: string | null
           tags?: string[]
