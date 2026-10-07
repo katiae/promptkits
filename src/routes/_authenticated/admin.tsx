@@ -11,6 +11,9 @@ import type { Json } from "@/integrations/supabase/types";
 import { useServerFn } from "@tanstack/react-start";
 import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DesignSystemUpload } from "@/components/DesignSystemUpload";
+import { importDesignSystem } from "@/lib/design-system-import.functions";
 
 type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
@@ -43,6 +46,7 @@ type Form = {
   hue: number;
   html_content: string;
   html_name: string;
+  ds_zip?: string | null;
 };
 
 const blank: Form = {
@@ -74,6 +78,8 @@ function Admin() {
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const importDs = useServerFn(importDesignSystem);
   const fetchDsStatus = useServerFn(listDesignSystemStatus);
   const generateDs = useServerFn(generateDesignSystem);
   const { data: dsStatus = [] } = useQuery({ queryKey: ["ds-status"], queryFn: () => fetchDsStatus(), enabled: !!isAdmin });
@@ -207,11 +213,24 @@ function Admin() {
       ? await supabase.from("entries").update(payload).eq("id", form.id).select("id").single()
       : await supabase.from("entries").insert(payload).select("id").single();
     if (error) { toast.error(error.message); return; }
+    if (saved && form.ds_zip) {
+      setImporting(true);
+      try {
+        const result = await importDs({ data: { entryId: saved.id, zipBase64: form.ds_zip } });
+        if (!result.ok) throw new Error(result.report.findings.map((f) => f.detail).join("\n"));
+        toast.success("Design system uploaded — guidelines and downloads are ready");
+      } catch (e) {
+        setForm((f) => f && { ...f, id: saved.id });
+        qc.invalidateQueries();
+        toast.error(e instanceof Error ? e.message : "Upload failed. Your template was saved; try the ZIP again.");
+        return;
+      } finally { setImporting(false); }
+    }
     toast.success("Saved");
     setForm(null);
     qc.invalidateQueries();
     // New templates with a demo get their own design system automatically.
-    if (isNew && saved && payload.html_content) runGenerate(saved.id, payload.name);
+    if (isNew && saved && payload.html_content && !form.ds_zip) runGenerate(saved.id, payload.name);
   };
 
   const remove = async (id: string) => {
@@ -368,7 +387,7 @@ function Admin() {
               )}
             </div>
           )}
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 border-t border-border pt-5">
             <span className="label-mono text-muted-foreground">Design system</span>
             <div className="mt-1 flex flex-wrap items-center gap-3">
               {original?.slug === "midnight-cadence" ? (
@@ -376,21 +395,22 @@ function Admin() {
               ) : !form.id || !original ? (
                 <>
                   <span className="rounded-full border border-border px-3 py-1 text-sm opacity-50">✨ Generate design system</span>
-                  <span className="text-xs text-muted-foreground">Available after saving — new templates with a demo build one automatically.</span>
+                  <span className="text-xs text-muted-foreground">New templates with a demo generate automatically unless you upload a ZIP.</span>
                 </>
               ) : (
                 <DesignSystemCell
                   entry={{ ...original, prompt: form.prompt, html_content: form.html_content }}
                   status={dsStatus.find((d) => d.entry_id === form.id)}
                   busy={generating.has(form.id)}
-                  onGenerate={() => { if (form.id) runGenerate(form.id, form.name); }}
+                  onGenerate={() => { if (form.id && !form.ds_zip) runGenerate(form.id, form.name); else if (form.ds_zip) toast.error("Remove the selected ZIP to generate instead."); }}
                 />
               )}
             </div>
+            <DesignSystemUpload key={form.id ?? "new"} disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip) => setForm((f) => f && { ...f, ds_zip })} />
           </div>
           <div className="flex gap-2 md:col-span-2">
-            <button onClick={save} disabled={(!!report && !report.ok) || capturing} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground disabled:opacity-60">{capturing ? "Capturing thumbnail…" : "Save"}</button>
-            <button onClick={() => setForm(null)} className="rounded-full border border-border px-5 py-2 text-sm">Cancel</button>
+            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
+            <Button variant="outline" disabled={importing} onClick={() => setForm(null)} className="rounded-full px-5">Cancel</Button>
           </div>
         </div>
       )}

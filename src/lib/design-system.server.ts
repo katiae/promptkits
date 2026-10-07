@@ -2,6 +2,7 @@
 import { renderPackage } from "./ds-generator/render";
 import { normalizeSpec } from "./ds-generator/spec";
 import { extractSourceVisuals } from "./ds-generator/source-visuals";
+import { IMPORT_META } from "./design-system-import";
 const files = import.meta.glob("/src/design-systems/**/*", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 
 export function getBundledFiles(slug: string): Record<string, string> | null {
@@ -21,14 +22,16 @@ async function admin() {
   return (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 }
 
-/** Repo bundle first, then a ready generated package for a published template. */
+/** Explicit admin imports override repo packages; otherwise preserve hand-built precedence. */
 export async function getBundle(slug: string): Promise<Record<string, string> | null> {
   const bundled = getBundledFiles(slug);
-  if (bundled) return bundled;
   const sb = await admin();
   const { data: entry } = await sb.from("entries").select("id, html_content").eq("slug", slug).eq("status", "published").maybeSingle();
-  if (!entry) return null;
+  if (!entry) return bundled;
    const { data } = await sb.from("design_systems").select("files, spec").eq("entry_id", entry.id).eq("status", "ready").maybeSingle();
+   const saved = data?.files as Record<string, string> | null;
+   if (saved?.[IMPORT_META]) return saved;
+   if (bundled) return bundled;
    // Re-render saved briefs so layout corrections also reach existing guidelines and ZIPs without another AI run.
    if (data?.spec) return renderPackage(normalizeSpec(data.spec, slug), entry.html_content ? extractSourceVisuals(entry.html_content) : undefined);
    return (data?.files as Record<string, string> | null) ?? null;
