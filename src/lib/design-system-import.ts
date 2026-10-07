@@ -4,10 +4,10 @@ import { scanHtml, type Finding, type ScanReport } from "./security-scanner";
 
 export const IMPORT_META = "__promptfolio_import.json";
 export type ImportResult = { report: ScanReport; files: Record<string, Uint8Array>; count: number };
-const MAX_ZIP = 5_000_000;
-const MAX_TOTAL = 12_000_000;
+const MAX_ZIP = 10_000_000;
+const MAX_TOTAL = 40_000_000;
 const textExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml)$/i;
-const allowedExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml|png|jpe?g|webp|woff2?|ttf|otf)$/i;
+const allowedExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml|png|jpe?g|webp|gif|ico|woff2?|ttf|otf)$/i;
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c);
 
 /** Validate the original central directory before inflation (fflate normalizes unsafe paths). */
@@ -16,13 +16,13 @@ export function inspectDesignSystemZip(bytes: Uint8Array): ImportResult {
   const block = (detail: string) => findings.push({ severity: "block", rule: "archive", detail });
   let files: Record<string, Uint8Array> = {};
   try {
-    if (bytes.length > MAX_ZIP || bytes.length < 22) throw new Error("Choose a ZIP smaller than 5 MB.");
+    if (bytes.length > MAX_ZIP || bytes.length < 22) throw new Error("Choose a ZIP smaller than 10 MB.");
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     let end = bytes.length - 22;
     while (end >= Math.max(0, bytes.length - 65557) && view.getUint32(end, true) !== 0x06054b50) end--;
     if (end < 0 || view.getUint32(end, true) !== 0x06054b50) throw new Error("This ZIP is damaged or unsupported.");
     const count = view.getUint16(end + 10, true);
-    if (view.getUint16(end + 4, true) || view.getUint16(end + 6, true) || count > 200) throw new Error("Use a standard ZIP with at most 200 files.");
+    if (view.getUint16(end + 4, true) || view.getUint16(end + 6, true) || count > 600) throw new Error("Use a standard ZIP with at most 600 files.");
     let offset = view.getUint32(end + 16, true), total = 0;
     const names = new Set<string>();
     for (let i = 0; i < count; i++) {
@@ -39,7 +39,7 @@ export function inspectDesignSystemZip(bytes: Uint8Array): ImportResult {
       if (!name.endsWith("/")) {
         if (!allowedExtension.test(name) || /(^|\/)(node_modules|\.git|\.env[^/]*)(\/|$)/i.test(name)) block(`${name}: unsupported or private file. Remove it from the ZIP.`);
         total += size;
-        if (size > 2_000_000 || total > MAX_TOTAL) throw new Error("ZIP expands beyond the limit: 2 MB per file, 12 MB total.");
+        if (size > 5_000_000 || total > MAX_TOTAL) throw new Error("ZIP expands beyond the limit: 5 MB per file, 40 MB total.");
       }
       offset += 46 + length + view.getUint16(offset + 30, true) + view.getUint16(offset + 32, true);
     }

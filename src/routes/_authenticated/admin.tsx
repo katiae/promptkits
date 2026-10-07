@@ -48,6 +48,8 @@ type Form = {
   html_name: string;
   ds_zip?: string | null;
   ds_zip_blocked?: boolean;
+  ds_guides?: string | null;
+  ds_guides_blocked?: boolean;
 };
 
 const blank: Form = {
@@ -185,7 +187,7 @@ function Admin() {
   };
 
   const save = async () => {
-    if (!form || importing || form.ds_zip_blocked) return;
+    if (!form || importing || form.ds_zip_blocked || form.ds_guides_blocked) return;
     let thumb = form.thumbnail_url;
     const htmlChanged = !!form.html_content && form.html_content !== (original?.html_content ?? "");
     if (form.html_content && (htmlChanged || !thumb) && !(report && !report.ok)) {
@@ -214,10 +216,10 @@ function Admin() {
       ? await supabase.from("entries").update(payload).eq("id", form.id).select("id").single()
       : await supabase.from("entries").insert(payload).select("id").single();
     if (error) { toast.error(error.message); return; }
-    if (saved && form.ds_zip) {
+    if (saved && (form.ds_zip || form.ds_guides)) {
       setImporting(true);
       try {
-        const result = await importDs({ data: { entryId: saved.id, zipBase64: form.ds_zip } });
+        const result = await importDs({ data: { entryId: saved.id, zipBase64: form.ds_zip ?? undefined, guidesBase64: form.ds_guides ?? undefined } });
         if (!result.ok) throw new Error(result.report.findings.map((f) => f.detail).join("\n"));
         toast.success("Design system uploaded — guidelines and downloads are ready");
       } catch (e) {
@@ -231,7 +233,7 @@ function Admin() {
     setForm(null);
     qc.invalidateQueries();
     // New templates with a demo get their own design system automatically.
-    if (isNew && saved && payload.html_content && !form.ds_zip) runGenerate(saved.id, payload.name);
+    if (isNew && saved && payload.html_content && !form.ds_zip && !form.ds_guides) runGenerate(saved.id, payload.name);
   };
 
   const remove = async (id: string) => {
@@ -403,14 +405,18 @@ function Admin() {
                   entry={{ ...original, prompt: form.prompt, html_content: form.html_content }}
                   status={dsStatus.find((d) => d.entry_id === form.id)}
                   busy={generating.has(form.id)}
-                  onGenerate={() => { if (form.id && !form.ds_zip) runGenerate(form.id, form.name); else if (form.ds_zip) toast.error("Remove the selected ZIP to generate instead."); }}
+                  onGenerate={() => { if (form.id && !form.ds_zip && !form.ds_guides) runGenerate(form.id, form.name); else toast.error("Remove the selected ZIPs to generate instead."); }}
                 />
               )}
             </div>
-            <DesignSystemUpload key={form.id ?? "new"} disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip, ds_zip_blocked = false) => setForm((f) => f && { ...f, ds_zip, ds_zip_blocked })} />
+            <div className="grid gap-4 md:grid-cols-2">
+              <DesignSystemUpload key={`g-${form.id ?? "new"}`} label="Guidelines ZIP (web view)" hint="HTML pages, CSS, images and docs shown on the guidelines page" disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_guides, ds_guides_blocked = false) => setForm((f) => f && { ...f, ds_guides, ds_guides_blocked })} />
+              <DesignSystemUpload key={`k-${form.id ?? "new"}`} label="UI kit ZIP (downloads & Storybook)" hint="Tokens, React components and stories developers download" disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip, ds_zip_blocked = false) => setForm((f) => f && { ...f, ds_zip, ds_zip_blocked })} />
+            </div>
+            <p className="text-xs leading-relaxed text-muted-foreground">Upload either or both. Uploading only one keeps the other part from a previous upload. Static checks are not an antivirus guarantee; uploaded code is never run.</p>
           </div>
           <div className="flex gap-2 md:col-span-2">
-            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing || form.ds_zip_blocked} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
+            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing || form.ds_zip_blocked || form.ds_guides_blocked} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
             <Button variant="outline" disabled={importing} onClick={() => setForm(null)} className="rounded-full px-5">Cancel</Button>
           </div>
         </div>
