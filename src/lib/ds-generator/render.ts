@@ -204,7 +204,8 @@ const statusSvg = (k: string) => {
 const prioritySvg = (n: number) => `<svg width="14" height="14" viewBox="0 0 14 14" aria-label="priority ${n}">${[0, 1, 2].map((i) => `<rect x="${2 + i * 4}" y="${10 - i * 3}" width="2.5" height="${3 + i * 3}" rx="1" fill="${i < n ? "var(--ds-fg)" : "var(--ds-line-strong)"}"/>`).join("")}</svg>`;
 
 const chevron = `<svg class="ds-select-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 6 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-function patternSpecimen(x: ProductPattern): string {
+function patternSpecimen(x: ProductPattern, visuals?: SourceVisuals): string {
+  if (x.kind === "checklist" && visuals?.tasks) return `<div class="template-source" data-mode="night"><div class="source-tasks">${visuals.tasks}</div></div>`;
   const title = `<h3>${esc(x.title || x.name)}</h3>`;
   const items = x.items.map((v) => `<div class="ds-pattern-item">${esc(v)}</div>`).join("");
   const content = x.kind === "checklist" ? `<div class="ds-pattern-list">${x.items.map((v, i) => `<label class="ds-pattern-item ds-check"><input type="checkbox" ${i === 0 ? "checked" : ""}/> ${esc(v)}</label>`).join("")}</div>`
@@ -282,7 +283,7 @@ export function guidelinesHtml(s: Spec, visuals?: SourceVisuals) {
     const n = notes.get(name);
     if (!n) return "";
     const list = (items: string[], cls: string) => items.length ? `<ul class="${cls}">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
-    return `<section id="${name.toLowerCase()}"><div class="eyebrow">${esc(group)}</div><h2>${name}</h2>${n.summary ? `<p class="lead">${esc(n.summary)}</p>` : ""}<div class="stage">${px(specimen(name), p)}</div>${n.usage ? `<p>${esc(n.usage)}</p>` : ""}${n.dos.length || n.donts.length ? `<div class="dd"><div><h5>Do</h5>${list(n.dos, "do")}</div><div><h5>Don't</h5>${list(n.donts, "dont")}</div></div>` : ""}<pre><code>&lt;${name} /&gt;  // react/Components.tsx · class .${p}-${name.toLowerCase()}</code></pre></section>`;
+    return `<section id="${name.toLowerCase()}"><div class="eyebrow">${esc(group)}</div><h2>${name}</h2>${n.summary ? `<p class="lead">${esc(n.summary)}</p>` : ""}<div class="stage">${name === "Card" && visuals?.cards.length ? `<div class="template-source" data-mode="night"><div class="source-grid">${visuals.cards.slice(0, 4).map((x)=>x.html).join("")}</div></div>` : px(specimen(name), p)}</div>${n.usage ? `<p>${esc(n.usage)}</p>` : ""}${n.dos.length || n.donts.length ? `<div class="dd"><div><h5>Do</h5>${list(n.dos, "do")}</div><div><h5>Don't</h5>${list(n.donts, "dont")}</div></div>` : ""}<pre><code>&lt;${name} /&gt;  // react/Components.tsx · class .${p}-${name.toLowerCase()}</code></pre></section>`;
   };
   const fontHref = s.fonts.googleHref || `https://fonts.googleapis.com/css2?family=${[s.fonts.display, s.fonts.body, s.fonts.mono].map((f) => encodeURIComponent(f).replace(/%20/g, "+") + ":wght@400;500;600;700").join("&family=")}&display=swap`;
   const shell = px(`
@@ -376,7 +377,7 @@ ${visuals ? sourceVisualCss(visuals) + px(visuals.cardCss, p) : ""}
   <section id="type"><div class="eyebrow">Foundations</div><h2>Type</h2><div class="col" style="gap:18px"><div><code>--${p}-font-display · ${esc(s.fonts.display)}</code><div style="font:600 40px/1.1 var(--${p}-font-display);letter-spacing:-.02em">The quick brown fox</div></div><div><code>--${p}-font-body · ${esc(s.fonts.body)}</code><div style="font:400 16px/1.6 var(--${p}-font-body)">Body copy reads calmly at sixteen pixels with generous line height.</div></div><div><code>--${p}-font-mono · ${esc(s.fonts.mono)}</code><div style="font:500 13px var(--${p}-font-mono)">const token = "--${p}-accent";</div></div></div></section>
   <section id="space"><div class="eyebrow">Foundations</div><h2>Space &amp; radius</h2><p class="lead">A ${s.space}px base unit.</p><table class="tok">${[1, 2, 3, 4, 6, 8, 12, 16].map((n) => `<tr><td><code>--${p}-space-${n}</code></td><td>${n * s.space}px</td><td><div style="height:8px;width:${n * s.space}px;background:var(--${p}-accent);border-radius:2px"></div></td></tr>`).join("")}</table><div class="row" style="margin-top:20px">${(["sm", "md", "lg"] as const).map((k) => `<div style="width:84px;height:60px;border:1px solid var(--${p}-line-strong);border-radius:var(--${p}-radius-${k});display:grid;place-items:center;font-size:11px;color:var(--${p}-fg-3)">${k} · ${s.radius[k]}px</div>`).join("")}</div></section>
   <section id="motion"><div class="eyebrow">Foundations</div><h2>Motion</h2><table class="tok"><tr><td><code>--${p}-dur-fast</code></td><td>${s.motion.fast}ms · hovers, presses</td></tr><tr><td><code>--${p}-dur-base</code></td><td>${s.motion.base}ms · toggles, tabs</td></tr><tr><td><code>--${p}-dur-slow</code></td><td>${s.motion.slow}ms · reveals, progress</td></tr><tr><td><code>--${p}-ease</code></td><td>${esc(s.motion.ease)}</td></tr></table></section>
-  ${s.product.patterns.map((x, i) => `<section id="pattern-${i}"><div class="eyebrow">Product patterns</div><h2>${esc(x.name)}</h2><p class="lead">${esc(x.summary)}</p><div class="stage">${px(patternSpecimen(x), p)}</div><p>${esc(x.usage)}</p><pre><code>&lt;ProductPattern name="${esc(x.name)}" /&gt;</code></pre></section>`).join("\n")}
+  ${s.product.patterns.map((x, i) => `<section id="pattern-${i}"><div class="eyebrow">Product patterns</div><h2>${esc(x.name)}</h2><p class="lead">${esc(x.summary)}</p><div class="stage">${px(patternSpecimen(x, visuals), p)}</div><p>${esc(x.usage)}</p><pre><code>&lt;ProductPattern name="${esc(x.name)}" /&gt;</code></pre></section>`).join("\n")}
   ${visuals ? sourceSections(visuals, p) : ""}
   ${COMPONENT_GROUPS.flatMap((g) => g.items.map((n) => comp(n, g.group))).join("\n  ")}
 </main>
@@ -540,9 +541,10 @@ function readme(s: Spec) {
   return `# ${s.brand.name} design system\n\n${s.brand.tagline}\n\nOpen \`index.html\` in a browser for the full guidelines (dark + light).\n\n## Contents\n\n- \`tokens/tokens.css\`, \`tokens/tokens.json\` — colour (dark + light), type, radius, space, motion\n- \`dist/${p}.css\` — component styles using only tokens\n- \`react/Components.tsx\` — React components\n- \`react/Components.stories.tsx\` — Storybook stories\n- \`guidelines/\` — brand and per-component usage notes\n\n## Use in a project\n\n1. Copy this folder into your repo (e.g. \`src/design-system\`).\n2. Import \`tokens/tokens.css\` and \`dist/${p}.css\` once at your app root.\n3. Set \`data-theme="dark"\` or \`data-theme="light"\` on \`<html>\`.\n4. Import components: \`import { Button } from "./design-system/react/Components";\`\n\n## Storybook\n\nAdd \`"../src/design-system/react/*.stories.tsx"\` to \`stories\` in \`.storybook/main.ts\`. Optionally add a \`theme\` global toolbar (dark/light) — the stories read \`globals.theme\`.\n\n## Fonts\n\n${s.fonts.display}, ${s.fonts.body}, ${s.fonts.mono} — load from Google Fonts.\n`;
 }
 
-function productReactFile(s: Spec) {
+function productReactFile(s: Spec, visuals?: SourceVisuals) {
   return px(`import * as React from "react";
 import { Button, Checkbox, ProgressBar } from "./Components";
+${visuals?.tasks ? 'import { AnimatedTasks } from "./TemplateVisuals";' : ""}
 export const patterns = ${JSON.stringify(s.product.patterns)};
 export function ProductPattern({ name }: { name: string }) {
   const x = patterns.find((p) => p.name === name);
@@ -551,7 +553,7 @@ export function ProductPattern({ name }: { name: string }) {
   return <section className={"ds-pattern ds-pattern--" + x.kind + (running ? " is-breathing" : "")}>
     <h3>{x.title || x.name}</h3>
     {x.kind === "timer" ? <><div className="ds-breath-orbit"/><p>{x.items[0]}</p><Button variant="highlight" aria-pressed={running} onClick={() => setRunning(!running)}>{running ? "Pause session" : "Start session"}</Button></>
-      : x.kind === "checklist" ? <div className="ds-pattern-list">{x.items.map((item, i) => <div className="ds-pattern-item" key={item}><Checkbox label={item} defaultChecked={i === 0}/></div>)}</div>
+      : x.kind === "checklist" ? ${visuals?.tasks ? "<AnimatedTasks/>" : '<div className="ds-pattern-list">'}${visuals?.tasks ? "" : '{x.items.map((item, i) => <div className="ds-pattern-item" key={item}><Checkbox label={item} defaultChecked={i === 0}/></div>)}</div>'}
       : <>{x.kind === "progress" && <><div className="ds-pattern-value">3 / 7</div><ProgressBar value={43}/></>}{x.kind === "stat" && <div className="ds-pattern-value">24</div>}{x.items.map((item) => <div key={item} className="ds-pattern-item">{item}</div>)}{x.kind === "plan" && <Button>Choose plan</Button>}</>}
   </section>;
 }
@@ -573,7 +575,7 @@ export function renderPackage(s: Spec, visuals?: SourceVisuals): Record<string, 
   };
   for (const g of COMPONENT_GROUPS) for (const n of g.items) files[`guidelines/components/${n}.md`] = componentMd(s, n);
   if (s.product.patterns.length) {
-    files["react/ProductPatterns.tsx"] = productReactFile(s);
+    files["react/ProductPatterns.tsx"] = productReactFile(s, visuals);
     files["react/ProductPatterns.stories.tsx"] = `import * as React from "react";\nimport { ProductPattern, patterns } from "./ProductPatterns";\nexport default { title: ${JSON.stringify(s.brand.name + "/Product patterns")} };\nexport const Examples = { render: () => <div className="${p}-root" style={{display:"grid",gap:24,padding:24}}>{patterns.map((x) => <ProductPattern key={x.name} name={x.name}/>)}</div> };`;
     for (const [i, x] of s.product.patterns.entries()) files[`guidelines/patterns/${i + 1}.md`] = `# ${x.name}\n\n${x.summary}\n\n${x.usage}\n\nImport ProductPattern from react/ProductPatterns and pass name=${JSON.stringify(x.name)}.`;
     files["guidelines/product.md"] = `# Product context\n\n${s.product.purpose}\n\n## Pages & workflows\n${s.product.pages.map((x) => `- ${x}`).join("\n")}`;
