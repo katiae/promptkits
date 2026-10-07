@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries";
@@ -77,9 +77,16 @@ function Admin() {
   const generateDs = useServerFn(generateDesignSystem);
   const { data: dsStatus = [] } = useQuery({ queryKey: ["ds-status"], queryFn: () => fetchDsStatus(), enabled: !!isAdmin });
   const [generating, setGenerating] = useState<Set<string>>(new Set());
+  // Leaving or refreshing the page stops a running generation, so warn first.
+  useEffect(() => {
+    if (!generating.size) return;
+    const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ""; };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [generating.size]);
   const runGenerate = async (entryId: string, name: string) => {
     setGenerating((s) => new Set(s).add(entryId));
-    const t = toast.loading(`Building the ${name} design system — this takes a minute or two…`);
+    const t = toast.loading(`Building the ${name} design system — about 2 minutes. Keep this page open…`);
     try {
       const r = await generateDs({ data: { entryId } });
       if (r.ok) toast.success(`${name} design system is ready`, { id: t });
@@ -379,8 +386,7 @@ function DesignSystemCell({ entry, status, busy, onGenerate }: { entry: Entry; s
   const bundled = entry.slug === "midnight-cadence";
   if (bundled) return <span className="label-mono text-muted-foreground">Design system · hand-built</span>;
   const btn = "rounded-full border border-border px-3 py-1 hover:bg-secondary disabled:opacity-60";
-  if (busy || status?.status === "generating")
-    return <span className="label-mono animate-pulse text-muted-foreground">Generating design system…</span>;
+  if (busy) return <span className="label-mono animate-pulse text-muted-foreground">Generating… keep this page open</span>;
   return (
     <>
       {status?.status === "ready" && (
