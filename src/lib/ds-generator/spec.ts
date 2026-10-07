@@ -1,3 +1,4 @@
+import { IDENTITY_SCHEMA, normalizeIdentity, type Identity } from "./identity";
 // Design-system "brief" the AI returns. Code renders every file from this, so output stays complete and consistent.
 export const COMPONENT_GROUPS: { group: string; items: string[] }[] = [
   { group: "Navigation & controls", items: ["SegmentedControl", "Tabs", "CommandMenu", "Pill"] },
@@ -26,6 +27,7 @@ export type Spec = {
   components: ComponentNote[];
   appearance: Appearance;
   product: { purpose: string; pages: string[]; patterns: ProductPattern[] };
+  identity?: Identity;
 };
 
 const str = { type: "string" } as const;
@@ -35,8 +37,9 @@ const num = { type: "number" } as const;
 export const SPEC_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["brand", "fonts", "dark", "light", "radius", "space", "motion", "components", "appearance", "product"],
+  required: ["identity", "brand", "fonts", "dark", "light", "radius", "space", "motion", "components", "appearance", "product"],
   properties: {
+    identity: IDENTITY_SCHEMA,
     brand: { type: "object", additionalProperties: false, required: ["name", "prefix", "tagline", "voice", "overview"], properties: { name: str, prefix: str, tagline: str, voice: str, overview: str } },
     fonts: { type: "object", additionalProperties: false, required: ["display", "body", "mono", "googleHref"], properties: { display: str, body: str, mono: str, googleHref: str } },
     dark: theme,
@@ -81,6 +84,7 @@ export function normalizeSpec(raw: any, fallbackName: string): Spec {
     });
   }
   return {
+    identity: normalizeIdentity(raw?.identity),
     brand: {
       name: clean(raw?.brand?.name, 40, fallbackName),
       prefix: prefix.length >= 2 ? prefix : "ds",

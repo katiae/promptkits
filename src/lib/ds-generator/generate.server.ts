@@ -1,5 +1,7 @@
 import { createLovableAiGatewayRunIdFetch } from "./run-id.server.ts";
 import { condenseHtml } from "./condense";
+import { IDENTITY_PROMPT } from "./identity";
+import SKILL from "./skill.md?raw";
 import { COMPONENT_GROUPS, SPEC_JSON_SCHEMA, normalizeSpec, type Spec } from "./spec";
 
 export class GatewayError extends Error {
@@ -14,7 +16,11 @@ Rules:
 - appearance: infer actual desktop control geometry from the CSS, not a generic SaaS kit. Include buttonRadius (999 for pills), controlRadius, checkRadius (999 for circular habit checkboxes), borderWidth, controlHeight, buttonHeight, fontSize, fontWeight, controlSize, shadowOffset (solid vertical offset shadow, zero if none), accordionCards (true for separate rounded outlined FAQ items). Match playful thick strokes and tactile shadows when present; do not make a friendly consumer template look like an enterprise dashboard.
 - product: identify its purpose and ALL supplied page/section workflows from HTML, headings and prompt. pages lists those sections. patterns: 3-5 genuinely relevant reusable compositions beyond primitives, choosing a supported kind: checklist, timer, progress, plan, notification, stat. Each has a descriptive component name, kind, summary, usage, title, and 2-4 realistic short example items. A wellness template needs habit checklists, breathing sessions, reminders and progress; commerce needs plans and product stats. Only describe pages visible in the supplied material, never claim to inspect external pages. Do not invent medical claims, testimonials or actual business prices.
 - radius in px (sm < md < lg), space = base spacing unit in px (usually 4), motion durations in ms and an ease (cubic-bezier).
-- components: one entry for EACH of: ${COMPONENT_GROUPS.flatMap((g) => g.items).join(", ")}. summary: one sentence of what it is. usage: when to use it in this brand's style. dos/donts: 2-3 short items each.`;
+- components: one entry for EACH of: ${COMPONENT_GROUPS.flatMap((g) => g.items).join(", ")}. summary: one sentence of what it is. usage: when to use it in this brand's style. dos/donts: 2-3 short items each.
+${IDENTITY_PROMPT}
+Let the identity drive every other choice (appearance, motion, voice, patterns, component usage notes). A mid-spectrum template must get mid-spectrum treatments, not one anchor's.
+
+OWNER'S DESIGN SYSTEM SKILL (authoritative reference for quality, depth, structure, contrast, accessibility, motion and voice). You only write the JSON brief; code renders the files, so apply the skill's judgement through the brief. Where the skill describes two styles, treat them as anchors on a spectrum, never as the only options:\n\n${SKILL.slice(0, 24000)}`;
 
 /** Asks the AI gateway for a design brief and returns a normalized spec. */
 export async function generateSpec(input: { name: string; prompt: string; html: string }, apiKey: string): Promise<Spec> {
