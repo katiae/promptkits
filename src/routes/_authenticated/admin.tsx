@@ -180,7 +180,6 @@ function Admin() {
   const save = async () => {
     if (!form) return;
     let thumb = form.thumbnail_url;
-    const original = form.id ? entries.find((e) => e.id === form.id) : undefined;
     const htmlChanged = !!form.html_content && form.html_content !== (original?.html_content ?? "");
     if (form.html_content && (htmlChanged || !thumb) && !(report && !report.ok)) {
       thumb = (await snap(form.html_content)) ?? thumb;
