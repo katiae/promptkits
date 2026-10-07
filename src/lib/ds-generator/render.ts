@@ -5,6 +5,19 @@ const kebab = (k: string) => k.replace(/[A-Z0-9]+/g, (m) => "-" + m.toLowerCase(
 /** Static templates use the `ds-` prefix; swapped for the brand prefix. Only apply to trusted template text. */
 const px = (s: string, p: string) => s.replace(/\bds-/g, `${p}-`);
 
+function readablePastel(color: string, s: Spec) {
+  const hex = color.replace("#", "");
+  if (!/^[0-9a-f]{6}$/i.test(hex)) return s.dark;
+  const rgb = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
+  const luminance = (rgb[0] ?? 0) * .2126 + (rgb[1] ?? 0) * .7152 + (rgb[2] ?? 0) * .0722;
+  return luminance > .35 ? s.light : s.dark;
+}
+function pastelVars(t: Theme, s: Spec) {
+  return ["pastel1", "pastel2"].map((key) => {
+    const theme = readablePastel(t[key as ThemeKey], s);
+    return ["fg", "fg2", "bgCard", "bgRaise", "stroke", "accent", "accentFg", "highlight", "highlightFg"].map((k) => `  --ds-${key}-${kebab(k)}: ${theme[k as ThemeKey]};`).join("\n");
+  }).join("\n");
+}
 function themeVars(t: Theme) {
   return THEME_KEYS.map((k: ThemeKey) => `  --ds-${kebab(k)}: ${t[k]};`).join("\n");
 }
@@ -15,10 +28,12 @@ export function tokensCss(s: Spec) {
 :root, [data-theme="dark"] {
   color-scheme: dark;
 ${themeVars(s.dark)}
+${pastelVars(s.dark, s)}
 }
 [data-theme="light"] {
   color-scheme: light;
 ${themeVars(s.light)}
+${pastelVars(s.light, s)}
 }
 :root {
   --ds-font-display: "${f.display}", ui-sans-serif, system-ui, sans-serif;
@@ -171,6 +186,7 @@ ${s.appearance.accordionCards ? ".ds-acc { border:0;display:grid;gap:12px; } .ds
 .ds-breath-orbit { margin:auto;width:96px;height:96px;border-radius:50%;background:var(--ds-highlight);border:var(--ds-border-width) solid var(--ds-stroke); }
 .ds-pattern--timer.is-breathing .ds-breath-orbit { animation:ds-breathe 8s var(--ds-ease) infinite; }
 .ds-pattern--checklist { background:var(--ds-pastel-1); }
+${["checklist", "timer"].map((kind, i) => `.ds-pattern--${kind} { ${["fg", "fg2", "bgCard", "bgRaise", "stroke", "accent", "accentFg", "highlight", "highlightFg"].map((k) => `--ds-${kebab(k)}:var(--ds-pastel${i + 1}-${kebab(k)});`).join("")} color:var(--ds-fg); }`).join("\n")}
 .ds-pattern-value { font:var(--ds-control-weight) 36px/1.2 var(--ds-font-display); }
 @keyframes ds-breathe { 50% { transform:scale(1.15); } }
 @media(prefers-reduced-motion:reduce) { .ds-pattern--timer.is-breathing .ds-breath-orbit { animation:none; } }
