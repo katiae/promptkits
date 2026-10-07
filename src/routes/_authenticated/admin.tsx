@@ -135,6 +135,8 @@ function Admin() {
     }
   };
   const report: ScanReport | null = form ? buildReport(form.html_content || null, form.prompt) : null;
+  // The entry being edited, so the form can show its saved design-system state.
+  const original = form?.id ? entries.find((e) => e.id === form.id) : undefined;
 
   // All tags already in use, sorted — reused for suggestions so tags stay consistent.
   const existingTags = [...new Set(entries.flatMap((e) => e.tags))].sort();
