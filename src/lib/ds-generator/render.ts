@@ -247,7 +247,7 @@ function sourceSections(v: SourceVisuals, p: string) {
   return `<section id="source-cards"><div class="eyebrow">Template visuals &amp; motion</div><h2>Template cards</h2><p class="lead">Original surfaces, illustration treatments and hover motion.</p>${wrap(`<div class="source-grid">${v.cards.map((x) => x.html).join("")}</div>`)}</section>
 <section id="source-tasks"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animated tasks</h2>${wrap(`<div class="source-tasks">${v.tasks || "No task controls in this template."}</div>`)}</section>
 <section id="source-art"><div class="eyebrow">Template visuals &amp; motion</div><h2>Illustrations &amp; icons</h2>${wrap(`<div class="source-grid">${v.illustrations.map((x) => `<figure class="source-figure"><div class="source-art">${x.html}</div><figcaption>${esc(x.name)}</figcaption></figure>`).join("")}</div>`)}</section>
-<section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="${p}-btn ${p}-btn--secondary" data-source-replay>Replay animations</button><button class="${p}-btn ${p}-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p></section>`;
+<section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="${p}-btn ${p}-btn--secondary" data-source-replay>Replay animations</button><button class="${p}-btn ${p}-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p>${wrap(v.themeToggle.replace(/<button /, '<button data-source-theme '))}</section>`;
 }
 
 function sourceReactFile(v: SourceVisuals) {
@@ -328,7 +328,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
   const js = px(`
 (function(){
   var html=document.documentElement;
-  function setTheme(t){ document.querySelectorAll('.template-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
+  function setTheme(t){ document.querySelectorAll('.template-source .mode-sw').forEach(function(b){b.setAttribute('aria-checked',String(t==='dark'));}); document.querySelectorAll('.template-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
   document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(){ setTheme(b.dataset.themeBtn); }; });
   setTheme(html.getAttribute('data-theme')||'dark');
   window.addEventListener('message', function(e){ var d=e.data; if(d && d.type==='hy-theme' && (d.theme==='dark'||d.theme==='light')) setTheme(d.theme); });
