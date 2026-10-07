@@ -14,3 +14,4 @@
 - [x] Preserve template-specific visual styling and generate relevant product patterns.
 - [x] Fix generated dropdown chevron spacing and verify guidelines and exports.
 - [x] Include source illustrations, icons and motion with faithful cards in guidelines and exports; verify Sprig interactions.
+- [ ] Add admin ZIP import with server-side security scanning, file-based guidelines and original package downloads; verify both upload and generation options.
