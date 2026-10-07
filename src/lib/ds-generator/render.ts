@@ -242,6 +242,32 @@ function specimen(name: string): string {
   return "";
 }
 
+function sourceSections(v: SourceVisuals) {
+  const wrap = (html: string) => `<div class="ds-source" data-theme="dark" data-mode="night">${html}</div>`;
+  return `<section id="source-cards"><div class="eyebrow">Template visuals &amp; motion</div><h2>Template cards</h2><p class="lead">Original surfaces, illustration treatments and hover motion.</p>${wrap(`<div class="source-grid">${v.cards.map((x) => x.html).join("")}</div>`)}</section>
+<section id="source-tasks"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animated tasks</h2>${wrap(`<div class="source-tasks">${v.tasks || "No task controls in this template."}</div>`)}</section>
+<section id="source-art"><div class="eyebrow">Template visuals &amp; motion</div><h2>Illustrations &amp; icons</h2>${wrap(`<div class="source-grid">${v.illustrations.map((x) => `<figure class="source-figure"><div class="source-art">${x.html}</div><figcaption>${esc(x.name)}</figcaption></figure>`).join("")}</div>`)}</section>
+<section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="ds-btn ds-btn--secondary" data-source-replay>Replay animations</button><button class="ds-btn ds-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p></section>`;
+}
+
+function sourceReactFile(v: SourceVisuals) {
+  return `import * as React from "react";
+import "../dist/source-visuals.css";
+export const cards = ${JSON.stringify(v.cards)};
+export const illustrations = ${JSON.stringify(v.illustrations)};
+const tasks = ${JSON.stringify(v.tasks)};
+function Source({html,theme="light",tasks=false}: {html:string;theme?:"light"|"dark";tasks?:boolean}) {
+  const ref=React.useRef<HTMLDivElement>(null);
+  React.useEffect(()=>{const el=ref.current;if(!el||!tasks)return;const click=(e:MouseEvent)=>{const target=e.target;if(!(target instanceof Element))return;const b=target.closest('.item[aria-pressed]');if(b&&el.contains(b))b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));};el.addEventListener('click',click);return()=>el.removeEventListener('click',click);},[tasks]);
+  return <div ref={ref} className="ds-source" data-theme={theme} data-mode={theme==='dark'?'night':'day'} dangerouslySetInnerHTML={{__html:html}}/>;
+}
+export function TemplateCard({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={cards[index]?.html??''}/>;}
+export function Illustration({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={illustrations[index]?.html??''}/>;}
+export function AnimatedTasks({theme="light"}: {theme?:"light"|"dark"}){return <Source tasks theme={theme} html={'<div class="source-tasks">'+tasks+'</div>'}/>;}
+export function ThemeTransition(){const [theme,set]=React.useState<"light"|"dark">('light');return <><button type="button" onClick={()=>set(theme==='light'?'dark':'light')}>Switch day / night</button><TemplateCard theme={theme}/><Illustration theme={theme}/></>;}
+`;
+}
+
 export function guidelinesHtml(s: Spec, visuals?: SourceVisuals) {
   const p = s.brand.prefix;
   const notes = new Map(s.components.map((c) => [c.name, c]));
