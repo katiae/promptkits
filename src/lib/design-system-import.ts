@@ -51,7 +51,7 @@ export function inspectDesignSystemZip(bytes: Uint8Array): ImportResult {
       const text = strFromU8(content);
       const add = (severity: "block" | "warn", rule: string, detail: string) => findings.push({ severity, rule, detail: `${name}: ${detail}` });
       if (/\.(html?|svg)$/i.test(name)) {
-        for (const f of scanHtml(/\.svg$/i.test(name) ? `<div>${text}</div>` : text)) add(f.severity, f.rule, f.detail);
+        for (const f of scanHtml(/\.svg$/i.test(name) || !/<(html|body)\b/i.test(text) ? `<div>${text}</div>` : text)) add(f.severity, f.rule, f.detail);
       }
       if (/\b(eval\s*\(|new\s+Function\s*\(|child_process|execSync\s*\(|spawnSync\s*\(|document\.cookie|navigator\.sendBeacon)|(?:curl|wget)[^\n]*\|\s*(?:ba)?sh|rm\s+-rf|powershell|Invoke-Expression/i.test(text)) add("block", "risky-code", "Contains potentially dangerous executable code or commands.");
       if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|\b(?:sk_live_|sk-proj-|ghp_)[\w-]{16,}/.test(text)) add("block", "secret", "Contains what looks like a private credential.");
