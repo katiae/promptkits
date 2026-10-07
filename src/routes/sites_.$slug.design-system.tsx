@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
 import { DesignSystemTeaser } from "@/components/DesignSystemButton";
+import { IMPORT_META } from "@/lib/design-system-import";
 
 export const Route = createFileRoute("/sites_/$slug/design-system")({
   head: ({ params }) => ({
@@ -51,7 +52,11 @@ function DesignSystemPage() {
       if (!files) throw new Error("missing");
       const { zipSync, strToU8 } = await import("fflate");
       const tree: Record<string, Uint8Array> = {};
-      for (const [p, c] of Object.entries(files)) tree[`${slug}-design-system/${p}`] = strToU8(c);
+      const binaryPaths = new Set<string>(files[IMPORT_META] ? JSON.parse(files[IMPORT_META]).binaryPaths : []);
+      for (const [p, c] of Object.entries(files)) {
+        if (p === IMPORT_META) continue;
+        tree[`${slug}-design-system/${p}`] = binaryPaths.has(p) ? Uint8Array.from(atob(c), (v) => v.charCodeAt(0)) : strToU8(c);
+      }
       const blob = new Blob([zipSync(tree, { level: 6 }) as BlobPart], { type: "application/zip" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
