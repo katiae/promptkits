@@ -77,20 +77,27 @@ function Admin() {
   const generateDs = useServerFn(generateDesignSystem);
   const { data: dsStatus = [] } = useQuery({ queryKey: ["ds-status"], queryFn: () => fetchDsStatus(), enabled: !!isAdmin });
   const [generating, setGenerating] = useState<Set<string>>(new Set());
-  // Leaving or refreshing the page stops a running generation, so warn first.
-  useEffect(() => {
-    if (!generating.size) return;
-    const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ""; };
-    window.addEventListener("beforeunload", warn);
-    return () => window.removeEventListener("beforeunload", warn);
-  }, [generating.size]);
   const runGenerate = async (entryId: string, name: string) => {
     setGenerating((s) => new Set(s).add(entryId));
-    const t = toast.loading(`Building the ${name} design system — about 2 minutes. Keep this page open…`);
+    const t = toast.loading(`Building the ${name} design system — about 2 minutes. You can leave this page; it keeps running.`);
     try {
       const r = await generateDs({ data: { entryId } });
-      if (r.ok) toast.success(`${name} design system is ready`, { id: t });
-      else toast.error(r.error, { id: t });
+      if (!r.ok) throw new Error(r.error);
+      // The build now runs in the background — poll until it reports back.
+      const deadline = Date.now() + 6 * 60_000;
+      for (;;) {
+        await new Promise((res) => setTimeout(res, 5000));
+        qc.invalidateQueries({ queryKey: ["ds-status"] });
+        const rows = await fetchDsStatus();
+        const row = rows.find((d) => d.entry_id === entryId);
+        if (!row || row.status === "generating") {
+          if (Date.now() > deadline) throw new Error("Still building — check back in a minute.");
+          continue;
+        }
+        if (row.status === "ready") toast.success(`${name} design system is ready`, { id: t });
+        else toast.error(row.error ?? "Generation failed", { id: t });
+        break;
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Generation failed", { id: t });
     } finally {
