@@ -1,3 +1,4 @@
+import { identityHtml, identityMd, transitionCss, transitionJs } from "./identity";
 import { sourceVisualCss, type SourceVisuals } from "./source-visuals";
 import { COMPONENT_GROUPS, THEME_KEYS, type Spec, type Theme, type ThemeKey, type ProductPattern } from "./spec";
 
@@ -331,7 +332,7 @@ ul.do li::marker { color:var(--ds-ok); } ul.dont li::marker { color:var(--ds-dan
 (function(){
   var html=document.documentElement;
   function setTheme(t){ document.querySelectorAll('.template-source .mode-sw').forEach(function(b){b.setAttribute('aria-checked',String(t==='dark'));}); document.querySelectorAll('.template-source').forEach(function(el){el.setAttribute('data-theme',t);el.setAttribute('data-mode',t==='dark'?'night':'day');}); html.setAttribute('data-theme',t); document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.themeBtn===t)); }); }
-  document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(){ setTheme(b.dataset.themeBtn); }; });
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b){ b.onclick=function(e){ var t=b.dataset.themeBtn; if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches){ setTheme(t); return; } html.style.setProperty('--${p}-vt-x',e.clientX+'px'); html.style.setProperty('--${p}-vt-y',e.clientY+'px'); html.classList.add('${p}-theme-vt'); document.startViewTransition(function(){ setTheme(t); }).finished.finally(function(){ html.classList.remove('${p}-theme-vt'); }); }; });
   setTheme(html.getAttribute('data-theme')||'dark');
   window.addEventListener('message', function(e){ var d=e.data; if(d && d.type==='hy-theme' && (d.theme==='dark'||d.theme==='light')) setTheme(d.theme); });
   var links=[].slice.call(document.querySelectorAll('aside a[href^="#"]')); var lock=0;
@@ -367,17 +368,18 @@ ${visuals ? sourceVisualCss(visuals) + px(visuals.cardCss, p) : ""}
 </head>
 <body>
 <div class="layout">
+${s.identity ? `<style>${transitionCss(s.identity, p)}</style>` : ""}
 <aside>
   <div class="brand"><i></i>${name}</div>
   ${nav.map((g) => `<div class="grp">${esc(g.group)}</div>${g.items.map(([id, label]) => `<a href="#${id}">${label}</a>`).join("")}`).join("\n  ")}
   <div class="theme"><div class="grp">Theme</div><div class="${p}-seg"><button data-theme-btn="dark" aria-pressed="true">Dark</button><button data-theme-btn="light" aria-pressed="false">Light</button></div></div>
 </aside>
 <main>
-  <section id="overview"><div class="eyebrow">Foundations</div><h1>${name}</h1><p class="lead">${esc(s.brand.tagline)}</p>${s.brand.overview ? `<p>${esc(s.brand.overview)}</p>` : ""}<h5 class="eyebrow" style="margin-top:20px">Voice</h5><p>${esc(s.brand.voice)}</p></section>
+  <section id="overview"><div class="eyebrow">Foundations</div><h1>${name}</h1><p class="lead">${esc(s.brand.tagline)}</p>${s.brand.overview ? `<p>${esc(s.brand.overview)}</p>` : ""}<h5 class="eyebrow" style="margin-top:20px">Voice</h5><p>${esc(s.brand.voice)}</p>${s.identity ? identityHtml(s.identity, p, esc) : ""}</section>
   <section id="colour"><div class="eyebrow">Foundations</div><h2>Colour</h2><p class="lead">Semantic tokens with a value for each theme. Switch the theme to see the light palette.</p><div class="grid">${THEME_KEYS.map(swatch).join("")}</div></section>
   <section id="type"><div class="eyebrow">Foundations</div><h2>Type</h2><div class="col" style="gap:18px"><div><code>--${p}-font-display · ${esc(s.fonts.display)}</code><div style="font:600 40px/1.1 var(--${p}-font-display);letter-spacing:-.02em">The quick brown fox</div></div><div><code>--${p}-font-body · ${esc(s.fonts.body)}</code><div style="font:400 16px/1.6 var(--${p}-font-body)">Body copy reads calmly at sixteen pixels with generous line height.</div></div><div><code>--${p}-font-mono · ${esc(s.fonts.mono)}</code><div style="font:500 13px var(--${p}-font-mono)">const token = "--${p}-accent";</div></div></div></section>
   <section id="space"><div class="eyebrow">Foundations</div><h2>Space &amp; radius</h2><p class="lead">A ${s.space}px base unit.</p><table class="tok">${[1, 2, 3, 4, 6, 8, 12, 16].map((n) => `<tr><td><code>--${p}-space-${n}</code></td><td>${n * s.space}px</td><td><div style="height:8px;width:${n * s.space}px;background:var(--${p}-accent);border-radius:2px"></div></td></tr>`).join("")}</table><div class="row" style="margin-top:20px">${(["sm", "md", "lg"] as const).map((k) => `<div style="width:84px;height:60px;border:1px solid var(--${p}-line-strong);border-radius:var(--${p}-radius-${k});display:grid;place-items:center;font-size:11px;color:var(--${p}-fg-3)">${k} · ${s.radius[k]}px</div>`).join("")}</div></section>
-  <section id="motion"><div class="eyebrow">Foundations</div><h2>Motion</h2><table class="tok"><tr><td><code>--${p}-dur-fast</code></td><td>${s.motion.fast}ms · hovers, presses</td></tr><tr><td><code>--${p}-dur-base</code></td><td>${s.motion.base}ms · toggles, tabs</td></tr><tr><td><code>--${p}-dur-slow</code></td><td>${s.motion.slow}ms · reveals, progress</td></tr><tr><td><code>--${p}-ease</code></td><td>${esc(s.motion.ease)}</td></tr></table></section>
+  <section id="motion"><div class="eyebrow">Foundations</div><h2>Motion</h2><table class="tok"><tr><td><code>--${p}-dur-fast</code></td><td>${s.motion.fast}ms · hovers, presses</td></tr><tr><td><code>--${p}-dur-base</code></td><td>${s.motion.base}ms · toggles, tabs</td></tr><tr><td><code>--${p}-dur-slow</code></td><td>${s.motion.slow}ms · reveals, progress</td></tr><tr><td><code>--${p}-ease</code></td><td>${esc(s.motion.ease)}</td></tr>${s.identity ? `<tr><td><code>theme transition</code></td><td>${esc(s.identity.transition.kind)} · ${s.identity.transition.duration}ms · ${esc(s.identity.transition.ease)}</td></tr>` : ""}</table>${s.identity?.motionCharacter ? `<p>${esc(s.identity.motionCharacter)}</p>` : ""}${s.identity?.transition.rationale ? `<p style="color:var(--${p}-fg-2)">${esc(s.identity.transition.rationale)}</p>` : ""}</section>
   ${s.product.patterns.map((x, i) => `<section id="pattern-${i}"><div class="eyebrow">Product patterns</div><h2>${esc(x.name)}</h2><p class="lead">${esc(x.summary)}</p><div class="stage">${px(patternSpecimen(x, visuals), p)}</div><p>${esc(x.usage)}</p><pre><code>&lt;ProductPattern name="${esc(x.name)}" /&gt;</code></pre></section>`).join("\n")}
   ${visuals ? sourceSections(visuals, p) : ""}
   ${COMPONENT_GROUPS.flatMap((g) => g.items.map((n) => comp(n, g.group))).join("\n  ")}
@@ -572,8 +574,9 @@ export function renderPackage(s: Spec, visuals?: SourceVisuals): Record<string, 
     [`dist/${p}.css`]: componentCss(s) + (visuals ? px(visuals.cardCss, p) : ""),
     "react/Components.tsx": reactFile(s),
     "react/Components.stories.tsx": storiesFile(s),
-    "guidelines/brand.md": brandMd(s),
+    "guidelines/brand.md": brandMd(s) + (s.identity ? "\n" + identityMd(s.identity) : ""),
   };
+  if (s.identity) { files["dist/theme-transition.css"] = transitionCss(s.identity, p); files["dist/theme-transition.js"] = transitionJs(p); }
   for (const g of COMPONENT_GROUPS) for (const n of g.items) files[`guidelines/components/${n}.md`] = componentMd(s, n);
   if (s.product.patterns.length) {
     files["react/ProductPatterns.tsx"] = productReactFile(s, visuals);
