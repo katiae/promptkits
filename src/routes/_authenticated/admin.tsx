@@ -82,6 +82,7 @@ function Admin() {
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [ordering, setOrdering] = useState(false);
   const importDs = useServerFn(importDesignSystem);
   const fetchDsStatus = useServerFn(listDesignSystemStatus);
   const generateDs = useServerFn(generateDesignSystem);
@@ -245,7 +246,6 @@ function Admin() {
 
   // Reorder the home page list: swap with the neighbour, then persist the
   // whole sequence so every row gets a clean, gapless sort_order.
-  const [ordering, setOrdering] = useState(false);
   const move = async (id: string, dir: -1 | 1) => {
     const i = entries.findIndex((e) => e.id === id);
     const j = i + dir;
