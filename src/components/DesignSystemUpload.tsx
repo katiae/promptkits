@@ -27,7 +27,7 @@ export function DesignSystemUpload({ onPrepared, disabled = false, label = "Uplo
     } finally { setBusy(false); }
   };
   return <div className="mt-5 min-w-0 space-y-3">
-    <label onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); if (!disabled && !busy) void choose(e.dataTransfer.files[0]); }} className={`flex h-full flex-col items-center gap-2 rounded-xl border border-dashed border-input bg-card px-5 py-6 text-center text-sm ${disabled || busy ? "opacity-50" : "cursor-pointer hover:border-ring"}`}>
+    <label onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); if (!disabled && !busy) void choose(e.dataTransfer.files[0]); }} className={`flex flex-col items-center gap-2 rounded-xl border border-dashed border-input bg-card px-5 py-6 text-center text-sm ${disabled || busy ? "opacity-50" : "cursor-pointer hover:border-ring"}`}>
       <input aria-label={label} type="file" accept=".zip,application/zip" className="sr-only" disabled={disabled || busy} onChange={(e) => { void choose(e.target.files?.[0]); e.target.value = ""; }} />
       {name ? <FileArchive className="size-5 text-primary" /> : <Upload className="size-5 text-muted-foreground" />}
       <span className="max-w-full break-all text-foreground">{busy ? "Scanning package…" : name || label}</span>

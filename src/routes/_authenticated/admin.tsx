@@ -409,7 +409,7 @@ function Admin() {
                 />
               )}
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid items-start gap-4 md:grid-cols-2">
               <DesignSystemUpload key={`g-${form.id ?? "new"}`} label="Guidelines ZIP (web view)" hint="HTML pages, CSS, images and docs shown on the guidelines page" disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_guides, ds_guides_blocked = false) => setForm((f) => f && { ...f, ds_guides, ds_guides_blocked })} />
               <DesignSystemUpload key={`k-${form.id ?? "new"}`} label="UI kit ZIP (downloads & Storybook)" hint="Tokens, React components and stories developers download" disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip, ds_zip_blocked = false) => setForm((f) => f && { ...f, ds_zip, ds_zip_blocked })} />
             </div>

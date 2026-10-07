@@ -6,8 +6,8 @@ export const IMPORT_META = "__promptfolio_import.json";
 export type ImportResult = { report: ScanReport; files: Record<string, Uint8Array>; count: number };
 const MAX_ZIP = 10_000_000;
 const MAX_TOTAL = 40_000_000;
-const textExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml)$/i;
-const allowedExtension = /\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml|png|jpe?g|webp|gif|ico|woff2?|ttf|otf)$/i;
+const textExtension = /(\.(mdx|gitignore|npmrc|nvmrc|prettierrc|editorconfig)|(^|\/)(LICENSE|NOTICE|CHANGELOG)(\.\w+)?)$|\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml)$/i;
+const allowedExtension = /(\.(mdx|gitignore|npmrc|nvmrc|prettierrc|editorconfig)|(^|\/)(LICENSE|NOTICE|CHANGELOG)(\.\w+)?)$|\.(md|txt|json|css|html?|svg|tsx?|jsx?|mjs|cjs|yaml|yml|png|jpe?g|webp|gif|ico|woff2?|ttf|otf)$/i;
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c);
 
 /** Validate the original central directory before inflation (fflate normalizes unsafe paths). */
@@ -95,7 +95,7 @@ export function buildImportedGuidelines(name: string, files: Record<string, Uint
   const groups = [
     { id: "foundations", title: "Foundations & tokens", match: /tokens?|theme|variables|\.css$/i },
     { id: "components", title: "Components & patterns", match: /\.(tsx?|jsx?|mjs|cjs)$/i },
-    { id: "documentation", title: "Documentation & configuration", match: /\.(md|txt|json|yaml|yml)$/i },
+    { id: "documentation", title: "Documentation & configuration", match: /\.(mdx?|txt|json|yaml|yml)$|LICENSE|gitignore/i },
   ];
   const preview = entries.filter(([p]) => /\.html?$/i.test(p));
   const sections = groups.map((g) => {
