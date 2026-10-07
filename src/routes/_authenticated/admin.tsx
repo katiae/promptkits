@@ -10,6 +10,7 @@ import { captureThumbnail } from "@/lib/thumbnail";
 import type { Json } from "@/integrations/supabase/types";
 import { useServerFn } from "@tanstack/react-start";
 import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
+import { ChevronDown } from "lucide-react";
 
 type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
@@ -287,6 +288,22 @@ function Admin() {
             )}
           </div>
           {field("demo_url", "Live demo URL (optional if you upload HTML)")}
+          {field("hue", "Orb colour hue (0–360)")}
+          <label className="block">
+            <span className="label-mono text-muted-foreground">Status</span>
+            <div className="relative mt-1">
+              <select
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.target.value })}
+                className="w-full appearance-none rounded-xl border border-input bg-card px-3 py-2 pr-10 text-sm outline-none transition-colors hover:border-ring focus:border-ring"
+              >
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="pending">Pending review</option>
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            </div>
+          </label>
           <div className="block">
             <span className="label-mono text-muted-foreground">Thumbnail</span>
             <div className="mt-1 flex items-center gap-3">
@@ -302,19 +319,6 @@ function Admin() {
               )}
             </div>
           </div>
-          {field("hue", "Orb colour hue (0–360)")}
-          <label className="block">
-            <span className="label-mono text-muted-foreground">Status</span>
-            <select
-              value={form.status}
-              onChange={(e) => setForm({ ...form, status: e.target.value })}
-              className="mt-1 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm"
-            >
-              <option value="published">Published</option>
-              <option value="draft">Draft</option>
-              <option value="pending">Pending review</option>
-            </select>
-          </label>
           <div className="md:col-span-2">
             {field("prompt", "Build prompt", true)}
             <p className="mt-1 text-xs text-muted-foreground">
