@@ -367,6 +367,26 @@ function Admin() {
               )}
             </div>
           )}
+          <div className="md:col-span-2">
+            <span className="label-mono text-muted-foreground">Design system</span>
+            <div className="mt-1 flex flex-wrap items-center gap-3">
+              {original?.slug === "midnight-cadence" ? (
+                <span className="text-sm text-muted-foreground">This template uses its hand-built design system.</span>
+              ) : !form.id || !original ? (
+                <>
+                  <span className="rounded-full border border-border px-3 py-1 text-sm opacity-50">✨ Generate design system</span>
+                  <span className="text-xs text-muted-foreground">Available after saving — new templates with a demo build one automatically.</span>
+                </>
+              ) : (
+                <DesignSystemCell
+                  entry={{ ...original, prompt: form.prompt, html_content: form.html_content }}
+                  status={dsStatus.find((d) => d.entry_id === form.id)}
+                  busy={generating.has(form.id)}
+                  onGenerate={() => runGenerate(form.id, form.name)}
+                />
+              )}
+            </div>
+          </div>
           <div className="flex gap-2 md:col-span-2">
             <button onClick={save} disabled={(!!report && !report.ok) || capturing} className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground disabled:opacity-60">{capturing ? "Capturing thumbnail…" : "Save"}</button>
             <button onClick={() => setForm(null)} className="rounded-full border border-border px-5 py-2 text-sm">Cancel</button>
