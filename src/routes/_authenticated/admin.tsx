@@ -416,7 +416,7 @@ function Admin() {
             <p className="text-xs leading-relaxed text-muted-foreground">Upload either or both. Uploading only one keeps the other part from a previous upload. Static checks are not an antivirus guarantee; uploaded code is never run.</p>
           </div>
           <div className="flex gap-2 md:col-span-2">
-            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing || form.ds_zip_blocked} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
+            <Button onClick={save} disabled={(!!report && !report.ok) || capturing || importing || form.ds_zip_blocked || form.ds_guides_blocked} className="rounded-full px-5">{importing ? "Saving design system…" : capturing ? "Capturing thumbnail…" : "Save"}</Button>
             <Button variant="outline" disabled={importing} onClick={() => setForm(null)} className="rounded-full px-5">Cancel</Button>
           </div>
         </div>
