@@ -19,7 +19,7 @@ export const getDesignSystemGuidelines = createServerFn({ method: "GET" })
     if (!imported) return { html: b?.["index.html"] ?? null };
     // Use the uploaded guidelines' own index.html as-is (shallowest one wins), locked down with a CSP.
     const index = Object.keys(b!).filter((p) => /^guidelines-source\/(?:[^/]+\/)?index\.html?$/i.test(p)).sort((a, z) => a.length - z.length)[0];
-    if (index) return { html: lockDown(b![index]) };
+    if (index) return { html: lockDown(b![index]!) };
     return { html: JSON.parse(imported).guidelines as string };
   });
 
