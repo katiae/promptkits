@@ -86,7 +86,7 @@ function Admin() {
   }, [generating.size]);
   const runGenerate = async (entryId: string, name: string) => {
     setGenerating((s) => new Set(s).add(entryId));
-    const t = toast.loading(`Building the ${name} design system — this takes a minute or two…`);
+    const t = toast.loading(`Building the ${name} design system — about 2 minutes. Keep this page open…`);
     try {
       const r = await generateDs({ data: { entryId } });
       if (r.ok) toast.success(`${name} design system is ready`, { id: t });
