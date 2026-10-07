@@ -87,7 +87,7 @@ export function extractSourceVisuals(html: string): SourceVisuals {
     let markup = sanitize(el);
     let parent = el.parentElement;
     for (let n = 0; n < 3 && parent && !/^(BODY|HTML|MAIN)$/.test(parent.tagName); n++, parent = parent.parentElement) {
-      const classes = (parent.getAttribute("class") ?? "").replace(/[^\w\s-]/g, "").split(/\s+/).filter((c) => !/^(pop|reveal|up|pagein)$/.test(c)).join(" ");
+      const classes = (parent.getAttribute("class") ?? "").replace(/[^\w\s-]/g, "").split(/\s+/).filter((c) => !/^(pop|reveal|up|pagein|phone|app|auth-art|cta|wrap|hero)$/.test(c)).join(" ");
       markup = `<div class="${classes}">${markup}</div>`;
     }
     return { name: el.querySelector("title")?.textContent || el.closest("article, .habit, section")?.querySelector("h2,h3,h4")?.textContent?.trim() || `Illustration / icon ${i + 1}`, html: markup };

@@ -245,7 +245,7 @@ function specimen(name: string): string {
 
 function sourceSections(v: SourceVisuals, p: string) {
   const wrap = (html: string) => `<div class="template-source" data-theme="dark" data-mode="night">${html}</div>`;
-  return `<section id="source-cards"><div class="eyebrow">Template visuals &amp; motion</div><h2>Template cards</h2><p class="lead">Original surfaces, illustration treatments and hover motion.</p>${wrap(`<div class="source-grid">${v.cards.map((x) => x.html).join("")}</div>`)}</section>
+  return `<section id="source-cards"><div class="eyebrow">Template visuals &amp; motion</div><h2>Template cards</h2><p class="lead">Original surfaces, illustration treatments and hover motion.</p>${wrap(`<div class="source-grid">${v.cards.filter((x)=>!x.html.includes('class="step')).map((x) => x.html).join("")}</div><div class="source-grid" style="margin-top:24px">${v.cards.filter((x)=>x.html.includes('class="step')).map((x) => x.html).join("")}</div>`)}</section>
 <section id="source-tasks"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animated tasks</h2>${wrap(`<div class="source-tasks">${v.tasks || "No task controls in this template."}</div>`)}</section>
 <section id="source-art"><div class="eyebrow">Template visuals &amp; motion</div><h2>Illustrations &amp; icons</h2>${wrap(`<div class="source-grid">${v.illustrations.map((x) => `<figure class="source-figure"><div class="source-art">${x.html}</div><figcaption>${esc(x.name)}</figcaption></figure>`).join("")}</div>`)}</section>
 <section id="source-motion"><div class="eyebrow">Template visuals &amp; motion</div><h2>Animation library</h2><div class="row"><button class="${p}-btn ${p}-btn--secondary" data-source-replay>Replay animations</button><button class="${p}-btn ${p}-btn--highlight" data-source-theme>Switch day / night</button></div><p>Live illustrations above retain their source keyframes. Motion is disabled when reduced motion is preferred.</p><p>${v.animations.map(esc).join(" · ")}</p>${wrap(v.themeToggle.replace(/<button /, '<button data-source-theme '))}</section>`;
@@ -265,7 +265,7 @@ function Source({html,theme="light",tasks=false}: {html:string;theme?:"light"|"d
 export function TemplateCard({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={cards[index]?.html??''}/>;}
 export function Illustration({index=0,theme="light"}: {index?:number;theme?:"light"|"dark"}){return <Source theme={theme} html={illustrations[index]?.html??''}/>;}
 export function AnimatedTasks({theme="light"}: {theme?:"light"|"dark"}){return <Source tasks theme={theme} html={'<div class="source-tasks">'+tasks+'</div>'}/>;}
-export function ThemeTransition(){const [theme,set]=React.useState<"light"|"dark">('light');return <><button type="button" onClick={()=>set(theme==='light'?'dark':'light')}>Switch day / night</button><TemplateCard theme={theme}/><Illustration theme={theme}/></>;}
+export function ThemeTransition(){const [theme,set]=React.useState<"light"|"dark">('light');return <><button type="button" className="template-theme-command" onClick={()=>set(theme==='light'?'dark':'light')}>Switch day / night</button><TemplateCard theme={theme}/><Illustration theme={theme}/></>;}
 `;
 }
 
