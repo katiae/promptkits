@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Monitor, Tablet, Smartphone, BookOpen, Square } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export type Device = "desktop" | "tablet" | "phone" | "fold" | "flip";
 
 export const DEVICES: { id: Device; label: string; icon: typeof Monitor; w?: number; h?: number }[] = [
   { id: "desktop", label: "Desktop", icon: Monitor },
   { id: "tablet", label: "Tablet", icon: Tablet, w: 820, h: 1180 },
-  { id: "fold", label: "Foldable", icon: BookOpen, w: 673, h: 841 },
+  { id: "fold", label: "Foldable", icon: BookOpen, w: 820, h: 860 },
   { id: "phone", label: "Phone", icon: Smartphone, w: 390, h: 844 },
   { id: "flip", label: "Flip phone", icon: Square, w: 360, h: 374 },
 ];
@@ -25,7 +26,9 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
       />
       {DEVICES.map(({ id, label, icon: Icon }) => (
         <div key={id} className="group relative">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             role="radio"
             aria-checked={value === id}
             aria-label={label}
@@ -33,7 +36,7 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
             className={`relative z-10 grid size-7 place-items-center rounded-full transition-colors ${value === id ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
           >
             <Icon className="size-3.5" />
-          </button>
+          </Button>
           <span
             role="tooltip"
             className="label-mono pointer-events-none absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-md bg-primary px-2 py-1 text-[10px] text-primary-foreground opacity-0 shadow-sm transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100"
@@ -50,7 +53,7 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
 export function DeviceFrame({ device, children }: { device: Device; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
-  const spec = DEVICES.find((d) => d.id === device)!;
+  const spec = DEVICES.find((d) => d.id === device) ?? DEVICES[0];
 
   useEffect(() => {
     const el = ref.current;
@@ -60,11 +63,11 @@ export function DeviceFrame({ device, children }: { device: Device; children: Re
     return () => ro.disconnect();
   }, []);
 
-  if (!spec.w || !spec.h) {
+  if (!spec?.w || !spec.h) {
     return <div ref={ref} className="flex min-h-[620px] w-full flex-1 flex-col">{children}</div>;
   }
   const pad = 24;
-  const scale = box.w ? Math.min(1, (box.w - pad) / spec.w, (box.h - pad) / spec.h) : 0;
+  const scale = box.w ? Math.max(0, Math.min(1, (box.w - pad) / spec.w, (box.h - pad) / spec.h)) : 0;
 
   return (
     <div ref={ref} className="relative flex min-h-[620px] w-full flex-1 items-center justify-center overflow-hidden rounded-b-2xl bg-tray/60">

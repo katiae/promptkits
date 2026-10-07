@@ -11,6 +11,8 @@
 
 # Project rules
 
+- Foldable uploaded-HTML previews simulate coarse-pointer CSS media conditions only in the preview document; saved HTML and downloads remain unchanged because iframe resizing cannot emulate touch hardware.
+
 - Directory entries live in one `entries` table with `category` text and `tags` text[] (no join tables) — keeps admin editing and filtering simple.
 - Public reads use the browser client with anon RLS (published only); writes are admin-only via `has_role` — no server functions needed yet.
 - First admin is claimed via the `claim_admin()` RPC from /admin — auth-schema triggers are not allowed.

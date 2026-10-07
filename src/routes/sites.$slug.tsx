@@ -10,6 +10,7 @@ import { OrbThumb } from "@/components/Orb";
 import { DeviceSwitcher, DeviceFrame, type Device } from "@/components/DevicePreview";
 import { buildReport } from "@/lib/security-scanner";
 import { DesignSystemButton } from "@/components/DesignSystemButton";
+import { foldablePreviewHtml } from "@/lib/device-preview";
 
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
@@ -192,7 +193,7 @@ function Detail() {
             </div>
           ) : html ? (
             <DeviceFrame device={device}><iframe
-              srcDoc={html}
+              srcDoc={device === "fold" ? foldablePreviewHtml(html) : html}
               title={`${entry.name} demo`}
               className={`w-full flex-1 bg-card ${device === "desktop" ? "min-h-[620px] rounded-b-2xl" : "h-full"}`}
               sandbox="allow-scripts"
