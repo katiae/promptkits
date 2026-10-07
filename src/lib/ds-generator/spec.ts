@@ -63,7 +63,13 @@ const fontName = (s: unknown, fb: string) => clean(s, 40, fb).replace(/[^\w\s-]/
 
 /** Validates and clamps whatever the model returned into a safe, complete spec. */
 export function normalizeSpec(raw: any, fallbackName: string): Spec {
-  const fixTheme = (t: any, d: Theme): Theme => Object.fromEntries(THEME_KEYS.map((k) => [k, typeof t?.[k] === "string" && COLOR.test(t[k].trim()) ? t[k].trim() : ({ action: t?.accent, actionFg: t?.accentFg, highlight: t?.accent, highlightFg: t?.accentFg, stroke: t?.lineStrong, pastel1: t?.bgCard, pastel2: t?.bgRaise, pastel3: t?.bgCard } as Record<string, string>)[k] && COLOR.test(({ action: t?.accent, actionFg: t?.accentFg, highlight: t?.accent, highlightFg: t?.accentFg, stroke: t?.lineStrong, pastel1: t?.bgCard, pastel2: t?.bgRaise, pastel3: t?.bgCard } as Record<string, string>)[k]) ? ({ action: t?.accent, actionFg: t?.accentFg, highlight: t?.accent, highlightFg: t?.accentFg, stroke: t?.lineStrong, pastel1: t?.bgCard, pastel2: t?.bgRaise, pastel3: t?.bgCard } as Record<string, string>)[k] : d[k]])) as Theme;
+  const fixTheme = (t: any, d: Theme): Theme => {
+    const legacy: Record<string, unknown> = { action: t?.accent, actionFg: t?.accentFg, highlight: t?.accent, highlightFg: t?.accentFg, stroke: t?.lineStrong, pastel1: t?.bgCard, pastel2: t?.bgRaise, pastel3: t?.bgCard };
+    return Object.fromEntries(THEME_KEYS.map((k) => {
+      const value: unknown = t?.[k] ?? legacy[k];
+      return [k, typeof value === "string" && COLOR.test(value.trim()) ? value.trim() : d[k]];
+    })) as Theme;
+  };
   const prefix = (typeof raw?.brand?.prefix === "string" ? raw.brand.prefix.toLowerCase().replace(/[^a-z]/g, "") : "").slice(0, 4);
   const href = typeof raw?.fonts?.googleHref === "string" && raw.fonts.googleHref.startsWith("https://fonts.googleapis.com/") ? raw.fonts.googleHref.replace(/["<>]/g, "") : "";
   const notes = new Map<string, ComponentNote>();

@@ -1,3 +1,4 @@
+import { createLovableAiGatewayRunIdFetch } from "./run-id.server.ts";
 import { condenseHtml } from "./condense";
 import { COMPONENT_GROUPS, SPEC_JSON_SCHEMA, normalizeSpec, type Spec } from "./spec";
 
@@ -17,7 +18,8 @@ Rules:
 
 /** Asks the AI gateway for a design brief and returns a normalized spec. */
 export async function generateSpec(input: { name: string; prompt: string; html: string }, apiKey: string): Promise<Spec> {
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
+  const gateway = createLovableAiGatewayRunIdFetch();
+  const res = await gateway.fetch("https://ai.gateway.lovable.dev/v1/responses", {
     method: "POST",
     headers: { "Content-Type": "application/json", "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "fetch" },
     body: JSON.stringify({

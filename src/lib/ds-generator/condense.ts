@@ -9,7 +9,7 @@ export function condenseHtml(html: string): string {
   const tw = [...new Set([...html.matchAll(/class="([^"]+)"/g)].flatMap((m) => (m[1] ?? "").split(/\s+/)))].slice(0, 300).join(" ");
   const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   const rules = styles.split("}").filter((r) => /(?:btn|button|check|radio|switch|toggle|faq|accordion|habit|plan|breathe|input|select|:root|data-mode|data-theme)/i.test(r)).map((r) => r + "}");
-  const headings = [...html.matchAll(/<(h[1-4])[^>]*>([\s\S]*?)<\/\1>/gi)].map((m) => m[2].replace(/<[^>]+>/g, " ").trim());
+  const headings = [...html.matchAll(/<(h[1-4])[^>]*>([\s\S]*?)<\/\1>/gi)].map((m) => (m[2] ?? "").replace(/<[^>]+>/g, " ").trim());
   const pages = [...html.matchAll(/<(?:section|main|form|article)[^>]*(?:id|class)=["']([^"']+)["'][^>]*>/gi)].map((m) => m[1]);
   return [
     `FONT LINKS: ${links.join(" | ") || "none"}`,
