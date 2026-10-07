@@ -1,4 +1,4 @@
-import { COMPONENT_GROUPS, THEME_KEYS, type Spec, type Theme, type ThemeKey } from "./spec";
+import { COMPONENT_GROUPS, THEME_KEYS, type Spec, type Theme, type ThemeKey, type ProductPattern } from "./spec";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const kebab = (k: string) => k.replace(/[A-Z0-9]+/g, (m) => "-" + m.toLowerCase());
@@ -28,6 +28,17 @@ ${themeVars(s.light)}
   --ds-radius-md: ${r.md}px;
   --ds-radius-lg: ${r.lg}px;
   --ds-radius-pill: 999px;
+  --ds-button-radius: ${s.appearance.buttonRadius}px;
+  --ds-control-radius: ${s.appearance.controlRadius}px;
+  --ds-check-radius: ${s.appearance.checkRadius}px;
+  --ds-border-width: ${s.appearance.borderWidth}px;
+  --ds-control-height: ${s.appearance.controlHeight}px;
+  --ds-button-height: ${s.appearance.buttonHeight}px;
+  --ds-control-size: ${s.appearance.controlSize}px;
+  --ds-control-font: ${s.appearance.fontSize}px;
+  --ds-control-weight: ${s.appearance.fontWeight};
+  --ds-offset: ${s.appearance.shadowOffset}px;
+  --ds-tactile-shadow: 0 var(--ds-offset) 0 var(--ds-stroke);
 ${[1, 2, 3, 4, 6, 8, 12, 16].map((n) => `  --ds-space-${n}: ${n * u}px;`).join("\n")}
   --ds-dur-fast: ${m.fast}ms;
   --ds-dur-base: ${m.base}ms;
@@ -40,7 +51,7 @@ ${[1, 2, 3, 4, 6, 8, 12, 16].map((n) => `  --ds-space-${n}: ${n * u}px;`).join("
 }
 
 export function tokensJson(s: Spec) {
-  return JSON.stringify({ name: s.brand.name, prefix: s.brand.prefix, color: { dark: s.dark, light: s.light }, font: s.fonts, radius: s.radius, spaceUnit: s.space, motion: s.motion }, null, 2);
+  return JSON.stringify({ name: s.brand.name, prefix: s.brand.prefix, color: { dark: s.dark, light: s.light }, font: s.fonts, radius: s.radius, spaceUnit: s.space, motion: s.motion, appearance: s.appearance, product: s.product }, null, 2);
 }
 
 const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
@@ -62,7 +73,10 @@ const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
 .ds-btn--danger { background:var(--ds-danger); color:#fff; }
 .ds-label { display:block; font:500 12px/1.4 var(--ds-font-body); color:var(--ds-fg-2); margin-bottom:6px; }
 .ds-field, .ds-select { width:100%; min-width:0; height:34px; padding:0 12px; background:var(--ds-bg-raise); color:var(--ds-fg); border:1px solid var(--ds-line-strong); border-radius:var(--ds-radius-md); font:13px var(--ds-font-body); transition:border-color var(--ds-dur-fast) var(--ds-ease); }
-.ds-select { padding-right:32px; }
+.ds-select-wrap { position:relative; min-width:0; width:100%; }
+.ds-select { appearance:none; -webkit-appearance:none; padding-right:44px; }
+.ds-select-chevron { position:absolute; right:16px; top:50%; transform:translateY(-50%); width:14px; height:14px; pointer-events:none; color:var(--ds-fg); }
+@media (forced-colors:active) { .ds-select { appearance:auto; } .ds-select-chevron { display:none; } }
 .ds-field:hover, .ds-select:hover { border-color:var(--ds-fg-3); }
 .ds-field[aria-invalid="true"] { border-color:var(--ds-danger); }
 .ds-hint { font-size:12px; color:var(--ds-fg-3); margin-top:6px; }
@@ -127,7 +141,40 @@ const COMPONENT_CSS = `/* Component styles — driven only by tokens. */
 @media (prefers-reduced-motion: reduce) { .ds-marquee > div { animation:none; } .ds-reveal { opacity:1; transform:none; } }
 `;
 
-export const componentCss = (s: Spec) => px(COMPONENT_CSS, s.brand.prefix);
+export const componentCss = (s: Spec) => px(COMPONENT_CSS + `
+/* Template-specific control geometry and surface language. */
+.ds-btn { border-radius:var(--ds-button-radius); height:var(--ds-button-height); padding-inline:calc(var(--ds-control-font) * 1.5); font-size:var(--ds-control-font); font-weight:var(--ds-control-weight); border-width:var(--ds-border-width); ${s.appearance.shadowOffset ? "border-color:var(--ds-stroke);box-shadow:var(--ds-tactile-shadow);" : ""} }
+.ds-btn--sm { height:calc(var(--ds-button-height) - 8px); font-size:calc(var(--ds-control-font) - 1px); padding-inline:16px; }
+.ds-btn--lg { height:calc(var(--ds-button-height) + 8px); font-size:calc(var(--ds-control-font) + 1px); }
+.ds-btn--primary { background:var(--ds-action);color:var(--ds-action-fg); }
+.ds-btn--highlight { background:var(--ds-highlight);color:var(--ds-highlight-fg); }
+.ds-btn--ghost { box-shadow:none; border-color:transparent; }
+${s.appearance.shadowOffset ? ".ds-btn:not(.ds-btn--ghost):hover { transform:translateY(-2px);box-shadow:0 calc(var(--ds-offset) + 2px) 0 var(--ds-stroke);filter:none; } .ds-btn:not(.ds-btn--ghost):active { transform:translateY(var(--ds-offset));box-shadow:0 0 0 var(--ds-stroke); }" : ""}
+.ds-field,.ds-select { height:var(--ds-control-height);border-radius:var(--ds-control-radius);font-size:var(--ds-control-font);border-width:var(--ds-border-width); ${s.appearance.borderWidth > 1 ? "border-color:var(--ds-stroke);" : ""} }
+.ds-check,.ds-radio { font-size:var(--ds-control-font);gap:12px; }
+.ds-check input,.ds-radio input { flex-shrink:0;width:var(--ds-control-size);height:var(--ds-control-size);border-width:var(--ds-border-width); ${s.appearance.borderWidth > 1 ? "border-color:var(--ds-stroke);" : ""} }
+.ds-check input { border-radius:var(--ds-check-radius); }
+.ds-check input:focus-visible,.ds-radio input:focus-visible,.ds-switch:focus-visible { outline:2px solid var(--ds-accent);outline-offset:4px; }
+.ds-switch { width:calc(var(--ds-control-size) * 2.2);height:calc(var(--ds-control-size) + 8px);border:var(--ds-border-width) solid var(--ds-stroke); }
+.ds-switch::after { width:calc(var(--ds-control-size) - 2px);height:calc(var(--ds-control-size) - 2px);top:3px;left:3px;background:var(--ds-bg-card); }
+.ds-switch[aria-checked="true"]::after { transform:translateX(calc(var(--ds-control-size) * 1.2 - 6px)); }
+.ds-seg { border-radius:var(--ds-button-radius);border-width:var(--ds-border-width);padding:4px; ${s.appearance.borderWidth > 1 ? "border-color:var(--ds-stroke);" : ""} }
+.ds-seg button { border-radius:var(--ds-button-radius);font-weight:var(--ds-control-weight);font-size:var(--ds-control-font);padding:10px 16px; }
+.ds-seg button[aria-pressed="true"] { background:var(--ds-highlight);color:var(--ds-highlight-fg); }
+${s.appearance.accordionCards ? ".ds-acc { border:0;display:grid;gap:12px; } .ds-acc details { border:var(--ds-border-width) solid var(--ds-stroke);border-radius:var(--ds-radius-lg);background:var(--ds-bg-card);padding:0 20px; } .ds-acc summary { align-items:center;gap:16px;padding:20px 0;font-weight:var(--ds-control-weight); } .ds-acc summary::after { display:grid;place-items:center;flex-shrink:0;width:30px;height:30px;border:var(--ds-border-width) solid var(--ds-stroke);border-radius:50%;background:var(--ds-highlight);color:var(--ds-highlight-fg);font-size:22px; }" : ""}
+.ds-pattern { width:100%;max-width:440px;padding:24px;border:var(--ds-border-width) solid var(--ds-stroke);border-radius:var(--ds-radius-lg);background:var(--ds-bg-card);box-shadow:var(--ds-tactile-shadow);display:grid;gap:16px; }
+.ds-pattern h3 { margin:0;font:var(--ds-control-weight) 22px/1.3 var(--ds-font-display); }
+.ds-pattern p { margin:0; }
+.ds-pattern-list { display:grid;gap:12px; }
+.ds-pattern-item { display:flex;gap:12px;align-items:center;padding:12px;border:var(--ds-border-width) solid var(--ds-stroke);border-radius:var(--ds-radius-md);background:var(--ds-bg-card); }
+.ds-pattern--timer { background:var(--ds-pastel-2);text-align:center; }
+.ds-breath-orbit { margin:auto;width:96px;height:96px;border-radius:50%;background:var(--ds-highlight);border:var(--ds-border-width) solid var(--ds-stroke); }
+.ds-pattern--timer.is-breathing .ds-breath-orbit { animation:ds-breathe 8s var(--ds-ease) infinite; }
+.ds-pattern--checklist { background:var(--ds-pastel-1); }
+.ds-pattern-value { font:var(--ds-control-weight) 36px/1.2 var(--ds-font-display); }
+@keyframes ds-breathe { 50% { transform:scale(1.15); } }
+@media(prefers-reduced-motion:reduce) { .ds-pattern--timer.is-breathing .ds-breath-orbit { animation:none; } }
+`, s.brand.prefix);
 
 const statusSvg = (k: string) => {
   const c = { todo: "var(--ds-fg-3)", progress: "var(--ds-warn)", done: "var(--ds-ok)", cancelled: "var(--ds-danger)" }[k];
@@ -136,15 +183,26 @@ const statusSvg = (k: string) => {
 };
 const prioritySvg = (n: number) => `<svg width="14" height="14" viewBox="0 0 14 14" aria-label="priority ${n}">${[0, 1, 2].map((i) => `<rect x="${2 + i * 4}" y="${10 - i * 3}" width="2.5" height="${3 + i * 3}" rx="1" fill="${i < n ? "var(--ds-fg)" : "var(--ds-line-strong)"}"/>`).join("")}</svg>`;
 
+const chevron = `<svg class="ds-select-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 6 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function patternSpecimen(x: ProductPattern): string {
+  const title = `<h3>${esc(x.title || x.name)}</h3>`;
+  const items = x.items.map((v) => `<div class="ds-pattern-item">${esc(v)}</div>`).join("");
+  const content = x.kind === "checklist" ? `<div class="ds-pattern-list">${x.items.map((v, i) => `<label class="ds-pattern-item ds-check"><input type="checkbox" ${i === 0 ? "checked" : ""}/> ${esc(v)}</label>`).join("")}</div>`
+    : x.kind === "timer" ? `<div class="ds-breath-orbit"></div><p>${esc(x.items[0] || "Take a moment")}</p><button class="ds-btn ds-btn--highlight" data-breathe aria-pressed="false">Start session</button>`
+    : x.kind === "progress" ? `<div class="ds-pattern-value">3 / 7</div><div class="ds-progress"><i style="width:43%"></i></div>${items}`
+    : x.kind === "plan" ? `${items}<button class="ds-btn ds-btn--primary">Choose plan</button>`
+    : x.kind === "stat" ? `<div class="ds-pattern-value">24</div>${items}` : items;
+  return `<div class="ds-pattern ds-pattern--${x.kind}">${title}${content}</div>`;
+}
 function specimen(name: string): string {
   switch (name) {
     case "SegmentedControl": return `<div class="ds-seg" data-seg><button aria-pressed="true">List</button><button aria-pressed="false">Board</button><button aria-pressed="false">Timeline</button></div>`;
     case "Tabs": return `<div style="width:100%"><div class="ds-tabs" role="tablist" data-tabs><button role="tab" aria-selected="true">Overview</button><button role="tab" aria-selected="false">Activity</button><button role="tab" aria-selected="false">Settings</button></div></div>`;
     case "CommandMenu": return `<div class="ds-cmd"><input placeholder="Type a command or search…" /><ul><li aria-selected="true">Create new item <span class="ds-kbd">C</span></li><li>Go to inbox <span><span class="ds-kbd">G</span> <span class="ds-kbd">I</span></span></li><li>Switch theme <span class="ds-kbd">⌘K</span></li></ul></div>`;
     case "Pill": return `<div class="row"><button class="ds-pill" aria-pressed="true" data-toggle>Active</button><button class="ds-pill" aria-pressed="false" data-toggle>Backlog</button><button class="ds-pill" aria-pressed="false" data-toggle>Mine</button></div>`;
-    case "Button": return `<div class="col"><div class="row"><button class="ds-btn ds-btn--primary">Primary</button><button class="ds-btn ds-btn--secondary">Secondary</button><button class="ds-btn ds-btn--ghost">Ghost</button><button class="ds-btn ds-btn--danger">Delete</button><button class="ds-btn ds-btn--primary" disabled>Disabled</button></div><div class="row"><button class="ds-btn ds-btn--primary ds-btn--sm">Small</button><button class="ds-btn ds-btn--primary">Medium</button><button class="ds-btn ds-btn--primary ds-btn--lg">Large</button></div></div>`;
+    case "Button": return `<div class="col"><div class="row"><button class="ds-btn ds-btn--primary">Primary</button><button class="ds-btn ds-btn--highlight">Highlight</button><button class="ds-btn ds-btn--secondary">Secondary</button><button class="ds-btn ds-btn--ghost">Ghost</button><button class="ds-btn ds-btn--danger">Delete</button><button class="ds-btn ds-btn--primary" disabled>Disabled</button></div><div class="row"><button class="ds-btn ds-btn--primary ds-btn--sm">Small</button><button class="ds-btn ds-btn--primary">Medium</button><button class="ds-btn ds-btn--primary ds-btn--lg">Large</button></div></div>`;
     case "TextField": return `<div class="specimen-grid"><div><label class="ds-label" for="project-name">Project name</label><input id="project-name" class="ds-field" placeholder="e.g. Spring launch" /><div class="ds-hint">Visible to your team.</div></div><div><label class="ds-label" for="email">Email</label><input id="email" class="ds-field" aria-invalid="true" value="not-an-email" /><div class="ds-hint" style="color:var(--ds-danger)">Enter a valid email.</div></div></div>`;
-    case "Select": return `<div style="width:240px;max-width:100%"><label class="ds-label">Status</label><select class="ds-select"><option>Todo</option><option>In progress</option><option>Done</option></select></div>`;
+    case "Select": return `<div style="width:240px;max-width:100%"><label class="ds-label" for="status-select">Status</label><div class="ds-select-wrap"><select id="status-select" class="ds-select"><option>Todo</option><option>In progress</option><option>Done</option></select>${chevron}</div></div>`;
     case "Checkbox": return `<div class="col"><label class="ds-check"><input type="checkbox" checked /> Email notifications</label><label class="ds-check"><input type="checkbox" /> Weekly digest</label></div>`;
     case "Radio": return `<div class="col" role="radiogroup"><label class="ds-radio"><input type="radio" name="r" checked /> Everyone</label><label class="ds-radio"><input type="radio" name="r" /> Only my team</label><label class="ds-radio"><input type="radio" name="r" /> Only me</label></div>`;
     case "Switch": return `<div class="col"><label class="row"><button class="ds-switch" role="switch" aria-checked="true" data-switch></button> Auto-assign</label><label class="row"><button class="ds-switch" role="switch" aria-checked="false" data-switch></button> Compact mode</label></div>`;
@@ -169,6 +227,7 @@ export function guidelinesHtml(s: Spec) {
   const notes = new Map(s.components.map((c) => [c.name, c]));
   const nav = [
     { group: "Foundations", items: [["overview", "Overview"], ["colour", "Colour"], ["type", "Type"], ["space", "Space & radius"], ["motion", "Motion"]] },
+    ...(s.product.patterns.length ? [{ group: "Product patterns", items: s.product.patterns.map((x, i) => [`pattern-${i}`, x.name]) }] : []),
     ...COMPONENT_GROUPS.map((g) => ({ group: g.group, items: g.items.map((n) => [n.toLowerCase(), n]) })),
   ];
   const swatch = (k: ThemeKey) => `<div class="sw"><i style="background:var(--${p}-${kebab(k)})"></i><b>${k}</b><code>--${p}-${kebab(k)}</code><code class="hex">${esc(s.dark[k])} / ${esc(s.light[k])}</code></div>`;
@@ -193,8 +252,8 @@ aside a.active { color:var(--ds-fg); background:var(--ds-line); font-weight:500;
 .theme { margin-top:auto; padding-top:20px; }
  main { width:100%; min-width:0; max-width:972px; padding:48px 56px 120px; overflow-wrap:anywhere; }
 section { padding:40px 0; border-bottom:1px solid var(--ds-line); scroll-margin-top:16px; }
-h1 { font:600 44px/1.05 var(--ds-font-display); letter-spacing:-.02em; margin:8px 0 12px; }
-h2 { font:600 26px var(--ds-font-display); letter-spacing:-.01em; margin:6px 0 8px; }
+h1 { font:600 44px/1.05 var(--ds-font-display); letter-spacing:0; margin:8px 0 12px; }
+h2 { font:600 26px var(--ds-font-display); letter-spacing:0; margin:6px 0 8px; }
 .eyebrow { font:500 11px var(--ds-font-mono); text-transform:uppercase; letter-spacing:.08em; color:var(--ds-accent); }
 .lead { color:var(--ds-fg-2); font-size:15px; line-height:1.6; margin:0 0 18px; }
 p { color:var(--ds-fg-2); font-size:14px; line-height:1.65; }
@@ -281,15 +340,16 @@ import "../dist/__P__.css";
 type Div = React.HTMLAttributes<HTMLDivElement>;
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(" ");
 
-export function Button({ variant = "primary", size = "md", className, ...p }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "ghost" | "danger"; size?: "sm" | "md" | "lg" }) {
+export function Button({ variant = "primary", size = "md", className, ...p }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "highlight" | "secondary" | "ghost" | "danger"; size?: "sm" | "md" | "lg" }) {
   return <button className={cx("ds-btn", "ds-btn--" + variant, size !== "md" && "ds-btn--" + size, className)} {...p} />;
 }
 export function TextField({ label, hint, error, id, ...p }: React.InputHTMLAttributes<HTMLInputElement> & { label?: string; hint?: string; error?: string }) {
-  const fid = id ?? React.useId();
+  const generatedId = React.useId(); const fid = id ?? generatedId;
   return <div>{label && <label className="ds-label" htmlFor={fid}>{label}</label>}<input id={fid} className="ds-field" aria-invalid={!!error} {...p} />{(error || hint) && <div className="ds-hint" style={error ? { color: "var(--ds-danger)" } : undefined}>{error ?? hint}</div>}</div>;
 }
-export function Select({ label, options, ...p }: React.SelectHTMLAttributes<HTMLSelectElement> & { label?: string; options: string[] }) {
-  return <div>{label && <label className="ds-label">{label}</label>}<select className="ds-select" {...p}>{options.map((o) => <option key={o}>{o}</option>)}</select></div>;
+export function Select({ label, options, id, ...p }: React.SelectHTMLAttributes<HTMLSelectElement> & { label?: string; options: string[] }) {
+  const generatedId = React.useId(); const fid = id ?? generatedId;
+  return <div>{label && <label className="ds-label" htmlFor={fid}>{label}</label>}<div className="ds-select-wrap"><select id={fid} className="ds-select" {...p}>{options.map((o) => <option key={o}>{o}</option>)}</select><svg className="ds-select-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 6 5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div></div>;
 }
 export function Checkbox({ label, ...p }: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
   return <label className="ds-check"><input type="checkbox" {...p} /> {label}</label>;
@@ -415,14 +475,33 @@ function brandMd(s: Spec) {
 }
 
 function componentMd(s: Spec, name: string) {
-  const n = s.components.find((c) => c.name === name)!;
-  const group = COMPONENT_GROUPS.find((g) => g.items.includes(name))!.group;
+  const n = s.components.find((c) => c.name === name);
+  if (!n) return "";
+  const group = COMPONENT_GROUPS.find((g) => g.items.includes(name))?.group ?? "Product patterns";
   return `# ${name}\n\n_${group}_\n\n${n.summary}\n\n${n.usage}\n\n## Do\n\n${n.dos.map((d) => `- ${d}`).join("\n") || "-"}\n\n## Don't\n\n${n.donts.map((d) => `- ${d}`).join("\n") || "-"}\n\n## Code\n\n\`\`\`tsx\nimport { ${name} } from "./react/Components";\n\`\`\`\n\nCSS class: \`.${s.brand.prefix}-${name.toLowerCase()}\` (see \`dist/${s.brand.prefix}.css\`).\n`;
 }
 
 function readme(s: Spec) {
   const p = s.brand.prefix;
   return `# ${s.brand.name} design system\n\n${s.brand.tagline}\n\nOpen \`index.html\` in a browser for the full guidelines (dark + light).\n\n## Contents\n\n- \`tokens/tokens.css\`, \`tokens/tokens.json\` — colour (dark + light), type, radius, space, motion\n- \`dist/${p}.css\` — component styles using only tokens\n- \`react/Components.tsx\` — React components\n- \`react/Components.stories.tsx\` — Storybook stories\n- \`guidelines/\` — brand and per-component usage notes\n\n## Use in a project\n\n1. Copy this folder into your repo (e.g. \`src/design-system\`).\n2. Import \`tokens/tokens.css\` and \`dist/${p}.css\` once at your app root.\n3. Set \`data-theme="dark"\` or \`data-theme="light"\` on \`<html>\`.\n4. Import components: \`import { Button } from "./design-system/react/Components";\`\n\n## Storybook\n\nAdd \`"../src/design-system/react/*.stories.tsx"\` to \`stories\` in \`.storybook/main.ts\`. Optionally add a \`theme\` global toolbar (dark/light) — the stories read \`globals.theme\`.\n\n## Fonts\n\n${s.fonts.display}, ${s.fonts.body}, ${s.fonts.mono} — load from Google Fonts.\n`;
+}
+
+function productReactFile(s: Spec) {
+  return px(`import * as React from "react";
+import { Button, Checkbox, ProgressBar } from "./Components";
+export const patterns = ${JSON.stringify(s.product.patterns)};
+export function ProductPattern({ name }: { name: string }) {
+  const x = patterns.find((p) => p.name === name);
+  const [running, setRunning] = React.useState(false);
+  if (!x) return null;
+  return <section className={"ds-pattern ds-pattern--" + x.kind + (running ? " is-breathing" : "")}>
+    <h3>{x.title || x.name}</h3>
+    {x.kind === "timer" ? <><div className="ds-breath-orbit"/><p>{x.items[0]}</p><Button variant="highlight" aria-pressed={running} onClick={() => setRunning(!running)}>{running ? "Pause session" : "Start session"}</Button></>
+      : x.kind === "checklist" ? <div className="ds-pattern-list">{x.items.map((item, i) => <div className="ds-pattern-item" key={item}><Checkbox label={item} defaultChecked={i === 0}/></div>)}</div>
+      : <>{x.kind === "progress" && <><div className="ds-pattern-value">3 / 7</div><ProgressBar value={43}/></>}{x.kind === "stat" && <div className="ds-pattern-value">24</div>}{x.items.map((item) => <div key={item} className="ds-pattern-item">{item}</div>)}{x.kind === "plan" && <Button>Choose plan</Button>}</>}
+  </section>;
+}
+`, s.brand.prefix);
 }
 
 /** Spec → every file in the package, keyed by relative path. */
@@ -439,5 +518,11 @@ export function renderPackage(s: Spec): Record<string, string> {
     "guidelines/brand.md": brandMd(s),
   };
   for (const g of COMPONENT_GROUPS) for (const n of g.items) files[`guidelines/components/${n}.md`] = componentMd(s, n);
+  if (s.product.patterns.length) {
+    files["react/ProductPatterns.tsx"] = productReactFile(s);
+    files["react/ProductPatterns.stories.tsx"] = `import * as React from "react";\nimport { ProductPattern, patterns } from "./ProductPatterns";\nexport default { title: ${JSON.stringify(s.brand.name + "/Product patterns")} };\nexport const Examples = { render: () => <div className="${p}-root" style={{display:"grid",gap:24,padding:24}}>{patterns.map((x) => <ProductPattern key={x.name} name={x.name}/>)}</div> };`;
+    for (const [i, x] of s.product.patterns.entries()) files[`guidelines/patterns/${i + 1}.md`] = `# ${x.name}\n\n${x.summary}\n\n${x.usage}\n\nImport ProductPattern from react/ProductPatterns and pass name=${JSON.stringify(x.name)}.`;
+    files["guidelines/product.md"] = `# Product context\n\n${s.product.purpose}\n\n## Pages & workflows\n${s.product.pages.map((x) => `- ${x}`).join("\n")}`;
+  }
   return files;
 }
