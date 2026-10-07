@@ -383,7 +383,7 @@ function Admin() {
                   entry={{ ...original, prompt: form.prompt, html_content: form.html_content }}
                   status={dsStatus.find((d) => d.entry_id === form.id)}
                   busy={generating.has(form.id)}
-                  onGenerate={() => runGenerate(form.id, form.name)}
+                  onGenerate={() => { if (form.id) runGenerate(form.id, form.name); }}
                 />
               )}
             </div>
