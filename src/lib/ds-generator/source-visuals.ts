@@ -1,7 +1,7 @@
 import { parseHTML } from "linkedom";
 import * as css from "css-tree";
 
-export type SourceVisuals = { css: string; cards: { name: string; html: string }[]; illustrations: { name: string; html: string }[]; tasks: string; themeToggle: string; animations: string[] };
+export type SourceVisuals = { css: string; cardCss: string; cards: { name: string; html: string }[]; illustrations: { name: string; html: string }[]; tasks: string; themeToggle: string; animations: string[] };
 const tags = new Set("div span p h1 h2 h3 h4 h5 h6 strong b em i small section article label button input svg g path circle ellipse rect line polyline polygon defs lineargradient radialgradient stop clippath mask title desc use".split(" "));
 const attrs = /^(class|id|role|title|type|checked|disabled|tabindex|viewbox|width|height|d|x|y|x1|x2|y1|y2|cx|cy|r|rx|ry|points|fill|stroke|stroke-width|stroke-linecap|stroke-linejoin|stroke-dasharray|stroke-dashoffset|opacity|transform|xmlns|offset|stop-color|stop-opacity|clip-path|mask|preserveaspectratio|aria-[\w-]+|data-mode|data-theme)$/i;
 const safeValue = (v: string) => !/[<>]|javascript:|expression\(|@import|(?:https?:|data:|\/\/)/i.test(v) && !/url\((?!["']?#)/i.test(v);
@@ -11,6 +11,22 @@ export function extractSourceVisuals(html: string): SourceVisuals {
   const { document } = parseHTML(html);
   const animations: string[] = [];
   const ast = css.parse(Array.from(document.querySelectorAll("style")).map((el) => el.textContent).join("\n"));
+  const vars = new Map<string, string>();
+  const cardRules: string[] = [];
+  css.walk(ast, { visit: "Rule", enter(rule) {
+    const selector = css.generate(rule.prelude);
+    if (selector === ":root") css.walk(rule.block, { visit: "Declaration", enter(d) { if (d.property.startsWith("--")) vars.set(d.property, css.generate(d.value)); } });
+    if (!this.atrule && /^\.(habit|card)(:hover)?$/.test(selector)) {
+      const declarations: string[] = [];
+      css.walk(rule.block, { visit: "Declaration", enter(d) {
+        if (/^(border|border-radius|padding|gap|transform|box-shadow|transition)$/.test(d.property)) declarations.push(`${d.property}:${css.generate(d.value)}`);
+      } });
+      cardRules.push(`.ds-card${selector.endsWith(":hover") ? ":hover" : ""}{${declarations.join(";")}}`);
+    }
+  } });
+  let cardCss = cardRules.join("\n");
+  for (let i = 0; i < 5; i++) cardCss = cardCss.replace(/var\((--[\w-]+)\)/g, (all, key) => vars.get(key) ?? all);
+  if (!safeValue(cardCss)) cardCss = "";
   css.walk(ast, {
     visit: "Atrule",
     enter(node, item, list) {
@@ -72,8 +88,8 @@ export function extractSourceVisuals(html: string): SourceVisuals {
     return { name: el.querySelector("title")?.textContent || `Illustration / icon ${i + 1}`, html: markup };
   });
   const tasks = Array.from(document.querySelectorAll('.item[aria-pressed]')).slice(0, 5).map(sanitize).join("");
-  const toggle = document.querySelector('.theme-toggle, .theme-switch, .mode-toggle, .toggle-theme, button[aria-label*="theme" i]');
-  return { css: sourceCss, cards, illustrations, tasks, themeToggle: toggle ? sanitize(toggle) : "", animations };
+  const toggle = document.querySelector('.theme-toggle, .theme-switch, .mode-toggle, .toggle-theme, .theme-btn, .mode-btn, button[aria-label*="theme" i], button[aria-label*="mode" i]');
+  return { css: sourceCss, cardCss, cards, illustrations, tasks, themeToggle: toggle ? sanitize(toggle) : "", animations };
 }
 
 export const sourceVisualCss = (v: SourceVisuals) => v.css + `
