@@ -11,3 +11,5 @@
 - [x] In-app generator to create design systems for new templates.
 - [x] AI design system generator for new templates
 - [x] Polish and verify generated guidelines spacing in existing pages and downloads.
+- [x] Preserve template-specific visual styling and generate relevant product patterns.
+- [x] Fix generated dropdown chevron spacing and verify guidelines and exports.
