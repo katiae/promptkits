@@ -58,8 +58,8 @@ export function extractSourceVisuals(html: string): SourceVisuals {
   let sourceCss = css.generate(ast);
   // Rename animation values and keyframe identifiers, never selectors such as .pop or .float.
   const motionAst = css.parse(sourceCss);
-  css.walk(motionAst, { visit: "Atrule", enter(n) { if (/keyframes$/.test(n.name) && n.prelude) n.prelude = css.parse("source-" + css.generate(n.prelude), { context: "atrulePrelude" }); } });
-  css.walk(motionAst, { visit: "Declaration", enter(n) { if (/^animation(?:-name)?$/.test(n.property)) { let value = css.generate(n.value); for (const name of animations) value = value.replace(new RegExp(`\\b${name}\\b`, "g"), "source-" + name); n.value = css.parse(value, { context: "value" }); } } });
+  css.walk(motionAst, { visit: "Atrule", enter(n) { if (/keyframes$/.test(n.name) && n.prelude) { const parsed = css.parse("source-" + css.generate(n.prelude), { context: "atrulePrelude" }); if (parsed.type === "AtrulePrelude") n.prelude = parsed; } } });
+  css.walk(motionAst, { visit: "Declaration", enter(n) { if (/^animation(?:-name)?$/.test(n.property)) { let value = css.generate(n.value); for (const name of animations) value = value.replace(new RegExp(`\\b${name}\\b`, "g"), "source-" + name); const parsed = css.parse(value, { context: "value" }); if (parsed.type === "Value") n.value = parsed; } } });
   sourceCss = css.generate(motionAst);
 
   let serial = 0;
