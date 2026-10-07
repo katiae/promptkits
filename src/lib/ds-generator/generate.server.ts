@@ -9,7 +9,9 @@ const SYSTEM = `You are a senior design-systems designer. From a website/app tem
 Rules:
 - brand.name: the template's product name if it has one, else an evocative 1-2 word name. brand.prefix: 2-3 lowercase letters derived from the name (used as CSS variable prefix). tagline: one sentence. voice: 1-2 sentences on tone of UI copy. overview: 2-3 sentences describing the visual language.
 - fonts: use the template's real font families (Google Fonts names). googleHref: a https://fonts.googleapis.com/css2 URL loading all three with needed weights.
-- dark and light: provide BOTH themes as hex or rgba values. Keep the template's own theme faithful; derive the other so it feels like the same brand. accent must keep AA contrast against bg in each theme (darken it for light themes). accentFg is text on the accent. accentSoft is a translucent accent tint. line/lineStrong are subtle translucent borders.
+- dark and light: provide BOTH themes as hex or rgba values. Keep the template's own theme faithful; derive the other so it feels like the same brand. accent must keep AA contrast against bg in each theme (darken it for light themes). accentFg is text on the accent. accentSoft is a translucent accent tint. line/lineStrong are dividers, NOT structural outlines. stroke is the real structural outline colour. action/actionFg are the actual primary CTA pair; accent is the brand colour and may be different. highlight/highlightFg capture secondary highlighted actions or selected toggles (e.g. yellow wellness CTA versus green brand). pastel1/2/3 preserve supporting panel colours. Do NOT darken a yellow CTA that already has dark readable text just to make the background meet text contrast. Preserve existing local pastel panel treatments.
+- appearance: infer actual desktop control geometry from the CSS, not a generic SaaS kit. Include buttonRadius (999 for pills), controlRadius, checkRadius (999 for circular habit checkboxes), borderWidth, controlHeight, buttonHeight, fontSize, fontWeight, controlSize, shadowOffset (solid vertical offset shadow, zero if none), accordionCards (true for separate rounded outlined FAQ items). Match playful thick strokes and tactile shadows when present; do not make a friendly consumer template look like an enterprise dashboard.
+- product: identify its purpose and ALL supplied page/section workflows from HTML, headings and prompt. pages lists those sections. patterns: 3-5 genuinely relevant reusable compositions beyond primitives, choosing a supported kind: checklist, timer, progress, plan, notification, stat. Each has a descriptive component name, kind, summary, usage, title, and 2-4 realistic short example items. A wellness template needs habit checklists, breathing sessions, reminders and progress; commerce needs plans and product stats. Only describe pages visible in the supplied material, never claim to inspect external pages. Do not invent medical claims, testimonials or actual business prices.
 - radius in px (sm < md < lg), space = base spacing unit in px (usually 4), motion durations in ms and an ease (cubic-bezier).
 - components: one entry for EACH of: ${COMPONENT_GROUPS.flatMap((g) => g.items).join(", ")}. summary: one sentence of what it is. usage: when to use it in this brand's style. dos/donts: 2-3 short items each.`;
 
@@ -22,7 +24,8 @@ export async function generateSpec(input: { name: string; prompt: string; html: 
       model: "openai/gpt-6-astra",
       stream: true,
       store: false,
-      reasoning: { effort: "medium" },
+      reasoning: { effort: "medium", summary: "auto" },
+      include: ["reasoning.encrypted_content"],
       input: [
         { role: "system", content: SYSTEM },
         { role: "user", content: `TEMPLATE NAME: ${input.name}\n\nBUILD PROMPT:\n${input.prompt.slice(0, 6000)}\n\nTEMPLATE STYLES:\n${input.html ? condenseHtml(input.html) : "(no HTML uploaded)"}` },
