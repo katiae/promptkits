@@ -13,3 +13,4 @@
 - [x] Polish and verify generated guidelines spacing in existing pages and downloads.
 - [x] Preserve template-specific visual styling and generate relevant product patterns.
 - [x] Fix generated dropdown chevron spacing and verify guidelines and exports.
+- [ ] Include source illustrations, icons and motion with faithful cards in guidelines and exports; verify Sprig interactions.
