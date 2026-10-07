@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Set foldable preview dimensions and verify Ostra's touch-specific side navigation without changing its uploaded HTML.
+- [x] Set foldable preview dimensions and verify Ostra's touch-specific side navigation without changing its uploaded HTML.
 
 - [x] Replace template list loading text with blurred-artwork skeleton cards and verify the transition.
 
