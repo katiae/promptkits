@@ -39,6 +39,12 @@ export const listDesignSystemStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context);
-    const { data } = await context.supabase.from("design_systems").select("entry_id, status, error, updated_at");
+    const sb = context.supabase;
+    // A run that stopped mid-way (page closed or refreshed) never reports back — mark it as interrupted after 5 minutes.
+    const staleBefore = new Date(Date.now() - 5 * 60_000).toISOString();
+    await sb.from("design_systems")
+      .update({ status: "failed", error: "Interrupted — the page was closed or refreshed. Try again.", updated_at: new Date().toISOString() })
+      .eq("status", "generating").lt("updated_at", staleBefore);
+    const { data } = await sb.from("design_systems").select("entry_id, status, error, updated_at");
     return (data ?? []) as { entry_id: string; status: string; error: string | null; updated_at: string }[];
   });
