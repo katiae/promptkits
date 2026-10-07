@@ -393,7 +393,7 @@ function DesignSystemCell({ entry, status, busy, onGenerate }: { entry: Entry; s
   const bundled = entry.slug === "midnight-cadence";
   if (bundled) return <span className="label-mono text-muted-foreground">Design system · hand-built</span>;
   const btn = "rounded-full border border-border px-3 py-1 hover:bg-secondary disabled:opacity-60";
-  if (busy) return <span className="label-mono animate-pulse text-muted-foreground">Generating… keep this page open</span>;
+  if (busy) return <span className="label-mono animate-pulse text-muted-foreground">Generating… runs in the background</span>;
   return (
     <>
       {status?.status === "ready" && (
