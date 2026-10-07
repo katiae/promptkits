@@ -55,7 +55,11 @@ function DesignSystemPage() {
       const binaryPaths = new Set<string>(files[IMPORT_META] ? JSON.parse(files[IMPORT_META]).binaryPaths : []);
       for (const [p, c] of Object.entries(files)) {
         if (p === IMPORT_META) continue;
-        tree[`${slug}-design-system/${p}`] = binaryPaths.has(p) ? Uint8Array.from(atob(c), (v) => v.charCodeAt(0)) : strToU8(c);
+        const bytes = binaryPaths.has(p) ? Uint8Array.from(atob(c), (v) => v.charCodeAt(0)) : strToU8(c);
+        // Split into two clear folders: guidelines (web view) and ui (Storybook kit)
+        const guides = p.match(/^guidelines-source\/(?:[^/]+\/)?(.*)$/i);
+        if (guides) tree[`${slug}-design-system/guidelines/${guides[1]}`] = bytes;
+        else tree[`${slug}-design-system/ui/${p}`] = bytes;
       }
       const blob = new Blob([zipSync(tree, { level: 6 }) as BlobPart], { type: "application/zip" });
       const a = document.createElement("a");
