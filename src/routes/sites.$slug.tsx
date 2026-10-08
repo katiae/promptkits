@@ -10,7 +10,7 @@ import { OrbThumb } from "@/components/Orb";
 import { DeviceSwitcher, DeviceFrame, type Device } from "@/components/DevicePreview";
 import { buildReport } from "@/lib/security-scanner";
 import { DesignSystemButton } from "@/components/DesignSystemButton";
-import { foldablePreviewHtml } from "@/lib/device-preview";
+import { foldablePreviewHtml, defaultThemeHtml } from "@/lib/device-preview";
 
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
@@ -98,7 +98,7 @@ function Detail() {
     setTimeout(() => setCopied(false), 1800);
   };
   const fav = isFav(entry.id);
-  const html = content?.html_content && buildReport(content.html_content, "").ok ? content.html_content : null;
+  const html = content?.html_content && buildReport(content.html_content, "").ok ? defaultThemeHtml(slug, content.html_content) : null;
   const hasDemo = !!(html || entry.demo_url);
   const openDemo = () => {
     const url = html

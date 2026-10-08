@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { defaultThemeHtml } from "@/lib/device-preview";
 
 export const Route = createFileRoute("/sites/$slug/live-demo")({
   server: {
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/sites/$slug/live-demo")({
         if (entry.html_content) {
           // `sandbox` CSP keeps the template in an opaque origin even though the
           // URL is same-origin, so it cannot read app storage or cookies.
-          return new Response(entry.html_content, {
+          return new Response(defaultThemeHtml(entry.slug, entry.html_content), {
             headers: {
               "Content-Type": "text/html; charset=utf-8",
               "Content-Security-Policy":
