@@ -15,3 +15,8 @@ describe("foldable preview touch media", () => {
     expect(foldablePreviewHtml(html)).toBe(html);
   });
 });
+import { defaultThemeHtml } from "./device-preview";
+describe("defaultThemeHtml", () => {
+  it("starts Halyard in dark mode", () => expect(defaultThemeHtml("Halyard", "<meta>")).toBe('<html data-theme="dark"><meta>'));
+  it("leaves other templates alone", () => expect(defaultThemeHtml("Ostra", "<meta>")).toBe("<meta>"));
+});
