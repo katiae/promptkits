@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries";
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
+import { generateTemplateHtml } from "@/lib/template-gen.functions";
 import { captureThumbnail } from "@/lib/thumbnail";
 import { defaultThemeHtml } from "@/lib/device-preview";
 import type { Json } from "@/integrations/supabase/types";
@@ -84,6 +85,8 @@ function Admin() {
   const [capturing, setCapturing] = useState(false);
   const [importing, setImporting] = useState(false);
   const [ordering, setOrdering] = useState(false);
+  const [buildingHtml, setBuildingHtml] = useState(false);
+  const genHtml = useServerFn(generateTemplateHtml);
   const importDs = useServerFn(importDesignSystem);
   const fetchDsStatus = useServerFn(listDesignSystemStatus);
   const generateDs = useServerFn(generateDesignSystem);
@@ -158,6 +161,18 @@ function Admin() {
     if (file.size > 2_000_000) { toast.error("File is larger than 2 MB"); return; }
     const text = await file.text();
     setForm((f) => f && { ...f, html_content: text, html_name: file.name });
+  };
+
+  const buildTemplate = async () => {
+    if (!form || form.prompt.trim().length < 20) { toast.error("Paste the build prompt first"); return; }
+    setBuildingHtml(true);
+    try {
+      const { html } = await genHtml({ data: { prompt: form.prompt } });
+      setForm((f) => f && { ...f, html_content: html, html_name: "Generated from prompt" });
+      toast.success("Template generated — check the security scan, then save");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Template generation failed");
+    } finally { setBuildingHtml(false); }
   };
 
   if (isLoading) return <p className="py-32 text-center text-muted-foreground">Loading…</p>;
@@ -386,9 +401,19 @@ function Admin() {
               {form.html_name ? <span className="text-foreground">{form.html_name}</span> : <span>Drop your .html file here or click to choose</span>}
               <span className="text-xs">Scanned automatically before it can be saved</span>
             </label>
-            {form.html_content && (
-              <button onClick={() => setForm({ ...form, html_content: "", html_name: "" })} className="mt-1 text-xs text-muted-foreground underline">Remove file</button>
-            )}
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={buildTemplate}
+                disabled={buildingHtml}
+                className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:bg-secondary disabled:opacity-60"
+              >
+                {buildingHtml ? "Generating template… (1–3 min)" : form.html_content ? "✨ Regenerate template from prompt" : "✨ Generate template from prompt"}
+              </button>
+              {form.html_content && (
+                <button onClick={() => setForm({ ...form, html_content: "", html_name: "" })} className="text-xs text-muted-foreground underline">Remove file</button>
+              )}
+            </div>
           </div>
           {report && (
             <div className="md:col-span-2 rounded-xl bg-card p-4 text-sm">
