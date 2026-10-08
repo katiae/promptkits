@@ -7,6 +7,7 @@ import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries"
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
 import { captureThumbnail } from "@/lib/thumbnail";
+import { defaultThemeHtml } from "@/lib/device-preview";
 import type { Json } from "@/integrations/supabase/types";
 import { useServerFn } from "@tanstack/react-start";
 import { generateDesignSystem, listDesignSystemStatus } from "@/lib/design-system-gen.functions";
@@ -171,7 +172,7 @@ function Admin() {
   const snap = async (html: string) => {
     setCapturing(true);
     try {
-      return await captureThumbnail(html);
+      return await captureThumbnail(defaultThemeHtml(form?.slug || slugify(form?.name ?? ""), html));
     } catch (e) {
       toast.error("Couldn't capture the thumbnail — saving without it");
       console.error(e);
