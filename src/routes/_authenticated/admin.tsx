@@ -95,7 +95,11 @@ function Admin() {
   const [capturing, setCapturing] = useState(false);
   const [importing, setImporting] = useState(false);
   const [ordering, setOrdering] = useState(false);
-  const [buildingHtml, setBuildingHtml] = useState(false);
+  const [brief, setBrief] = useState("");
+  const [notes, setNotes] = useState("");
+  const [inspo, setInspo] = useState<string[]>([]);
+  const [aiStep, setAiStep] = useState<string | null>(null);
+  const genPrompt = useServerFn(generateBuildPrompt);
   const genHtml = useServerFn(generateTemplateHtml);
   const importDs = useServerFn(importDesignSystem);
   const fetchDsStatus = useServerFn(listDesignSystemStatus);
