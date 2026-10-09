@@ -1,7 +1,4 @@
 // Design system bundles. Hand-built packages live in the repo; AI-generated ones live in the database.
-import { renderPackage } from "./ds-generator/render";
-import { normalizeSpec } from "./ds-generator/spec";
-import { extractSourceVisuals } from "./ds-generator/source-visuals";
 import { IMPORT_META } from "./design-system-import";
 const files = import.meta.glob("/src/design-systems/**/*", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
 
@@ -33,7 +30,11 @@ export async function getBundle(slug: string): Promise<Record<string, string> | 
    if (saved?.[IMPORT_META]) return saved;
    if (bundled) return bundled;
    // Re-render saved briefs so layout corrections also reach existing guidelines and ZIPs without another AI run.
-   if (data?.spec) return renderPackage(normalizeSpec(data.spec, slug), entry.html_content ? extractSourceVisuals(entry.html_content) : undefined);
+   if (data?.spec) {
+     // Heavy renderer/parser modules load only when actually needed.
+     const [{ renderPackage }, { normalizeSpec }, { extractSourceVisuals }] = await Promise.all([import("./ds-generator/render"), import("./ds-generator/spec"), import("./ds-generator/source-visuals")]);
+     return renderPackage(normalizeSpec(data.spec, slug), entry.html_content ? extractSourceVisuals(entry.html_content) : undefined);
+   }
    return (data?.files as Record<string, string> | null) ?? null;
 }
 
