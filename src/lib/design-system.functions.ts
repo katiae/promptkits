@@ -6,7 +6,14 @@ import { IMPORT_META } from "./design-system-import";
 const slugInput = (d: unknown) => z.object({ slug: z.string().min(1).max(120) }).parse(d);
 
 /** Public: which templates have a design system (no content). */
-export const listDesignSystems = createServerFn({ method: "GET" }).handler(async () => (await import("./design-system.server")).availableSlugs());
+export const listDesignSystems = createServerFn({ method: "GET" }).handler(async () => {
+  try {
+    return await (await import("./design-system.server")).availableSlugs();
+  } catch (e) {
+    console.error("listDesignSystems failed", e);
+    return [] as string[];
+  }
+});
 
 /** Signed-in only: the guidelines page HTML. */
 export const getDesignSystemGuidelines = createServerFn({ method: "GET" })
