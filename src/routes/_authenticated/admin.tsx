@@ -6,7 +6,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { entriesQuery, normalizeTags, slugify, type Entry } from "@/lib/entries";
 import { buildReport, type ScanReport } from "@/lib/security-scanner";
 import { autofillEntry } from "@/lib/autofill.functions";
-import { generateTemplateHtml } from "@/lib/template-gen.functions";
+import { generateTemplateHtml, generateBuildPrompt } from "@/lib/template-gen.functions";
+
+/** Downscale an inspiration image to a ≤1024px JPEG data URL. */
+async function shrinkImage(file: File): Promise<string> {
+  const bmp = await createImageBitmap(file);
+  const s = Math.min(1, 1024 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+  c.getContext("2d")!.drawImage(bmp, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", 0.8);
+}
 import { captureThumbnail } from "@/lib/thumbnail";
 import { defaultThemeHtml } from "@/lib/device-preview";
 import type { Json } from "@/integrations/supabase/types";
@@ -163,16 +173,28 @@ function Admin() {
     setForm((f) => f && { ...f, html_content: text, html_name: file.name });
   };
 
-  const buildTemplate = async () => {
-    if (!form || form.prompt.trim().length < 20) { toast.error("Paste the build prompt first"); return; }
-    setBuildingHtml(true);
+  const addInspo = async (files: FileList | null) => {
+    if (!files) return;
+    const urls = await Promise.all([...files].slice(0, 4 - inspo.length).map(shrinkImage));
+    setInspo((a) => [...a, ...urls].slice(0, 4));
+  };
+
+  const createWithAi = async () => {
+    if (!form || brief.trim().length < 10) { toast.error("Write a short brief first"); return; }
     try {
-      const { html } = await genHtml({ data: { prompt: form.prompt } });
-      setForm((f) => f && { ...f, html_content: html, html_name: "Generated from prompt" });
-      toast.success("Template generated — check the security scan, then save");
+      setAiStep("Designing the template… (1–3 min)");
+      const { html } = await genHtml({ data: { brief, notes, images: inspo } });
+      setForm((f) => f && { ...f, html_content: html, html_name: "Generated with AI" });
+      setAiStep("Writing the build prompt…");
+      const { prompt } = await genPrompt({ data: { html } });
+      setForm((f) => f && { ...f, prompt });
+      setAiStep("Filling in the fields…");
+      const meta = await autofillEntry({ data: { prompt, existingTags } });
+      setForm((f) => f && { ...f, name: meta.name, slug: slugify(meta.name), description: meta.description, category: meta.category, tags: meta.tags.join(", "), hue: Math.max(0, Math.min(360, Math.round(meta.hue))) });
+      toast.success("Template ready — review everything, then save");
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Template generation failed");
-    } finally { setBuildingHtml(false); }
+      toast.error(e instanceof Error ? e.message : "Generation failed");
+    } finally { setAiStep(null); }
   };
 
   if (isLoading) return <p className="py-32 text-center text-muted-foreground">Loading…</p>;
@@ -311,6 +333,28 @@ function Admin() {
 
       {form && (
         <div className="mt-8 grid gap-4 rounded-3xl bg-tray p-6 md:grid-cols-2">
+          <div className="md:col-span-2 rounded-2xl bg-card p-5">
+            <p className="label-mono text-muted-foreground">Create with AI</p>
+            <p className="mt-1 text-sm text-muted-foreground">Describe the template in a few lines and add inspiration. The AI designs the page, then writes the detailed build prompt and fills in the fields. Or skip this and upload your own file below.</p>
+            <textarea value={brief} onChange={(e) => setBrief(e.target.value)} rows={3} placeholder="e.g. A calm meditation app landing page with soft gradients, a breathing timer and a pricing section" className="mt-3 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none focus:border-ring" />
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} placeholder="Inspiration notes, references, colours, fonts, moods (optional)" className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none focus:border-ring" />
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              {inspo.map((src, i) => (
+                <button key={i} type="button" title="Remove image" onClick={() => setInspo((a) => a.filter((_, j) => j !== i))} className="overflow-hidden rounded-lg border border-border">
+                  <img src={src} alt={`Inspiration ${i + 1}`} className="h-14 w-20 object-cover" />
+                </button>
+              ))}
+              {inspo.length < 4 && (
+                <label className="flex h-14 cursor-pointer items-center rounded-lg border border-dashed border-input px-3 text-xs text-muted-foreground hover:border-ring">
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => { void addInspo(e.target.files); e.target.value = ""; }} />
+                  + Inspiration images (up to 4)
+                </label>
+              )}
+            </div>
+            <button type="button" onClick={createWithAi} disabled={!!aiStep} className="mt-4 rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground hover:opacity-90 disabled:opacity-60">
+              {aiStep ?? (form.html_content ? "✨ Regenerate template, prompt & fields" : "✨ Generate template, prompt & fields")}
+            </button>
+          </div>
           {field("name", "Name")}
           {field("slug", "Slug (auto if empty)")}
           {field("description", "One-line description")}
@@ -401,19 +445,9 @@ function Admin() {
               {form.html_name ? <span className="text-foreground">{form.html_name}</span> : <span>Drop your .html file here or click to choose</span>}
               <span className="text-xs">Scanned automatically before it can be saved</span>
             </label>
-            <div className="mt-2 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={buildTemplate}
-                disabled={buildingHtml}
-                className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:bg-secondary disabled:opacity-60"
-              >
-                {buildingHtml ? "Generating template… (1–3 min)" : form.html_content ? "✨ Regenerate template from prompt" : "✨ Generate template from prompt"}
-              </button>
-              {form.html_content && (
-                <button onClick={() => setForm({ ...form, html_content: "", html_name: "" })} className="text-xs text-muted-foreground underline">Remove file</button>
-              )}
-            </div>
+            {form.html_content && (
+              <button onClick={() => setForm({ ...form, html_content: "", html_name: "" })} className="mt-1 text-xs text-muted-foreground underline">Remove file</button>
+            )}
           </div>
           {report && (
             <div className="md:col-span-2 rounded-xl bg-card p-4 text-sm">
