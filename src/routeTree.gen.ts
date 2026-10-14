@@ -12,11 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as SitesSlugRouteImport } from './routes/sites.$slug'
 import { Route as TagSlugRouteImport } from './routes/tag.$slug'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicDsGenerateRouteImport } from './routes/api/public/ds-generate'
 import { Route as SitesSlugLiveDemoRouteImport } from './routes/sites.$slug.live-demo'
 import { Route as SitesSlugDesignSystemRouteImport } from './routes/sites_.$slug.design-system'
@@ -36,6 +39,17 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -59,6 +73,11 @@ const SitesSlugRoute = SitesSlugRouteImport.update({
 const TagSlugRoute = TagSlugRouteImport.update({
   id: '/tag/$slug',
   path: '/tag/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicDsGenerateRoute = ApiPublicDsGenerateRouteImport.update({
@@ -86,11 +105,14 @@ const SitesSlugDesignSystemPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/saved': typeof AuthenticatedSavedRoute
   '/category/$slug': typeof CategorySlugRoute
   '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
@@ -99,11 +121,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/saved': typeof AuthenticatedSavedRoute
   '/category/$slug': typeof CategorySlugRoute
   '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
@@ -114,11 +139,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
   '/category/$slug': typeof CategorySlugRoute
   '/sites/$slug': typeof SitesSlugRouteWithChildren
   '/tag/$slug': typeof TagSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites_/$slug/design-system': typeof SitesSlugDesignSystemRoute
@@ -129,11 +157,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/mcp'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/saved'
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/.lovable/oauth/consent'
     | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
@@ -142,11 +173,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/mcp'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/saved'
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/.lovable/oauth/consent'
     | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
@@ -156,11 +190,14 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/mcp'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/_authenticated/saved'
     | '/category/$slug'
     | '/sites/$slug'
     | '/tag/$slug'
+    | '/.lovable/oauth/consent'
     | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites_/$slug/design-system'
@@ -171,9 +208,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  McpRoute: typeof McpRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CategorySlugRoute: typeof CategorySlugRoute
   SitesSlugRoute: typeof SitesSlugRouteWithChildren
   TagSlugRoute: typeof TagSlugRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicDsGenerateRoute: typeof ApiPublicDsGenerateRoute
   SitesSlugDesignSystemRoute: typeof SitesSlugDesignSystemRoute
   SitesSlugDesignSystemPreviewRoute: typeof SitesSlugDesignSystemPreviewRoute
@@ -200,6 +240,20 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -235,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/tag/$slug'
       fullPath: '/tag/$slug'
       preLoaderRoute: typeof TagSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/ds-generate': {
@@ -297,9 +358,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  McpRoute: McpRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CategorySlugRoute: CategorySlugRoute,
   SitesSlugRoute: SitesSlugRouteWithChildren,
   TagSlugRoute: TagSlugRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicDsGenerateRoute: ApiPublicDsGenerateRoute,
   SitesSlugDesignSystemRoute: SitesSlugDesignSystemRoute,
   SitesSlugDesignSystemPreviewRoute: SitesSlugDesignSystemPreviewRoute,
