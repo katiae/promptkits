@@ -495,6 +495,9 @@ function Admin() {
               <DesignSystemUpload key={`g-${form.id ?? "new"}`} label="Guidelines ZIP (web view)" hint="HTML pages, CSS, images and docs shown on the guidelines page" disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_guides, ds_guides_blocked = false) => setForm((f) => f && { ...f, ds_guides, ds_guides_blocked })} />
               <DesignSystemUpload key={`k-${form.id ?? "new"}`} label="UI kit ZIP (downloads & Storybook)" hint="Tokens, React components and stories developers download" disabled={importing || !!(form.id && (generating.has(form.id) || dsStatus.find((d) => d.entry_id === form.id)?.status === "generating"))} onPrepared={(ds_zip, ds_zip_blocked = false) => setForm((f) => f && { ...f, ds_zip, ds_zip_blocked })} />
             </div>
+            {form.id && dsStatus.find((d) => d.entry_id === form.id)?.status === "ready" && (
+              <p className="mt-3 text-sm text-primary">✓ A design system is saved for this template (updated {new Date(dsStatus.find((d) => d.entry_id === form.id)!.updated_at).toLocaleString()}). Upload new ZIPs only to replace it.</p>
+            )}
             <p className="text-xs leading-relaxed text-muted-foreground">Upload either or both. Uploading only one keeps the other part from a previous upload. Static checks are not an antivirus guarantee; uploaded code is never run.</p>
           </div>
           <div className="flex gap-2 md:col-span-2">
