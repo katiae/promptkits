@@ -26,7 +26,7 @@ import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DesignSystemUpload } from "@/components/DesignSystemUpload";
 import { importDesignSystem } from "@/lib/design-system-import.functions";
-import { summarize } from "@/lib/analytics";
+import { summarize, summarizeUsers } from "@/lib/analytics";
 
 type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
@@ -91,7 +91,7 @@ function Admin() {
     },
   });
   const { data: entries = [] } = useQuery({ ...entriesQuery(true), enabled: !!isAdmin });
-  const { data: stats = {} } = useQuery({
+  const { data: analytics } = useQuery({
     queryKey: ["analytics-stats"],
     enabled: !!isAdmin,
     queryFn: async () => {
@@ -102,9 +102,10 @@ function Admin() {
         rows.push(...(data ?? []));
         if (!data || data.length < 1000) break;
       }
-      return summarize(rows);
+      return { stats: summarize(rows), users: summarizeUsers(rows) };
     },
   });
+  const stats = analytics?.stats ?? {};
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);
@@ -522,7 +523,10 @@ function Admin() {
         </div>
       )}
 
-      <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
+      <p className="label-mono mt-8 text-muted-foreground">
+        {analytics?.users.users ?? 0} signed-in users · {analytics?.users.signIns ?? 0} sign-ins
+      </p>
+      <div className="mt-3 divide-y divide-border rounded-2xl border border-border bg-card">
         {entries.map((e, i) => (
           <div key={e.id} className="flex items-center gap-4 px-5 py-3.5">
             <div className="flex flex-col items-center gap-0.5">
@@ -552,7 +556,7 @@ function Admin() {
               <Link to="/sites/$slug" params={{ slug: e.slug }} className="font-serif text-lg">{e.name}</Link>
               <p className="truncate text-sm text-muted-foreground">{e.category} · {e.status}</p>
               <p className="label-mono mt-0.5 truncate text-muted-foreground">
-                {stats[e.slug]?.views ?? 0} views · {stats[e.slug]?.copies ?? 0} copies · {stats[e.slug]?.downloads ?? 0} downloads
+                {stats[e.slug]?.views ?? 0} views · {stats[e.slug]?.copies ?? 0} copies · {stats[e.slug]?.downloads ?? 0} downloads ({stats[e.slug]?.dsDownloads ?? 0} design system) · {stats[e.slug]?.demoTabs ?? 0} demo tabs · {stats[e.slug]?.dsTabs ?? 0} design system tabs
               </p>
             </div>
             <div className="ml-auto flex items-center gap-2 text-sm">
