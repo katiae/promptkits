@@ -26,6 +26,7 @@ import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DesignSystemUpload } from "@/components/DesignSystemUpload";
 import { importDesignSystem } from "@/lib/design-system-import.functions";
+import { summarize } from "@/lib/analytics";
 
 type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
@@ -90,6 +91,20 @@ function Admin() {
     },
   });
   const { data: entries = [] } = useQuery({ ...entriesQuery(true), enabled: !!isAdmin });
+  const { data: stats = {} } = useQuery({
+    queryKey: ["analytics-stats"],
+    enabled: !!isAdmin,
+    queryFn: async () => {
+      const rows: { entry_slug: string; event_type: string }[] = [];
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await supabase.from("analytics_events").select("entry_slug,event_type").range(from, from + 999);
+        if (error) throw error;
+        rows.push(...(data ?? []));
+        if (!data || data.length < 1000) break;
+      }
+      return summarize(rows);
+    },
+  });
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);
@@ -536,6 +551,9 @@ function Admin() {
             <div className="min-w-0">
               <Link to="/sites/$slug" params={{ slug: e.slug }} className="font-serif text-lg">{e.name}</Link>
               <p className="truncate text-sm text-muted-foreground">{e.category} · {e.status}</p>
+              <p className="label-mono mt-0.5 truncate text-muted-foreground">
+                {stats[e.slug]?.views ?? 0} views · {stats[e.slug]?.copies ?? 0} copies · {stats[e.slug]?.downloads ?? 0} downloads
+              </p>
             </div>
             <div className="ml-auto flex items-center gap-2 text-sm">
               <DesignSystemCell entry={e} status={dsStatus.find((d) => d.entry_id === e.id)} busy={generating.has(e.id)} onGenerate={() => runGenerate(e.id, e.name)} />

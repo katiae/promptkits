@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 import { ArrowUpRight, Copy, Check, Download } from "lucide-react";
 import { FavHeart } from "@/components/FavHeart";
 import { toast } from "sonner";
@@ -81,6 +82,7 @@ function Detail() {
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
   const [device, setDevice] = useState<Device>("desktop");
+  useEffect(() => { if (entry?.slug) track(entry.slug, "view"); }, [entry?.slug]);
 
   if (isLoading) return <DetailSkeleton />;
   if (!entry)
@@ -93,6 +95,7 @@ function Detail() {
 
   const copy = async () => {
     await navigator.clipboard.writeText(content?.prompt ?? "");
+    track(entry.slug, "copy_prompt");
     setCopied(true);
     toast.success("Prompt copied");
     setTimeout(() => setCopied(false), 1800);
@@ -111,6 +114,7 @@ function Detail() {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
     a.download = `${entry.slug}.html`;
+    track(entry.slug, "download_html");
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
