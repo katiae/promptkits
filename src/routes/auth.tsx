@@ -17,7 +17,7 @@ export const Route = createFileRoute("/auth")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({ next: oauthReturnPath(s.next) }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } => (s.next ? { next: oauthReturnPath(s.next) } : {}),
   component: AuthPage,
 });
 
@@ -25,7 +25,7 @@ function AuthPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
-  const { next } = Route.useSearch();
+  const next = Route.useSearch().next ?? "/";
 
   useEffect(() => {
     if (user) navigate({ href: next, replace: true });
