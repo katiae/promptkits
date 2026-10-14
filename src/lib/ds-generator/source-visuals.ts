@@ -1,5 +1,9 @@
 import { parseHTML } from "linkedom";
-import * as css from "css-tree";
+// Subpath imports avoid css-tree's lexer data, which loads a JSON file at runtime and crashes the live server.
+import parse from "css-tree/parser";
+import walk from "css-tree/walker";
+import generate from "css-tree/generator";
+const css = { parse, walk, generate };
 
 export type SourceVisuals = { css: string; cardCss: string; cards: { name: string; html: string }[]; illustrations: { name: string; html: string }[]; tasks: string; themeToggle: string; animations: string[] };
 const tags = new Set("div span p h1 h2 h3 h4 h5 h6 strong b em i small section article label button input svg g path circle ellipse rect line polyline polygon defs lineargradient radialgradient stop clippath mask title desc use".split(" "));
