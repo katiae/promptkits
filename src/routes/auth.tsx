@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { Orb } from "@/components/Orb";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/auth")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>) => ({ next: oauthReturnPath(s.next) }),
   component: AuthPage,
 });
 
@@ -23,21 +25,22 @@ function AuthPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const { next } = Route.useSearch();
 
   useEffect(() => {
-    if (user) navigate({ to: "/", replace: true });
-  }, [user, navigate]);
+    if (user) navigate({ href: next, replace: true });
+  }, [user, navigate, next]);
 
   const signIn = async () => {
     setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: new URL(next, window.location.origin).href });
     if (result.error) {
       toast.error("Sign in failed. Please try again.");
       setBusy(false);
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/" });
+    navigate({ href: next });
   };
 
   return (
