@@ -26,7 +26,7 @@ import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DesignSystemUpload } from "@/components/DesignSystemUpload";
 import { importDesignSystem } from "@/lib/design-system-import.functions";
-import { summarize } from "@/lib/analytics";
+import { summarize, summarizeUsers } from "@/lib/analytics";
 
 type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
@@ -91,7 +91,7 @@ function Admin() {
     },
   });
   const { data: entries = [] } = useQuery({ ...entriesQuery(true), enabled: !!isAdmin });
-  const { data: stats = {} } = useQuery({
+  const { data: analytics } = useQuery({
     queryKey: ["analytics-stats"],
     enabled: !!isAdmin,
     queryFn: async () => {
@@ -102,9 +102,10 @@ function Admin() {
         rows.push(...(data ?? []));
         if (!data || data.length < 1000) break;
       }
-      return summarize(rows);
+      return { stats: summarize(rows), users: summarizeUsers(rows) };
     },
   });
+  const stats = analytics?.stats ?? {};
   const [form, setForm] = useState<Form | null>(null);
   const [autofilling, setAutofilling] = useState(false);
   const [capturing, setCapturing] = useState(false);

@@ -107,7 +107,7 @@ function Detail() {
     const url = html
       ? `${window.location.origin}/sites/${entry.slug}/live-demo`
       : entry.demo_url;
-    if (url) window.open(url, "_blank", "noopener");
+    if (url) { track(entry.slug, "open_demo_tab"); window.open(url, "_blank", "noopener"); }
   };
   const download = () => {
     if (!html) return;
