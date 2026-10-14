@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
 import { DesignSystemTeaser } from "@/components/DesignSystemButton";
 import { IMPORT_META } from "@/lib/design-system-import";
+import { track } from "@/lib/analytics";
 
 export const Route = createFileRoute("/sites_/$slug/design-system")({
   head: ({ params }) => ({
@@ -66,6 +67,7 @@ function DesignSystemPage() {
       a.href = URL.createObjectURL(blob);
       a.download = `${slug}-design-system.zip`;
       a.click();
+      track(slug, "download_design_system");
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     } catch {
       toast.error("Download failed. Please try again.");
