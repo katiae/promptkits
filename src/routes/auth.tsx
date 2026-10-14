@@ -17,7 +17,7 @@ export const Route = createFileRoute("/auth")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>): { next?: string } => (s.next ? { next: oauthReturnPath(s.next) } : {}),
+  validateSearch: (s: Record<string, unknown>): { next?: string } => (s['next'] ? { next: oauthReturnPath(s['next']) } : {}),
   component: AuthPage,
 });
 
