@@ -114,6 +114,7 @@ function Detail() {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
     a.download = `${entry.slug}.html`;
+    track(entry.slug, "download_html");
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
