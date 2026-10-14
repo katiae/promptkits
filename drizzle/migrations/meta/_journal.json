@@ -36,6 +36,13 @@
       "when": 1791372683060,
       "tag": "0004_entries_sort_order",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791996204966,
+      "tag": "0005_claim_admin_require_verified_email",
+      "breakpoints": true
     }
   ]
 }
