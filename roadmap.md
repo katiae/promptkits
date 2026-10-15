@@ -19,3 +19,5 @@
 - [x] Fix generated dropdown chevron spacing and verify guidelines and exports.
 - [x] Include source illustrations, icons and motion with faithful cards in guidelines and exports; verify Sprig interactions.
 - [x] Add admin ZIP import with server-side security scanning, file-based guidelines and original package downloads; verified safe/blocked uploads, saved guidelines and unchanged downloads.
+
+- [x] Explain what signing in unlocks on the design system page (hover tooltip) and mention scalable design systems in the homepage intro.
