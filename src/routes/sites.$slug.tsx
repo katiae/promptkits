@@ -40,17 +40,17 @@ function DetailSkeleton() {
             <div className="h-3 w-20 rounded bg-secondary" />
             <div className="mt-3 h-10 w-2/5 rounded-lg bg-muted" />
             <div className="mt-3 h-4 w-3/5 rounded bg-secondary" />
+            <div className="mt-4 flex gap-1.5">
+              <div className="h-5 w-16 rounded-full bg-secondary" />
+              <div className="h-5 w-20 rounded-full bg-secondary" />
+              <div className="h-5 w-14 rounded-full bg-secondary" />
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <div className="h-8 w-28 rounded-full bg-muted" />
             <div className="h-8 w-36 rounded-full bg-secondary" />
             <div className="h-8 w-20 rounded-full bg-secondary" />
           </div>
-        </div>
-        <div className="mt-5 flex gap-1.5">
-          <div className="h-5 w-16 rounded-full bg-secondary" />
-          <div className="h-5 w-20 rounded-full bg-secondary" />
-          <div className="h-5 w-14 rounded-full bg-secondary" />
         </div>
         <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2 lg:grid lg:grid-cols-[1.45fr_1fr] lg:gap-2">
           <div className="rounded-2xl bg-card p-2">
