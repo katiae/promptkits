@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Download, ArrowUpRight } from "lucide-react";
+import { Download, ArrowUpRight, Lock } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
 import { toast } from "sonner";
@@ -99,19 +99,17 @@ function DesignSystemPage() {
             )}
             </div>
           </div>
-          <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2">
-            {isLoading || loading ? (
-              <div className="skeleton-art skeleton-palette-1 relative h-[80vh] overflow-hidden rounded-2xl bg-card" aria-busy="true">
-                <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
-              </div>
-            ) : data?.html ? (
-              <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
-            ) : (
-              <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
-            )}
+      <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2">
+        {isLoading ? (
+          <div className="skeleton-art skeleton-palette-1 relative h-[80vh] overflow-hidden rounded-2xl bg-card" aria-busy="true">
+            <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
           </div>
-        </>
-      )}
+        ) : data?.html ? (
+          <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
+        ) : (
+          <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
+        )}
+      </div>
     </main>
   );
 }
