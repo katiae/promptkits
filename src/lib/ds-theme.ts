@@ -24,7 +24,7 @@ export function withTheme(html: string, theme?: DsTheme): string {
       : `<html data-theme="${theme}">${result}</html>`;
   }
   if (result.includes('data-preview-theme-bridge')) return result;
-  return /<\/body\s*>/i.test(result) ? result.replace(/<\/body\s*>/i, `${THEME_BRIDGE}</body>`) : result + THEME_BRIDGE;
+  return /<\/body\s*>/i.test(result) ? result.replace(/<\/body\s*>/i, () => `${THEME_BRIDGE}</body>`) : result + THEME_BRIDGE;
 }
 /** Switches the theme of a loaded guidelines iframe without reloading it (keeps scroll position). */
 export const postTheme = (frame: HTMLIFrameElement | null, theme: DsTheme) =>
