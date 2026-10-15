@@ -45,7 +45,7 @@ export function SiteHeader() {
             </>
           ) : (
             <Link to="/auth" className="rounded-full bg-primary px-4 py-1.5 text-primary-foreground hover:opacity-90">
-              Sign in
+              Join for free
             </Link>
           )}
         </div>
