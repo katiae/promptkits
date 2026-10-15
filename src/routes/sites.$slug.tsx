@@ -12,6 +12,9 @@ import { DeviceSwitcher, DeviceFrame, type Device } from "@/components/DevicePre
 import { buildReport } from "@/lib/security-scanner";
 import { DesignSystemButton } from "@/components/DesignSystemButton";
 import { foldablePreviewHtml, defaultThemeHtml, linkGuardHtml } from "@/lib/device-preview";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { withTheme } from "@/lib/ds-theme";
+import { usePreviewTheme } from "@/hooks/use-preview-theme";
 
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
@@ -82,6 +85,7 @@ function Detail() {
   const [tab, setTab] = useState<"demo" | "prompt">("demo");
   const [copied, setCopied] = useState(false);
   const [device, setDevice] = useState<Device>("desktop");
+  const { theme, setTheme, frameRef, onLoad } = usePreviewTheme();
   useEffect(() => { if (entry?.slug) track(entry.slug, "view"); }, [entry?.slug]);
 
   if (isLoading) return <DetailSkeleton />;
@@ -164,6 +168,7 @@ function Detail() {
         ))}
       </div>
 
+      {html && <div className="mt-6 flex justify-end"><ThemeToggle value={theme} onChange={setTheme} /></div>}
       <div className="mt-6 flex gap-1 lg:hidden">
         {(["demo", "prompt"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`rounded-full px-4 py-1.5 text-sm capitalize ${tab === t ? "bg-primary text-primary-foreground" : "border border-border"}`}>
@@ -197,7 +202,9 @@ function Detail() {
             </div>
           ) : html ? (
             <DeviceFrame device={device}><iframe
-              srcDoc={linkGuardHtml(device === "fold" ? foldablePreviewHtml(html) : html)}
+              ref={frameRef}
+              onLoad={onLoad}
+              srcDoc={withTheme(linkGuardHtml(device === "fold" ? foldablePreviewHtml(html) : html))}
               title={`${entry.name} demo`}
               className={`w-full flex-1 bg-card ${device === "desktop" ? "min-h-[620px] rounded-b-2xl" : "h-full"}`}
               sandbox="allow-scripts"

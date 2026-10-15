@@ -11,6 +11,8 @@
 
 # Project rules
 
+- Preview theme controls share a browser-injected message bridge and source-validated frame hook; prefer native theme controls to preserve template motion, and never change saved HTML or downloads.
+
 - Foldable uploaded-HTML previews simulate coarse-pointer CSS media conditions only in the preview document; saved HTML and downloads remain unchanged because iframe resizing cannot emulate touch hardware.
 
 - Directory entries live in one `entries` table with `category` text and `tags` text[] (no join tables) — keeps admin editing and filtering simple.
