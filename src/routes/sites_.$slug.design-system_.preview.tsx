@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { getDesignSystemGuidelines } from "@/lib/design-system.functions";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
+import { withTheme } from "@/lib/ds-theme";
+import { usePreviewTheme } from "@/hooks/use-preview-theme";
 
 export const Route = createFileRoute("/sites_/$slug/design-system_/preview")({
   head: ({ params }) => ({
@@ -24,14 +25,10 @@ export const Route = createFileRoute("/sites_/$slug/design-system_/preview")({
 function FullScreen() {
   const { slug } = Route.useParams();
   const fetchGuide = useServerFn(getDesignSystemGuidelines);
-  const [theme, setTheme] = useState<DsTheme>("dark");
-  const frameRef = useRef<HTMLIFrameElement>(null);
-  const themeRef = useRef(theme);
-  themeRef.current = theme;
-  useEffect(() => { postTheme(frameRef.current, theme); }, [theme]);
+  const { theme, setTheme, frameRef, onLoad } = usePreviewTheme("dark");
   const { data } = useQuery({ queryKey: ["design-system", slug], queryFn: () => fetchGuide({ data: { slug } }) });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, themeRef.current) : ""), [data?.html]);
+  const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, "dark") : ""), [data?.html]);
   const name = slug === "midnight-cadence" ? "Halyard" : slug;
 
   return (
@@ -41,7 +38,7 @@ function FullScreen() {
         <div className="ml-auto"><ThemeToggle value={theme} onChange={setTheme} /></div>
       </div>
       {data?.html ? (
-        <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system`} sandbox="allow-scripts" className="w-full flex-1 bg-card" />
+        <iframe ref={frameRef} srcDoc={srcDoc} onLoad={onLoad} title={`${name} design system`} sandbox="allow-scripts" className="w-full flex-1 bg-card" />
       ) : (
         <div className="skeleton-art skeleton-palette-1 relative flex-1 overflow-hidden" aria-busy="true"><div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" /></div>
       )}

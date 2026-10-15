@@ -2,10 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { GitPushSoon } from "@/components/GitPushSoon";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Download, ArrowUpRight, Lock } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
+import { withTheme } from "@/lib/ds-theme";
+import { usePreviewTheme } from "@/hooks/use-preview-theme";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
@@ -33,17 +34,13 @@ function DesignSystemPage() {
   const fetchGuide = useServerFn(getDesignSystemGuidelines);
   const fetchFiles = useServerFn(getDesignSystemFiles);
   const [busy, setBusy] = useState(false);
-  const [theme, setTheme] = useState<DsTheme>("dark");
-  const frameRef = useRef<HTMLIFrameElement>(null);
-  const themeRef = useRef(theme);
-  themeRef.current = theme;
-  useEffect(() => { postTheme(frameRef.current, theme); }, [theme]);
+  const { theme, setTheme, frameRef, onLoad } = usePreviewTheme("dark");
   const { data, isLoading } = useQuery({
     queryKey: ["design-system", slug],
     queryFn: () => fetchGuide({ data: { slug } }),
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, themeRef.current) : ""), [data?.html]);
+  const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, "dark") : ""), [data?.html]);
   const name = slug === "midnight-cadence" ? "Halyard" : slug;
 
   const download = async () => {
@@ -109,7 +106,7 @@ function DesignSystemPage() {
             <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
           </div>
         ) : data?.html ? (
-          <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
+          <iframe ref={frameRef} srcDoc={srcDoc} onLoad={onLoad} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
         ) : (
           <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
         )}
