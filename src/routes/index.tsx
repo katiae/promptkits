@@ -9,9 +9,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Promptfolio — Better interface templates for AI" },
-      { name: "description", content: "Explore distinctive interface templates, try each live demo, and copy the prompt to build it with AI." },
+      { name: "description", content: "Explore distinctive interface templates, try each live demo, copy the prompt to build it with AI, and grow every one into a scalable design system for GitHub and Storybook." },
       { property: "og:title", content: "Promptfolio — Better interface templates for AI" },
-      { property: "og:description", content: "Live interface templates and the prompts to build them with AI." },
+      { property: "og:description", content: "Live interface templates, the prompts to build them with AI, and a scalable design system behind each one." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -48,7 +48,7 @@ function Index() {
           Build better interfaces with AI.
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-muted-foreground">
-          Explore distinctive templates, try the live demo, then copy the full prompt to make it your own.
+          Explore distinctive templates, try the live demo, then copy the full prompt to make it your own — and grow each one into a scalable design system.
         </p>
       </section>
 

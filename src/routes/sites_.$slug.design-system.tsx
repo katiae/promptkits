@@ -3,7 +3,8 @@ import { GitPushSoon } from "@/components/GitPushSoon";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
-import { Download, ArrowUpRight, Lock } from "lucide-react";
+import { Download, ArrowUpRight } from "lucide-react";
+import { DownloadSignInButton } from "@/components/DownloadSignInButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { withTheme } from "@/lib/ds-theme";
 import { usePreviewTheme } from "@/hooks/use-preview-theme";
@@ -94,9 +95,7 @@ function DesignSystemPage() {
                 <GitPushSoon />
               </>
             ) : (
-              <button onClick={() => signInWithGoogle(`/sites/${slug}/design-system`)} className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm hover:bg-secondary">
-                <Lock className="size-3.5" /> Sign in with Google to download
-              </button>
+              <DownloadSignInButton onClick={() => signInWithGoogle(`/sites/${slug}/design-system`)} />
             )}
             </div>
           </div>
