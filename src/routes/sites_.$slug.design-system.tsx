@@ -8,7 +8,7 @@ import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
-import { DesignSystemTeaser } from "@/components/DesignSystemButton";
+import { signInWithGoogle } from "@/components/DesignSystemButton";
 import { IMPORT_META } from "@/lib/design-system-import";
 import { track } from "@/lib/analytics";
 
@@ -78,11 +78,7 @@ function DesignSystemPage() {
   return (
     <main className="mx-auto max-w-[1600px] px-6 pt-12">
       <Link to="/sites/$slug" params={{ slug }} className="label-mono text-muted-foreground hover:text-foreground">← Back to template</Link>
-      {!loading && !user ? (
-        <div className="mx-auto mt-16 max-w-md rounded-3xl bg-card p-8"><DesignSystemTeaser slug={slug} name={name} /></div>
-      ) : (
-        <>
-          <div className="mt-6 flex flex-wrap items-end gap-4">
+      <div className="mt-6 flex flex-wrap items-end gap-4">
             <div>
               <h1 className="font-serif text-5xl tracking-tight">{name} design system</h1>
               <p className="mt-2 text-muted-foreground">Foundations and a complete component kit to grow your product beyond the template.</p>
