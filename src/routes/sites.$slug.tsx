@@ -13,7 +13,7 @@ import { buildReport } from "@/lib/security-scanner";
 import { DesignSystemButton } from "@/components/DesignSystemButton";
 import { foldablePreviewHtml, defaultThemeHtml, linkGuardHtml } from "@/lib/device-preview";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { withTheme } from "@/lib/ds-theme";
+import { withTheme, supportsPreviewThemes } from "@/lib/ds-theme";
 import { usePreviewTheme } from "@/hooks/use-preview-theme";
 
 export const Route = createFileRoute("/sites/$slug")({
@@ -131,7 +131,7 @@ function Detail() {
           <h1 className="font-serif text-5xl tracking-tight">{entry.name}</h1>
           <p className="mt-2 text-muted-foreground">{entry.description}</p>
         </div>
-        <div className="ml-auto flex items-center gap-2 text-sm">
+        <div className="ml-auto flex flex-wrap items-center gap-2 text-sm">
           {hasDemo ? (
             <button onClick={openDemo} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-primary-foreground hover:opacity-90">
               Open demo <ArrowUpRight className="size-3.5" />
@@ -168,7 +168,7 @@ function Detail() {
         ))}
       </div>
 
-      {html && <div className="mt-6 flex justify-end"><ThemeToggle value={theme} onChange={setTheme} /></div>}
+      {html && <div className="mt-6 flex justify-end"><ThemeToggle value={theme} onChange={setTheme} singleTheme={!supportsPreviewThemes(html)} /></div>}
       <div className="mt-6 flex gap-1 lg:hidden">
         {(["demo", "prompt"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`rounded-full px-4 py-1.5 text-sm capitalize ${tab === t ? "bg-primary text-primary-foreground" : "border border-border"}`}>

@@ -1,4 +1,8 @@
 export type DsTheme = "dark" | "light";
+/** Do not invent or recolor a second theme for single-theme uploads. */
+export function supportsPreviewThemes(html: string): boolean {
+  return /data-theme\s*(?:=|\])|\.(?:dark|light)(?:[\s.{:#>])|prefers-color-scheme|theme-toggle|ThemeProvider/i.test(html);
+}
 /** Preview-only bridge: use the page's own toggle where possible, preserving its motion and state. */
 const THEME_BRIDGE = `<script data-preview-theme-bridge>(function(){
 var root=document.documentElement;
