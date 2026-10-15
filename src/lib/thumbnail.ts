@@ -83,6 +83,40 @@ async function settleTemplate(iframe: HTMLIFrameElement, doc: Document) {
   await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 }
 
+/**
+ * Inlines the template's Google Fonts (latin subsets) as data URLs. Without the real
+ * fonts the capture falls back to wider system fonts and headings overflow onto text below.
+ */
+async function embeddedFontCss(doc: Document): Promise<string> {
+  const toDataUrl = async (url: string) => {
+    const blob = await (await fetch(url)).blob();
+    return await new Promise<string>((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result));
+      r.onerror = reject;
+      r.readAsDataURL(blob);
+    });
+  };
+  try {
+    const links = Array.from(doc.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href^="https://fonts.googleapis.com"]'));
+    const out: string[] = [];
+    for (const link of links) {
+      const css = await (await fetch(link.href)).text();
+      const blocks = css.split(/(?=\/\*\s*[\w-]+\s*\*\/)/).filter((b) => /^\/\*\s*latin\s*\*\//.test(b) || !/^\/\*/.test(b));
+      for (const block of blocks) {
+        let b = block;
+        for (const m of block.matchAll(/url\((https:\/\/fonts\.gstatic\.com[^)]+)\)/g)) {
+          b = b.replace(m[1]!, await toDataUrl(m[1]!));
+        }
+        out.push(b);
+      }
+    }
+    return out.join("\n");
+  } catch {
+    return "";
+  }
+}
+
 // Renders template HTML in an invisible in-viewport frame and captures its top viewport.
 // Keeping the frame in the viewport is important: templates commonly reveal their hero
 // with IntersectionObserver, which never fires when the frame is positioned off-screen.
@@ -114,6 +148,7 @@ export async function captureThumbnail(html: string): Promise<string> {
 
     await settleTemplate(iframe, doc);
     const root = doc.documentElement;
+    const fontEmbedCSS = await embeddedFontCss(doc);
     return await toJpeg(root, {
       width: CAPTURE_WIDTH,
       height: CAPTURE_HEIGHT,
@@ -122,7 +157,7 @@ export async function captureThumbnail(html: string): Promise<string> {
       quality: 0.82,
       backgroundColor: getComputedStyle(doc.body).backgroundColor || "#ffffff",
       style: { overflow: "hidden" },
-      skipFonts: true,
+      ...(fontEmbedCSS ? { fontEmbedCSS } : { skipFonts: true }),
     });
   } finally {
     iframe.remove();
