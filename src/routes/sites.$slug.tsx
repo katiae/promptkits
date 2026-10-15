@@ -11,7 +11,7 @@ import { OrbThumb } from "@/components/Orb";
 import { DeviceSwitcher, DeviceFrame, type Device } from "@/components/DevicePreview";
 import { buildReport } from "@/lib/security-scanner";
 import { DesignSystemButton } from "@/components/DesignSystemButton";
-import { foldablePreviewHtml, defaultThemeHtml } from "@/lib/device-preview";
+import { foldablePreviewHtml, defaultThemeHtml, linkGuardHtml } from "@/lib/device-preview";
 
 export const Route = createFileRoute("/sites/$slug")({
   head: ({ params }) => ({
