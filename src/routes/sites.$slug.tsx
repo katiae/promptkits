@@ -197,7 +197,7 @@ function Detail() {
             </div>
           ) : html ? (
             <DeviceFrame device={device}><iframe
-              srcDoc={device === "fold" ? foldablePreviewHtml(html) : html}
+              srcDoc={linkGuardHtml(device === "fold" ? foldablePreviewHtml(html) : html)}
               title={`${entry.name} demo`}
               className={`w-full flex-1 bg-card ${device === "desktop" ? "min-h-[620px] rounded-b-2xl" : "h-full"}`}
               sandbox="allow-scripts"
