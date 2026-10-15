@@ -5,9 +5,7 @@ import { useState } from "react";
 import { Layers, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable";
-import { useAuth } from "@/hooks/use-auth";
 import { listDesignSystems } from "@/lib/design-system.functions";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 export async function signInWithGoogle(returnPath: string) {
   const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}${returnPath}` });

@@ -38,9 +38,8 @@ function DesignSystemPage() {
   themeRef.current = theme;
   useEffect(() => { postTheme(frameRef.current, theme); }, [theme]);
   const { data, isLoading } = useQuery({
-    queryKey: ["design-system", slug, user?.id],
+    queryKey: ["design-system", slug],
     queryFn: () => fetchGuide({ data: { slug } }),
-    enabled: !!user,
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, themeRef.current) : ""), [data?.html]);
