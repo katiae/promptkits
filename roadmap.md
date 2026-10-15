@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Fix Dark/Light switching in design-system previews and add synchronized theme controls to template previews.
+- [x] Fix Dark/Light switching in design-system previews and add synchronized theme controls to template previews.
 
 - [x] Set foldable preview dimensions and verify Ostra's touch-specific side navigation without changing its uploaded HTML.
 
