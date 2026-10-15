@@ -39,24 +39,10 @@ export function DesignSystemTeaser({ slug, name }: { slug: string; name: string 
 }
 
 export function DesignSystemButton({ slug, name }: { slug: string; name: string }) {
-  const { user } = useAuth();
   const list = useServerFn(listDesignSystems);
   const { data } = useQuery({ queryKey: ["design-systems"], queryFn: () => list(), staleTime: 600_000 });
-  const [open, setOpen] = useState(false);
   if (!data?.includes(slug)) return null;
   const cls = "flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 hover:bg-secondary";
-  if (user)
-    return <Link to="/sites/$slug/design-system" params={{ slug }} className={cls}><Layers className="size-3.5" /> Design system</Link>;
-  return (
-    <>
-      <button onClick={() => setOpen(true)} className={cls}><Layers className="size-3.5" /> Design system <Lock className="size-3 text-muted-foreground" /></button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md rounded-3xl border-0 p-8">
-          <DialogTitle className="sr-only">Sign in to unlock the design system</DialogTitle>
-          <DialogDescription className="sr-only">Design system access requires a free account.</DialogDescription>
-          <DesignSystemTeaser slug={slug} name={name} />
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+  // Preview is open to everyone; signing in only unlocks the downloads.
+  return <Link to="/sites/$slug/design-system" params={{ slug }} className={cls}><Layers className="size-3.5" /> Design system</Link>;
 }
