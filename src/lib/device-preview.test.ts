@@ -20,3 +20,10 @@ describe("defaultThemeHtml", () => {
   it("starts Halyard in dark mode", () => expect(defaultThemeHtml("Halyard", "<meta>")).toBe('<html data-theme="dark"><meta>'));
   it("leaves other templates alone", () => expect(defaultThemeHtml("Ostra", "<meta>")).toBe("<meta>"));
 });
+
+import { linkGuardHtml } from "./device-preview";
+describe("linkGuardHtml", () => {
+  it("adds the in-page link guard before </body>", () => {
+    expect(linkGuardHtml("<body><a href='#x'>x</a></body>")).toMatch(/<script>[\s\S]*preventDefault[\s\S]*<\/script><\/body>$/);
+  });
+});
