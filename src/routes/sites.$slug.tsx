@@ -139,7 +139,6 @@ function Detail() {
           </div>
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2 text-sm">
-          {html && <ThemeToggle value={theme} onChange={setTheme} singleTheme={!supportsPreviewThemes(html)} />}
           {hasDemo ? (
             <button onClick={openDemo} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-primary-foreground hover:opacity-90">
               Open demo <ArrowUpRight className="size-3.5" />
@@ -183,8 +182,11 @@ function Detail() {
             <span className="size-2.5 rounded-full bg-border" />
             <span className="size-2.5 rounded-full bg-border" />
             <span className="ml-3 truncate font-mono text-[11px] text-muted-foreground">{html ? `/sites/${entry.slug}/live-demo · security scanned` : entry.demo_url ?? "demo coming soon"}</span>
-            {hasDemo && (
-              <div className="ml-auto hidden shrink-0 pl-3 sm:block"><DeviceSwitcher value={device} onChange={setDevice} /></div>
+            {(html || hasDemo) && (
+              <div className="ml-auto flex shrink-0 items-center gap-2 pl-3">
+                {html && <ThemeToggle compact value={theme} onChange={setTheme} singleTheme={!supportsPreviewThemes(html)} />}
+                {hasDemo && <div className="hidden sm:block"><DeviceSwitcher value={device} onChange={setDevice} /></div>}
+              </div>
             )}
             {hasDemo && (
               <button onClick={openDemo} className="ml-3 shrink-0 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground" aria-label="Open demo in a new tab">
