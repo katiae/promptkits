@@ -40,17 +40,17 @@ function DetailSkeleton() {
             <div className="h-3 w-20 rounded bg-secondary" />
             <div className="mt-3 h-10 w-2/5 rounded-lg bg-muted" />
             <div className="mt-3 h-4 w-3/5 rounded bg-secondary" />
+            <div className="mt-4 flex gap-1.5">
+              <div className="h-5 w-16 rounded-full bg-secondary" />
+              <div className="h-5 w-20 rounded-full bg-secondary" />
+              <div className="h-5 w-14 rounded-full bg-secondary" />
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <div className="h-8 w-28 rounded-full bg-muted" />
             <div className="h-8 w-36 rounded-full bg-secondary" />
             <div className="h-8 w-20 rounded-full bg-secondary" />
           </div>
-        </div>
-        <div className="mt-5 flex gap-1.5">
-          <div className="h-5 w-16 rounded-full bg-secondary" />
-          <div className="h-5 w-20 rounded-full bg-secondary" />
-          <div className="h-5 w-14 rounded-full bg-secondary" />
         </div>
         <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2 lg:grid lg:grid-cols-[1.45fr_1fr] lg:gap-2">
           <div className="rounded-2xl bg-card p-2">
@@ -130,8 +130,16 @@ function Detail() {
         <div>
           <h1 className="font-serif text-5xl tracking-tight">{entry.name}</h1>
           <p className="mt-2 text-muted-foreground">{entry.description}</p>
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {entry.tags.map((t) => (
+              <Link key={t} to="/tag/$slug" params={{ slug: t }} className="rounded-full bg-secondary px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground hover:text-foreground">
+                {t}
+              </Link>
+            ))}
+          </div>
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2 text-sm">
+          {html && <ThemeToggle value={theme} onChange={setTheme} singleTheme={!supportsPreviewThemes(html)} />}
           {hasDemo ? (
             <button onClick={openDemo} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-primary-foreground hover:opacity-90">
               Open demo <ArrowUpRight className="size-3.5" />
@@ -160,15 +168,6 @@ function Detail() {
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-1.5">
-        {entry.tags.map((t) => (
-          <Link key={t} to="/tag/$slug" params={{ slug: t }} className="rounded-full bg-secondary px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground hover:text-foreground">
-            {t}
-          </Link>
-        ))}
-      </div>
-
-      {html && <div className="mt-6 flex justify-end"><ThemeToggle value={theme} onChange={setTheme} singleTheme={!supportsPreviewThemes(html)} /></div>}
       <div className="mt-6 flex gap-1 lg:hidden">
         {(["demo", "prompt"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`rounded-full px-4 py-1.5 text-sm capitalize ${tab === t ? "bg-primary text-primary-foreground" : "border border-border"}`}>
