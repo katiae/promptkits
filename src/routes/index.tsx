@@ -48,7 +48,7 @@ function Index() {
           Build better interfaces with AI.
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-muted-foreground">
-          Explore distinctive templates, try the live demo, then copy the full prompt to make it your own — and grow each one into a scalable design system.
+          Explore distinctive templates, try the live demo, copy the full prompt to make it your own, and grow each one into a scalable design system.
         </p>
       </section>
 
