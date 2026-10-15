@@ -7,12 +7,24 @@ export function ThemeToggle({ value, onChange, singleTheme = false }: { value: D
   return (
     <div role="radiogroup" aria-label="Theme" className="relative flex gap-0.5 rounded-full bg-tray p-0.5">
       <div aria-hidden className="absolute left-0.5 top-0.5 h-8 w-[76px] rounded-full bg-card shadow-sm transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]" style={{ transform: `translateX(${value === "light" ? 78 : 0}px)` }} />
-      {opts.map(({ t, Icon, label }) => (
-        <Button variant="ghost" key={t} role="radio" aria-checked={value === t} disabled={singleTheme && value !== t} title={singleTheme && value !== t ? "This template does not include this theme" : undefined} onClick={() => onChange(t)}
-          className={`relative z-10 flex h-8 w-[76px] items-center justify-center gap-1.5 rounded-full px-0 text-sm font-normal transition-colors ${value === t ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
-          <Icon className="size-3.5" /> {label}
-        </Button>
-      ))}
+      {opts.map(({ t, Icon, label }) => {
+        const unavailable = singleTheme && value !== t;
+        return (
+          <div key={t} className="group relative">
+            <Button variant="ghost" role="radio" aria-checked={value === t} aria-disabled={unavailable || undefined}
+              title={unavailable ? "Coming soon" : undefined}
+              onClick={() => { if (!unavailable) onChange(t); }}
+              className={`relative z-10 flex h-8 w-[76px] items-center justify-center gap-1.5 rounded-full px-0 text-sm font-normal transition-colors ${unavailable ? "cursor-not-allowed text-muted-foreground/45" : value === t ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+              <Icon className="size-3.5" /> {label}
+            </Button>
+            {unavailable && (
+              <span role="tooltip" className="label-mono pointer-events-none absolute left-1/2 top-full z-20 mt-1.5 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-md bg-primary px-2 py-1 text-[10px] text-primary-foreground opacity-0 shadow-sm transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                Coming soon
+              </span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
