@@ -2,13 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Download, ArrowUpRight } from "lucide-react";
+import { Download, ArrowUpRight, Lock } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { withTheme, postTheme, type DsTheme } from "@/lib/ds-theme";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { getDesignSystemGuidelines, getDesignSystemFiles } from "@/lib/design-system.functions";
-import { DesignSystemTeaser } from "@/components/DesignSystemButton";
+import { signInWithGoogle } from "@/components/DesignSystemButton";
 import { IMPORT_META } from "@/lib/design-system-import";
 import { track } from "@/lib/analytics";
 
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/sites_/$slug/design-system")({
 
 function DesignSystemPage() {
   const { slug } = Route.useParams();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const fetchGuide = useServerFn(getDesignSystemGuidelines);
   const fetchFiles = useServerFn(getDesignSystemFiles);
   const [busy, setBusy] = useState(false);
@@ -38,9 +38,8 @@ function DesignSystemPage() {
   themeRef.current = theme;
   useEffect(() => { postTheme(frameRef.current, theme); }, [theme]);
   const { data, isLoading } = useQuery({
-    queryKey: ["design-system", slug, user?.id],
+    queryKey: ["design-system", slug],
     queryFn: () => fetchGuide({ data: { slug } }),
-    enabled: !!user,
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const srcDoc = useMemo(() => (data?.html ? withTheme(data.html, themeRef.current) : ""), [data?.html]);
@@ -79,11 +78,7 @@ function DesignSystemPage() {
   return (
     <main className="mx-auto max-w-[1600px] px-6 pt-12">
       <Link to="/sites/$slug" params={{ slug }} className="label-mono text-muted-foreground hover:text-foreground">← Back to template</Link>
-      {!loading && !user ? (
-        <div className="mx-auto mt-16 max-w-md rounded-3xl bg-card p-8"><DesignSystemTeaser slug={slug} name={name} /></div>
-      ) : (
-        <>
-          <div className="mt-6 flex flex-wrap items-end gap-4">
+      <div className="mt-6 flex flex-wrap items-end gap-4">
             <div>
               <h1 className="font-serif text-5xl tracking-tight">{name} design system</h1>
               <p className="mt-2 text-muted-foreground">Foundations and a complete component kit to grow your product beyond the template.</p>
@@ -93,24 +88,28 @@ function DesignSystemPage() {
             <a href={`/sites/${slug}/design-system/preview`} target="_blank" rel="noopener" onClick={() => track(slug, "open_design_system_tab")} className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90">
               Open in new tab <ArrowUpRight className="size-3.5" />
             </a>
-            <button onClick={download} disabled={busy || !data?.html} className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm hover:bg-secondary disabled:opacity-60">
-              <Download className="size-3.5" /> {busy ? "Preparing…" : "Download for GitHub & Storybook"}
-            </button>
+            {user ? (
+              <button onClick={download} disabled={busy || !data?.html} className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm hover:bg-secondary disabled:opacity-60">
+                <Download className="size-3.5" /> {busy ? "Preparing…" : "Download for GitHub & Storybook"}
+              </button>
+            ) : (
+              <button onClick={() => signInWithGoogle(`/sites/${slug}/design-system`)} className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm hover:bg-secondary">
+                <Lock className="size-3.5" /> Sign in with Google to download
+              </button>
+            )}
             </div>
           </div>
-          <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2">
-            {isLoading || loading ? (
-              <div className="skeleton-art skeleton-palette-1 relative h-[80vh] overflow-hidden rounded-2xl bg-card" aria-busy="true">
-                <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
-              </div>
-            ) : data?.html ? (
-              <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
-            ) : (
-              <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
-            )}
+      <div className="mt-6 overflow-hidden rounded-3xl bg-tray p-2">
+        {isLoading ? (
+          <div className="skeleton-art skeleton-palette-1 relative h-[80vh] overflow-hidden rounded-2xl bg-card" aria-busy="true">
+            <div className="skeleton-cloud skeleton-cloud-first" /><div className="skeleton-cloud skeleton-cloud-second" />
           </div>
-        </>
-      )}
+        ) : data?.html ? (
+          <iframe ref={frameRef} srcDoc={srcDoc} onLoad={() => postTheme(frameRef.current, themeRef.current)} title={`${name} design system guidelines`} sandbox="allow-scripts" className="h-[80vh] w-full rounded-2xl bg-card" />
+        ) : (
+          <p className="label-mono py-24 text-center text-muted-foreground">No design system for this template yet</p>
+        )}
+      </div>
     </main>
   );
 }

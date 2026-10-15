@@ -15,9 +15,8 @@ export const listDesignSystems = createServerFn({ method: "GET" }).handler(async
   }
 });
 
-/** Signed-in only: the guidelines page HTML. */
+/** Public: the guidelines page HTML (preview is open to everyone; downloads stay signed-in only). */
 export const getDesignSystemGuidelines = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
   .inputValidator(slugInput)
   .handler(async ({ data }) => {
     const b = await (await import("./design-system.server")).getBundle(data.slug);
