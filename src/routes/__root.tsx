@@ -128,9 +128,9 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <SiteHeader />
       <Outlet />
-      <footer className="mx-auto mt-24 flex max-w-[1600px] flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/70 px-6 py-8 text-sm text-muted-foreground">
+      <footer className="mx-auto mt-24 flex max-w-[1600px] flex-col items-start gap-x-3 gap-y-1 border-t border-border/70 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center">
         <span className="font-serif text-base text-foreground">Promptfolio</span>
-        <span className="label-mono ml-auto text-right sm:text-left">
+        <span className="label-mono sm:ml-auto">
           Copy any prompt, make it yours, ship a distinctive interface with AI.
         </span>
       </footer>
