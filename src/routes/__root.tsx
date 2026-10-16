@@ -85,6 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Browse distinctive interface templates, try each live demo, and copy the prompt to build it with AI." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "google-site-verification", content: "T1dM4eZWeYOPqt5DE2yPvOBK9-2FUz01qOWTOBsTEag" },
     ],
     links: [
       {
