@@ -557,7 +557,7 @@ function Admin() {
               <Link to="/sites/$slug" params={{ slug: e.slug }} className="font-serif text-lg">{e.name}</Link>
               <p className="truncate text-sm text-muted-foreground">{e.category} · {e.status}</p>
               <p className="label-mono mt-0.5 truncate text-muted-foreground">
-                {stats[e.slug]?.views ?? 0} views · {stats[e.slug]?.copies ?? 0} copies · {stats[e.slug]?.downloads ?? 0} downloads ({stats[e.slug]?.dsDownloads ?? 0} design system) · {stats[e.slug]?.demoTabs ?? 0} demo tabs · {stats[e.slug]?.dsTabs ?? 0} design system tabs
+                {stats[e.slug]?.views ?? 0} views · {stats[e.slug]?.copies ?? 0} copies · {stats[e.slug]?.downloads ?? 0} downloads ({stats[e.slug]?.dsDownloads ?? 0} design system) · {stats[e.slug]?.demoTabs ?? 0} demo tabs · {stats[e.slug]?.dsTabs ?? 0} design system tabs · {stats[e.slug]?.lovableOpens ?? 0} opened in Lovable
               </p>
             </div>
             <div className="ml-auto flex items-center gap-2 text-sm">

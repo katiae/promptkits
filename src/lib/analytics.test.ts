@@ -29,7 +29,7 @@ describe("summarize", () => {
       { entry_slug: "b", event_type: "view" },
       { entry_slug: "user:1", event_type: "sign_in" },
     ]);
-    expect(s["a"]).toEqual({ views: 1, copies: 1, downloads: 2, demoTabs: 1, dsTabs: 1, dsDownloads: 1 });
+    expect(s["a"]).toEqual({ views: 1, copies: 1, downloads: 2, demoTabs: 1, dsTabs: 1, dsDownloads: 1, lovableOpens: 0 });
     expect(s["b"]?.views).toBe(1);
     expect(s["user:1"]).toBeUndefined();
   });
