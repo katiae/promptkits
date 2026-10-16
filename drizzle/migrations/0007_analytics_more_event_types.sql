@@ -1,0 +1,2 @@
+ALTER TABLE public.analytics_events DROP CONSTRAINT analytics_events_event_type_check;
+ALTER TABLE public.analytics_events ADD CONSTRAINT analytics_events_event_type_check CHECK (event_type IN ('view','copy_prompt','download_html','download_design_system','open_demo_tab','open_design_system_tab','sign_in'));
