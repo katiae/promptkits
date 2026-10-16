@@ -7,6 +7,7 @@ export type AnalyticsEvent =
   | "download_design_system"
   | "open_demo_tab"
   | "open_design_system_tab"
+  | "open_in_lovable"
   | "sign_in";
 
 /** Prefix used for site-wide sign-in events; the rest of the slug is the user id. */
@@ -49,17 +50,18 @@ export function trackSignIn(userId: string) {
   track(`${USER_PREFIX}${userId}`, "sign_in");
 }
 
-export type EntryStats = { views: number; copies: number; downloads: number; demoTabs: number; dsTabs: number; dsDownloads: number };
+export type EntryStats = { views: number; copies: number; downloads: number; demoTabs: number; dsTabs: number; dsDownloads: number; lovableOpens: number };
 
 export function summarize(rows: { entry_slug: string; event_type: string }[]) {
   const out: Record<string, EntryStats> = {};
   for (const r of rows) {
     if (r.event_type === "sign_in") continue;
-    const s = (out[r.entry_slug] ??= { views: 0, copies: 0, downloads: 0, demoTabs: 0, dsTabs: 0, dsDownloads: 0 });
+    const s = (out[r.entry_slug] ??= { views: 0, copies: 0, downloads: 0, demoTabs: 0, dsTabs: 0, dsDownloads: 0, lovableOpens: 0 });
     if (r.event_type === "view") s.views++;
     else if (r.event_type === "copy_prompt") s.copies++;
     else if (r.event_type === "open_demo_tab") s.demoTabs++;
     else if (r.event_type === "open_design_system_tab") s.dsTabs++;
+    else if (r.event_type === "open_in_lovable") s.lovableOpens++;
     else if (r.event_type.startsWith("download")) {
       s.downloads++;
       if (r.event_type === "download_design_system") s.dsDownloads++;

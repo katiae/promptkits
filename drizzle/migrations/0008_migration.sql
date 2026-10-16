@@ -1,0 +1,2 @@
+alter table public.analytics_events drop constraint analytics_events_event_type_check;
+alter table public.analytics_events add constraint analytics_events_event_type_check check (event_type = any (array['view','copy_prompt','download_html','download_design_system','open_demo_tab','open_design_system_tab','sign_in','open_in_lovable']));
