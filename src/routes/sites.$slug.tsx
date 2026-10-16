@@ -17,16 +17,43 @@ import { withTheme, supportsPreviewThemes } from "@/lib/ds-theme";
 import { usePreviewTheme } from "@/hooks/use-preview-theme";
 
 export const Route = createFileRoute("/sites/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug} interface template — Promptfolio` },
-      { name: "description", content: `Try the ${params.slug} interface template and copy its complete AI build prompt.` },
-      { property: "og:title", content: `${params.slug} interface template — Promptfolio` },
-      { property: "og:description", content: `Open the live template and copy its complete AI build prompt.` },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  staticData: { sitemap: true },
+  loader: async ({ params, context }) => {
+    try { return await context.queryClient.ensureQueryData(entryMetaQuery(params.slug)); } catch { return null; }
+  },
+  head: ({ params, loaderData }) => {
+    const name = loaderData?.name ?? params.slug.replace(/-/g, " ");
+    const title = `${name} interface template — Promptfolio`;
+    const desc = loaderData?.description || `Try the ${name} interface template and copy its complete AI build prompt.`;
+    const url = `https://promptkits.dev/sites/${params.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: loaderData
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: loaderData.name,
+              description: loaderData.description,
+              applicationCategory: "DesignApplication",
+              operatingSystem: "Web",
+              url,
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+            }),
+          }]
+        : [],
+    };
+  },
   component: Detail,
 });
 

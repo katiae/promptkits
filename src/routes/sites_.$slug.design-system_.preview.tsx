@@ -8,6 +8,7 @@ import { withTheme } from "@/lib/ds-theme";
 import { usePreviewTheme } from "@/hooks/use-preview-theme";
 
 export const Route = createFileRoute("/sites_/$slug/design-system_/preview")({
+  staticData: { sitemap: false },
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} design system (full screen) — Promptfolio` },

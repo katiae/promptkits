@@ -12,6 +12,7 @@ type OAuthApi = {
 const oauth = () => (supabase.auth as unknown as { oauth: OAuthApi }).oauth;
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
+  staticData: { sitemap: false },
   // SSR has no localStorage session and would redirect signed-in users.
   ssr: false,
   head: () => ({ meta: [{ title: "Connect an assistant — Promptkits" }, { name: "robots", content: "noindex" }] }),

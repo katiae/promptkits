@@ -7,6 +7,7 @@ import { Orb } from "@/components/Orb";
 import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 export const Route = createFileRoute("/auth")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Sign in — Promptfolio" },

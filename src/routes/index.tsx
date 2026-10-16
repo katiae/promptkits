@@ -6,6 +6,7 @@ import { entriesQuery } from "@/lib/entries";
 import { EntryGrid } from "@/components/EntryGrid";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Promptfolio — Better interface templates for AI" },

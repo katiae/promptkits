@@ -8,6 +8,7 @@ import { z } from "zod";
  * shared secret header — it is not usable by outside callers.
  */
 export const Route = createFileRoute("/api/public/ds-generate")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

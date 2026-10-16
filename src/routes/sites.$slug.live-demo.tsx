@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { defaultThemeHtml } from "@/lib/device-preview";
 
 export const Route = createFileRoute("/sites/$slug/live-demo")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       GET: async ({ params }) => {
