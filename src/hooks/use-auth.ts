@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { trackSignIn } from "@/lib/analytics";
+import { trackSignIn, markOwnerBrowser } from "@/lib/analytics";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -10,12 +10,12 @@ export function useAuth() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      if (session?.user) trackSignIn(session.user.id);
+      if (session?.user) { markOwnerBrowser(session.user.email); trackSignIn(session.user.id); }
     });
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user ?? null);
       setLoading(false);
-      if (data.user) trackSignIn(data.user.id);
+      if (data.user) { markOwnerBrowser(data.user.email); trackSignIn(data.user.id); }
     });
     return () => sub.subscription.unsubscribe();
   }, []);

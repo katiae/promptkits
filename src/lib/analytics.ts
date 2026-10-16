@@ -12,9 +12,22 @@ export type AnalyticsEvent =
 /** Prefix used for site-wide sign-in events; the rest of the slug is the user id. */
 export const USER_PREFIX = "user:";
 
+const OWNER_EMAIL = "hello@katiadejuan.com";
+const EXCLUDE_KEY = "pk-exclude-analytics";
+
+/** Marks this browser as the owner's so none of its activity is counted, even when signed out later. */
+export function markOwnerBrowser(email?: string | null) {
+  if (typeof window === "undefined" || email?.toLowerCase() !== OWNER_EMAIL) return;
+  try { localStorage.setItem(EXCLUDE_KEY, "1"); } catch { /* ignore */ }
+}
+
+function isExcluded() {
+  try { return localStorage.getItem(EXCLUDE_KEY) === "1"; } catch { return false; }
+}
+
 /** Fire-and-forget, anonymous event. Views count once per template per browser session. */
 export function track(slug: string, event: AnalyticsEvent) {
-  if (typeof window === "undefined" || !slug) return;
+  if (typeof window === "undefined" || !slug || isExcluded()) return;
   if (event === "view") {
     const key = `pk-viewed:${slug}`;
     try {
