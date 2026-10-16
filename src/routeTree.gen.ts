@@ -24,6 +24,7 @@ import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.
 import { Route as ApiPublicDsGenerateRouteImport } from './routes/api/public/ds-generate'
 import { Route as SitesSlugLiveDemoRouteImport } from './routes/sites.$slug.live-demo'
 import { Route as SitesSlugDesignSystemRouteImport } from './routes/sites_.$slug.design-system'
+import { Route as ApiPublicThumbSlugRouteImport } from './routes/api/public/thumb.$slug'
 import { Route as SitesSlugDesignSystemPreviewRouteImport } from './routes/sites_.$slug.design-system_.preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -101,6 +102,11 @@ const SitesSlugDesignSystemRoute = SitesSlugDesignSystemRouteImport.update({
   path: '/sites/$slug/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicThumbSlugRoute = ApiPublicThumbSlugRouteImport.update({
+  id: '/api/public/thumb/$slug',
+  path: '/api/public/thumb/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitesSlugDesignSystemPreviewRoute =
   SitesSlugDesignSystemPreviewRouteImport.update({
     id: '/sites_/$slug/design-system_/preview',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
+  '/api/public/thumb/$slug': typeof ApiPublicThumbSlugRoute
   '/sites/$slug/design-system/preview': typeof SitesSlugDesignSystemPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites/$slug/design-system': typeof SitesSlugDesignSystemRoute
+  '/api/public/thumb/$slug': typeof ApiPublicThumbSlugRoute
   '/sites/$slug/design-system/preview': typeof SitesSlugDesignSystemPreviewRoute
 }
 export interface FileRoutesById {
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/api/public/ds-generate': typeof ApiPublicDsGenerateRoute
   '/sites/$slug/live-demo': typeof SitesSlugLiveDemoRoute
   '/sites_/$slug/design-system': typeof SitesSlugDesignSystemRoute
+  '/api/public/thumb/$slug': typeof ApiPublicThumbSlugRoute
   '/sites_/$slug/design-system_/preview': typeof SitesSlugDesignSystemPreviewRoute
 }
 export interface FileRouteTypes {
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
+    | '/api/public/thumb/$slug'
     | '/sites/$slug/design-system/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites/$slug/design-system'
+    | '/api/public/thumb/$slug'
     | '/sites/$slug/design-system/preview'
   id:
     | '__root__'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/api/public/ds-generate'
     | '/sites/$slug/live-demo'
     | '/sites_/$slug/design-system'
+    | '/api/public/thumb/$slug'
     | '/sites_/$slug/design-system_/preview'
   fileRoutesById: FileRoutesById
 }
@@ -229,6 +241,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicDsGenerateRoute: typeof ApiPublicDsGenerateRoute
   SitesSlugDesignSystemRoute: typeof SitesSlugDesignSystemRoute
+  ApiPublicThumbSlugRoute: typeof ApiPublicThumbSlugRoute
   SitesSlugDesignSystemPreviewRoute: typeof SitesSlugDesignSystemPreviewRoute
 }
 
@@ -339,6 +352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitesSlugDesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/thumb/$slug': {
+      id: '/api/public/thumb/$slug'
+      path: '/api/public/thumb/$slug'
+      fullPath: '/api/public/thumb/$slug'
+      preLoaderRoute: typeof ApiPublicThumbSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sites_/$slug/design-system_/preview': {
       id: '/sites_/$slug/design-system_/preview'
       path: '/sites/$slug/design-system/preview'
@@ -388,6 +408,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicDsGenerateRoute: ApiPublicDsGenerateRoute,
   SitesSlugDesignSystemRoute: SitesSlugDesignSystemRoute,
+  ApiPublicThumbSlugRoute: ApiPublicThumbSlugRoute,
   SitesSlugDesignSystemPreviewRoute: SitesSlugDesignSystemPreviewRoute,
 }
 export const routeTree = rootRouteImport
