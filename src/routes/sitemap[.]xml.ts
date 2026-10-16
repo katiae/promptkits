@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getRouterInstance } from "@tanstack/react-start";
+import { slugify } from "@/lib/entries";
 import { isSitemapRouteIncluded, sitemapPathForLocation, sitemapStaticPaths, sitemapXML, type SitemapEntry } from "@/lib/sitemap";
 
 const BASE_URL = "https://promptkits.dev";
@@ -26,6 +27,8 @@ export const Route = createFileRoute("/sitemap.xml")({
               },
             },
           });
+          const categories = new Set<string>();
+          const tagCounts = new Map<string, number>();
           const pageSize = 1000;
           for (let offset = 0; ; ) {
             const { data, error } = await supabase.from("entries").select("slug,category,tags").eq("status", "published").order("id").range(offset, offset + pageSize - 1);
@@ -40,6 +43,9 @@ export const Route = createFileRoute("/sitemap.xml")({
             }
             offset += data.length;
           }
+          for (const c of categories) entries.push({ path: `/category/${c}` });
+          // Only tags shared by 2+ templates, so thin single-template pages stay out of search.
+          for (const [t, n] of tagCounts) if (n >= 2) entries.push({ path: `/tag/${t}` });
         }
         return new Response(sitemapXML(BASE_URL, entries), {
           headers: { "Content-Type": "application/xml", "Cache-Control": "public, max-age=3600" },
