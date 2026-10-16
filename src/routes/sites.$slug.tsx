@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { ArrowUpRight, Copy, Check, Download } from "lucide-react";
+import { lovableBuildUrl } from "@/lib/lovable-link";
 import { FavHeart } from "@/components/FavHeart";
 import { toast } from "sonner";
 import { entryMetaQuery, entryContentQuery } from "@/lib/entries";
@@ -146,6 +147,14 @@ function Detail() {
       : entry.demo_url;
     if (url) { track(entry.slug, "open_demo_tab"); window.open(url, "_blank", "noopener"); }
   };
+  const openInLovable = () => {
+    const prompt = content?.prompt ?? "";
+    const demo = html ? `https://promptkits.dev/sites/${entry.slug}/live-demo` : entry.demo_url;
+    const url = lovableBuildUrl(prompt, demo);
+    track(entry.slug, "open_in_lovable");
+    if (!url) { void copy(); toast.message("Prompt copied. Paste it into a new Lovable project."); window.open("https://lovable.dev", "_blank", "noopener"); return; }
+    window.open(url, "_blank", "noopener");
+  };
   const download = () => {
     if (!html) return;
     const a = document.createElement("a");
@@ -263,10 +272,16 @@ function Detail() {
         <aside className={`${tab === "prompt" ? "flex" : "hidden"} flex-col overflow-hidden rounded-2xl bg-card lg:flex`}>
           <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
             <span className="label-mono text-muted-foreground">Build prompt</span>
+            <div className="flex items-center gap-2">
+            <button onClick={openInLovable} disabled={!content?.prompt} title="Opens Lovable with this prompt filled in. Review it and press Send." className="flex items-center gap-1.5 rounded-full bg-secondary px-3.5 py-1.5 text-sm text-foreground hover:bg-secondary/70 disabled:opacity-50">
+              Open in Lovable <ArrowUpRight className="size-3.5" />
+            </button>
             <button onClick={copy} className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-sm text-primary-foreground hover:opacity-90">
               {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />} {copied ? "Copied" : "Copy"}
             </button>
+            </div>
           </div>
+          <p className="border-b border-border/70 px-5 py-2 text-xs text-muted-foreground">Works with Lovable and any AI builder: paste it into a new project or one you're already building.</p>
           {contentLoading ? (
             <div className="flex-1 space-y-3 p-5" aria-hidden="true">
               <div className="h-3.5 w-11/12 rounded bg-secondary" />
