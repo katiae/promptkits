@@ -1,5 +1,21 @@
-import { describe, it, expect } from "vitest";
-import { summarize, summarizeUsers } from "./analytics";
+import { describe, it, expect, vi } from "vitest";
+
+const insert = vi.fn(() => Promise.resolve({}));
+vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: () => ({ insert }) } }));
+
+import { summarize, summarizeUsers, track, markOwnerBrowser } from "./analytics";
+
+describe("owner exclusion", () => {
+  it("stops recording events once the owner's email signs in on this browser", () => {
+    localStorage.clear();
+    markOwnerBrowser("someone@else.com");
+    track("a", "copy_prompt");
+    expect(insert).toHaveBeenCalledTimes(1);
+    markOwnerBrowser("Hello@KatiaDeJuan.com");
+    track("a", "copy_prompt");
+    expect(insert).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe("summarize", () => {
   it("counts views, copies, tabs and both download kinds per template", () => {
