@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { ArrowUpRight, Copy, Check, Download } from "lucide-react";
 import { lovableBuildUrl } from "@/lib/lovable-link";
+import { designSystemPromptSection } from "@/lib/lovable-ds-prompt";
+import { listDesignSystems, getLovableDesignSystemFiles } from "@/lib/design-system.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { useAuth } from "@/hooks/use-auth";
 import { FavHeart } from "@/components/FavHeart";
 import { toast } from "sonner";
 import { entryMetaQuery, entryContentQuery } from "@/lib/entries";
@@ -121,6 +125,13 @@ function Detail() {
   const [device, setDevice] = useState<Device>("desktop");
   const { theme, setTheme, frameRef, onLoad } = usePreviewTheme();
   useEffect(() => { if (entry?.slug) track(entry.slug, "view"); }, [entry?.slug]);
+  // Members get the template's design system code added to the Lovable prompt (fetched ahead so the click opens instantly).
+  const { user } = useAuth();
+  const listDs = useServerFn(listDesignSystems);
+  const getDs = useServerFn(getLovableDesignSystemFiles);
+  const { data: dsSlugs } = useQuery({ queryKey: ["design-systems"], queryFn: () => listDs(), staleTime: 600_000 });
+  const hasDs = !!dsSlugs?.includes(slug);
+  const { data: dsFiles } = useQuery({ queryKey: ["lovable-ds", slug, user?.id], queryFn: () => getDs({ data: { slug } }), enabled: !!user && hasDs, staleTime: 600_000 });
 
   if (isLoading) return <DetailSkeleton />;
   if (!entry)
@@ -148,11 +159,16 @@ function Detail() {
     if (url) { track(entry.slug, "open_demo_tab"); window.open(url, "_blank", "noopener"); }
   };
   const openInLovable = () => {
-    const prompt = content?.prompt ?? "";
+    const prompt = (content?.prompt ?? "") + designSystemPromptSection(entry.name, dsFiles?.files ?? {});
     const demo = html ? `https://promptkits.dev/sites/${entry.slug}/live-demo` : entry.demo_url;
     const url = lovableBuildUrl(prompt, demo);
     track(entry.slug, "open_in_lovable");
-    if (!url) { void copy(); toast.message("Prompt copied. Paste it into a new Lovable project."); window.open("https://lovable.dev", "_blank", "noopener"); return; }
+    if (!url) {
+      void navigator.clipboard.writeText(prompt);
+      toast.message("Prompt and design system copied. Paste them into a new Lovable project.");
+      window.open("https://lovable.dev", "_blank", "noopener");
+      return;
+    }
     window.open(url, "_blank", "noopener");
   };
   const download = () => {
