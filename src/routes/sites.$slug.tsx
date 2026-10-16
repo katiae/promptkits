@@ -160,8 +160,8 @@ function Detail() {
   };
   const openInLovable = () => {
     const prompt = (content?.prompt ?? "") + designSystemPromptSection(entry.name, dsFiles?.files ?? {});
-    const demo = html ? `https://promptkits.dev/sites/${entry.slug}/live-demo` : entry.demo_url;
-    const url = lovableBuildUrl(prompt, demo);
+    // No demo reference: Lovable fetching the live demo page made the editor hang while loading.
+    const url = lovableBuildUrl(prompt);
     track(entry.slug, "open_in_lovable");
     if (!url) {
       void navigator.clipboard.writeText(prompt);
