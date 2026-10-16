@@ -35,6 +35,12 @@ export const Route = createFileRoute("/sites/$slug")({
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        ...(loaderData?.thumbnail_url
+          ? [
+              { property: "og:image", content: `https://promptkits.dev/api/public/thumb/${params.slug}` },
+              { name: "twitter:image", content: `https://promptkits.dev/api/public/thumb/${params.slug}` },
+            ]
+          : []),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: loaderData
