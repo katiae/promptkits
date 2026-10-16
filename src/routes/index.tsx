@@ -49,7 +49,7 @@ function Index() {
           Build better interfaces with AI.
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-muted-foreground">
-          Explore distinctive templates, try the live demo, copy the full prompt or open it straight in Lovable, and grow each one into a scalable design system.
+          Explore distinctive templates, try the live demo, copy the full prompt or open it straight in Lovable, and grow each one into a scalable design system you can push to GitHub or Storybook, coming soon.
         </p>
       </section>
 
