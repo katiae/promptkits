@@ -7,6 +7,7 @@ export type AnalyticsEvent =
   | "download_design_system"
   | "open_demo_tab"
   | "open_design_system_tab"
+  | "open_in_lovable"
   | "sign_in";
 
 /** Prefix used for site-wide sign-in events; the rest of the slug is the user id. */
