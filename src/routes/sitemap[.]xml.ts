@@ -28,13 +28,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           });
           const pageSize = 1000;
           for (let offset = 0; ; ) {
-            const { data, error } = await supabase.from("entries").select("slug").eq("status", "published").order("id").range(offset, offset + pageSize - 1);
+            const { data, error } = await supabase.from("entries").select("slug,category,tags").eq("status", "published").order("id").range(offset, offset + pageSize - 1);
             if (error) throw error;
             if (!data || data.length === 0) break;
             for (const row of data) {
               const location = router.buildLocation({ to: "/sites/$slug", params: { slug: row.slug }, search: () => ({}), hash: "" });
               const path = sitemapPathForLocation(router, location, routeId);
               if (path) entries.push({ path });
+              if (row.category) categories.add(slugify(row.category));
+              for (const t of row.tags ?? []) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
             }
             offset += data.length;
           }
