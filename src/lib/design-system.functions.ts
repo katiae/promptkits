@@ -34,6 +34,16 @@ export const getDesignSystemFiles = createServerFn({ method: "GET" })
   .inputValidator(slugInput)
   .handler(async ({ data }) => ({ files: await (await import("./design-system.server")).getBundle(data.slug) }));
 
+/** Signed-in only: just the code files Lovable needs to reuse the design system. */
+export const getLovableDesignSystemFiles = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(slugInput)
+  .handler(async ({ data }) => {
+    const bundle = await (await import("./design-system.server")).getBundle(data.slug);
+    const { pickDesignSystemFiles } = await import("./lovable-ds-prompt");
+    return { files: bundle ? pickDesignSystemFiles(bundle) : {} };
+  });
+
 const CSP = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/react/ https://cdnjs.cloudflare.com/ajax/libs/react-dom/; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src data: https://fonts.gstatic.com; img-src data: blob:; media-src data: blob:; connect-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">`;
 function lockDown(html: string) {
   return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, (m) => m + CSP) : CSP + html;
