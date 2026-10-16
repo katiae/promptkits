@@ -3,6 +3,7 @@ import { FilteredPage } from "@/components/FilteredPage";
 import { useFavorites } from "@/hooks/use-favorites";
 
 export const Route = createFileRoute("/_authenticated/saved")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Saved — Promptfolio" },

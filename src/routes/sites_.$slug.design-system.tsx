@@ -16,6 +16,7 @@ import { IMPORT_META } from "@/lib/design-system-import";
 import { track } from "@/lib/analytics";
 
 export const Route = createFileRoute("/sites_/$slug/design-system")({
+  staticData: { sitemap: false },
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} design system — Promptfolio` },

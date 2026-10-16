@@ -17,6 +17,7 @@ import { withTheme, supportsPreviewThemes } from "@/lib/ds-theme";
 import { usePreviewTheme } from "@/hooks/use-preview-theme";
 
 export const Route = createFileRoute("/sites/$slug")({
+  staticData: { sitemap: true },
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} interface template — Promptfolio` },

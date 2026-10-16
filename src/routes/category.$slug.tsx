@@ -3,6 +3,7 @@ import { FilteredPage } from "@/components/FilteredPage";
 import { slugify } from "@/lib/entries";
 
 export const Route = createFileRoute("/category/$slug")({
+  staticData: { sitemap: false },
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} templates — Promptfolio` },

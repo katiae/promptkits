@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { FilteredPage } from "@/components/FilteredPage";
 
 export const Route = createFileRoute("/tag/$slug")({
+  staticData: { sitemap: false },
   head: ({ params }) => ({
     meta: [
       { title: `#${params.slug} — Promptfolio` },

@@ -31,6 +31,7 @@ import { summarize, summarizeUsers } from "@/lib/analytics";
 type DsStatus = { entry_id: string; status: string; error: string | null; updated_at: string };
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Admin — Promptfolio" },
