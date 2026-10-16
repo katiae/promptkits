@@ -1,13 +1,25 @@
 import { describe, it, expect } from "vitest";
-import { lovableBuildUrl } from "./lovable-link";
+import { lovableBuildUrl, planLovableOpen } from "./lovable-link";
 
 describe("lovableBuildUrl", () => {
-  it("prefills an encoded prompt and the demo reference", () => {
-    expect(lovableBuildUrl("Build a todo app", "https://promptkits.dev/sites/a/live-demo")).toBe(
-      "https://lovable.dev/#prompt=Build%20a%20todo%20app&html=https%3A%2F%2Fpromptkits.dev%2Fsites%2Fa%2Flive-demo",
-    );
+  it("prefills an encoded prompt", () => {
+    expect(lovableBuildUrl("Build a todo app")).toBe("https://lovable.dev/#prompt=Build%20a%20todo%20app");
   });
-  it("returns null above Lovable's 50,000 character limit", () => {
-    expect(lovableBuildUrl("x".repeat(50_001))).toBeNull();
+  it("refuses prompts over 20,000 characters so Lovable doesn't freeze", () => {
+    expect(lovableBuildUrl("x".repeat(20_001))).toBeNull();
+    expect(lovableBuildUrl("x".repeat(20_000))).not.toBeNull();
+  });
+});
+
+describe("planLovableOpen", () => {
+  it("puts everything in the link when it fits", () => {
+    expect(planLovableOpen("a", "b").kind).toBe("url");
+  });
+  it("keeps the template in the link and copies the design system when too long", () => {
+    const p = planLovableOpen("t".repeat(15_000), "d".repeat(10_000));
+    expect(p.kind).toBe("url+clipboard");
+  });
+  it("copies everything when the template alone is too long", () => {
+    expect(planLovableOpen("t".repeat(25_000), "").kind).toBe("clipboard");
   });
 });
