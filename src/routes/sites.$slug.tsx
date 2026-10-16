@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { ArrowUpRight, Copy, Check, Download } from "lucide-react";
-import { lovableBuildUrl } from "@/lib/lovable-link";
+import { planLovableOpen } from "@/lib/lovable-link";
 import { designSystemPromptSection } from "@/lib/lovable-ds-prompt";
 import { listDesignSystems, getLovableDesignSystemFiles } from "@/lib/design-system.functions";
 import { useServerFn } from "@tanstack/react-start";
@@ -159,17 +159,12 @@ function Detail() {
     if (url) { track(entry.slug, "open_demo_tab"); window.open(url, "_blank", "noopener"); }
   };
   const openInLovable = () => {
-    const prompt = (content?.prompt ?? "") + designSystemPromptSection(entry.name, dsFiles?.files ?? {});
-    // No demo reference: Lovable fetching the live demo page made the editor hang while loading.
-    const url = lovableBuildUrl(prompt);
     track(entry.slug, "open_in_lovable");
-    if (!url) {
-      void navigator.clipboard.writeText(prompt);
-      toast.message("Prompt and design system copied. Paste them into a new Lovable project.");
-      window.open("https://lovable.dev", "_blank", "noopener");
-      return;
-    }
-    window.open(url, "_blank", "noopener");
+    const plan = planLovableOpen(content?.prompt ?? "", designSystemPromptSection(entry.name, dsFiles?.files ?? {}));
+    if (plan.kind !== "url") void navigator.clipboard.writeText(plan.clipboard);
+    if (plan.kind === "url+clipboard") toast.message("Design system copied. Send the template prompt in Lovable, then paste the design system as your next message.");
+    if (plan.kind === "clipboard") toast.message("Prompt copied. Paste it into a new Lovable project.");
+    window.open(plan.kind === "clipboard" ? "https://lovable.dev" : plan.url, "_blank", "noopener");
   };
   const download = () => {
     if (!html) return;
